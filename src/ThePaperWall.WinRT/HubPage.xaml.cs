@@ -14,6 +14,8 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using ThePaperWall.Core;
+using System.Net.Http;
 
 // The Hub Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=??????
 
@@ -105,9 +107,19 @@ namespace ThePaperWall.WinRT
         /// The navigation parameter is available in the LoadState method 
         /// in addition to page state preserved during an earlier session.
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             navigationHelper.OnNavigatedTo(e);
+
+            var themeService = new ThemeService(WallpaperResource.Feeds);
+            var themes = themeService.GetThemes();
+
+            var fixture = new RssReader();
+
+            var rssForFeed = await fixture.GetFeed(themes.WallPaperOfTheDay.FeedUrl);
+            var images = fixture.GetImageUrls(rssForFeed);
+
+            
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)

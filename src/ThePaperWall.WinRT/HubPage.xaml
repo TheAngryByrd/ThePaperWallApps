@@ -89,7 +89,7 @@
             </Hub.Header>
             <HubSection Width="780">
                 <HubSection.Background>
-                    <ImageBrush ImageSource="Assets/MediumGray.png" Stretch="UniformToFill" />
+                    <ImageBrush x:Name="MainImage" Stretch="UniformToFill" />
                 </HubSection.Background>
             </HubSection>
             <HubSection Width="580" Padding="120,30,40,44"  VerticalAlignment="Top" >
