@@ -6,7 +6,13 @@ using System.Threading.Tasks;
 
 namespace ThePaperWall.Core.Models
 {
-    class Theme
+    public class Theme
     {
+        public string Name { get; set; }
+        public string FeedUrl { get; set; }
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }

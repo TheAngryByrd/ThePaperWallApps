@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ThePaperWall.Core;
 
 namespace ThePaperWall.Core.Tests
 {
@@ -9,6 +11,7 @@ namespace ThePaperWall.Core.Tests
         [TestMethod]
         public void TestMethod1()
         {
+            var strings = WallpaperResource.Feeds;
         }
     }
 }

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>67c22283-11c7-4770-b4aa-780c75a607a7</ProjectGuid>
+    <ProjectGuid>{D33B1BA0-B31D-4D3D-9442-04B4EC7254C5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ThePaperWall.Core.Tests</RootNamespace>
@@ -52,6 +52,12 @@
   <ItemGroup>
     <Compile Include="UnitTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ThePaperWall.Core\ThePaperWall.Core.csproj">
+      <Project>{4C9DE318-B02B-4BF6-9C83-42AAEFEBC0CE}</Project>
+      <Name>ThePaperWall.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

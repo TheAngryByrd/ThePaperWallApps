@@ -6,7 +6,17 @@ using System.Threading.Tasks;
 
 namespace ThePaperWall.Core.Models
 {
-    class Themes
+    public class Themes
     {
+        private List<Theme> _all;
+
+        public List<Theme> All
+        {
+            get
+            {
+                return _all;
+            }
+            
+        }
     }
 }
