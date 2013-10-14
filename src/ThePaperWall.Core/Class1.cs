@@ -7,5 +7,6 @@ namespace ThePaperWall.Core
 {
     public class Class1
     {
+       
     }
 }

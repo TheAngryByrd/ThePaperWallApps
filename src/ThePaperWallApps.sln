@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThePaperWall.WinRT", "ThePa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThePaperWall.WP8", "ThePaperWall.WP8\ThePaperWall.WP8.csproj", "{09D6C248-D027-45DD-9889-07A29541DAD8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThePaperWall.Core", "ThePaperWall.Core\ThePaperWall.Core.csproj", "{4C9DE318-B02B-4BF6-9C83-42AAEFEBC0CE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,16 @@ Global
 		{09D6C248-D027-45DD-9889-07A29541DAD8}.Release|x86.ActiveCfg = Release|x86
 		{09D6C248-D027-45DD-9889-07A29541DAD8}.Release|x86.Build.0 = Release|x86
 		{09D6C248-D027-45DD-9889-07A29541DAD8}.Release|x86.Deploy.0 = Release|x86
+		{4C9DE318-B02B-4BF6-9C83-42AAEFEBC0CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C9DE318-B02B-4BF6-9C83-42AAEFEBC0CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C9DE318-B02B-4BF6-9C83-42AAEFEBC0CE}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{4C9DE318-B02B-4BF6-9C83-42AAEFEBC0CE}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{4C9DE318-B02B-4BF6-9C83-42AAEFEBC0CE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4C9DE318-B02B-4BF6-9C83-42AAEFEBC0CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C9DE318-B02B-4BF6-9C83-42AAEFEBC0CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C9DE318-B02B-4BF6-9C83-42AAEFEBC0CE}.Release|ARM.ActiveCfg = Release|Any CPU
+		{4C9DE318-B02B-4BF6-9C83-42AAEFEBC0CE}.Release|x64.ActiveCfg = Release|Any CPU
+		{4C9DE318-B02B-4BF6-9C83-42AAEFEBC0CE}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
