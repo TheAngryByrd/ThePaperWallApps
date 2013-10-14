@@ -1,4 +1,4 @@
-﻿namespace ThePaperWall.Core.Themes
+﻿namespace ThePaperWall.Core.Feeds
 {
     public class WallpaperResource
     {   

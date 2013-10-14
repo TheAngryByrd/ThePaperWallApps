@@ -33,15 +33,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="DownloadManager.cs" />
-    <Compile Include="IThemeService.cs" />
+    <Compile Include="Downloads\DownloadManager.cs" />
+    <Compile Include="Downloads\HttpClientExtensions.cs" />
+    <Compile Include="Downloads\IAsyncDownloadManager.cs" />
+    <Compile Include="Downloads\ProgressEvent.cs" />
+    <Compile Include="Feeds\IThemeService.cs" />
     <Compile Include="Models\ImageMetaData.cs" />
-    <Compile Include="Models\Rss.cs" />
+    <Compile Include="Rss\Rss.cs" />
     <Compile Include="Models\Theme.cs" />
     <Compile Include="Models\Themes.cs" />
-    <Compile Include="RssReader.cs" />
-    <Compile Include="ThemeService.cs" />
-    <Compile Include="WallpaperResource.cs" />
+    <Compile Include="Rss\RssReader.cs" />
+    <Compile Include="Feeds\ThemeService.cs" />
+    <Compile Include="Feeds\WallpaperResource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

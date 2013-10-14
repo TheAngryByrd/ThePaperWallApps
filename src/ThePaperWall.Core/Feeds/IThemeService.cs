@@ -1,6 +1,6 @@
 using ThePaperWall.Core.Models;
 
-namespace ThePaperWall.Core.Themes
+namespace ThePaperWall.Core.Feeds
 {
     public interface IThemeService
     {

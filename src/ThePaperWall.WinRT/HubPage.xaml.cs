@@ -1,4 +1,6 @@
-﻿using ThePaperWall.WinRT.Common;
+﻿using ThePaperWall.Core.Downloads;
+using ThePaperWall.Core.Feeds;
+using ThePaperWall.WinRT.Common;
 using ThePaperWall.WinRT.Data;
 using System;
 using System.Collections.Generic;
@@ -16,6 +18,10 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using ThePaperWall.Core;
 using System.Net.Http;
+using Splat;
+using Windows.UI.Core;
+using Akavache;
+using System.Reactive.Linq;
 
 // The Hub Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=??????
 
@@ -117,9 +123,12 @@ namespace ThePaperWall.WinRT
             var fixture = new RssReader();
 
             var rssForFeed = await fixture.GetFeed(themes.WallPaperOfTheDay.FeedUrl);
-            var images = fixture.GetImageUrls(rssForFeed);
+            var imageMetaData = fixture.GetImageMetaData(rssForFeed).First();
 
-            
+            var downloader = new AsyncDownloadManager();
+           // MainImage.ImageSource = (await downloader.DownloadImage(imageMetaData)).ToNative();
+            MainImage.ImageSource = (await BlobCache.LocalMachine.LoadImageFromUrl(imageMetaData.imageUrl)).ToNative();
+           
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)

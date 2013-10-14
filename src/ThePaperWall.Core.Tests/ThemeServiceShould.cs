@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using ThePaperWall.Core.Feeds;
 
 namespace ThePaperWall.Core.Tests
 {
@@ -29,7 +30,7 @@ namespace ThePaperWall.Core.Tests
             var fixture = new RssReader();
 
             var rssForFeed = await fixture.GetFeed(themes.WallPaperOfTheDay.FeedUrl);
-            var images = fixture.GetImageUrls(rssForFeed);
+            var images = fixture.GetImageMetaData(rssForFeed);
             Assert.IsNotNull(images.First().imageUrl);
 
         }

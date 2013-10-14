@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using ThePaperWall.Core.Models;
-using ThePaperWall.Core.Themes;
 
-namespace ThePaperWall.Core.Themes
+namespace ThePaperWall.Core.Feeds
 {
     public class ThemeService : IThemeService
     {
