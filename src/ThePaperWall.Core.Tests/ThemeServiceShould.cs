@@ -4,6 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using ThePaperWall.Core.Feeds;
+using ThePaperWall.Core.Rss;
 
 namespace ThePaperWall.Core.Tests
 {
@@ -13,8 +14,8 @@ namespace ThePaperWall.Core.Tests
         [TestMethod]
         public void GetThemesFromStringResource()
         {
-            var fixture = new ThemeService(WallpaperResource.Feeds);
-            var themes = fixture.GetThemes();
+            var fixture = new ThemeService();
+            var themes = fixture.GetThemes(WallpaperResource.Feeds);
 
             Assert.AreEqual("Wallpaper of the Day", themes.WallPaperOfTheDay.Name);
             Assert.AreEqual("Top 4 Wallpapers Today", themes.All.ToList()[1].Name);
@@ -24,8 +25,8 @@ namespace ThePaperWall.Core.Tests
         [TestMethod]
         public async Task GetImageInformation()
         {
-              var themeService = new ThemeService(WallpaperResource.Feeds);
-            var themes = themeService.GetThemes();
+              var themeService = new ThemeService();
+              var themes = themeService.GetThemes(WallpaperResource.Feeds);
 
             var fixture = new RssReader();
 

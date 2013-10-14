@@ -39,6 +39,7 @@
     <Compile Include="Downloads\ProgressEvent.cs" />
     <Compile Include="Feeds\IThemeService.cs" />
     <Compile Include="Models\ImageMetaData.cs" />
+    <Compile Include="Rss\IRssReader.cs" />
     <Compile Include="Rss\Rss.cs" />
     <Compile Include="Models\Theme.cs" />
     <Compile Include="Models\Themes.cs" />

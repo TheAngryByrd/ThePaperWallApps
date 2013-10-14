@@ -1,7 +1,6 @@
 ﻿<Page
     x:Name="pageRoot"
     x:Class="ThePaperWall.WinRT.Views.HubView"
-    DataContext="{Binding DefaultViewModel, RelativeSource={RelativeSource Self}}"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:ThePaperWall.WinRT"
@@ -19,7 +18,7 @@
     -->
         <CollectionViewSource
         x:Name="groupedItemsViewSource"
-        Source="{Binding Groups}"
+        Source="{Binding DefaultViewModel.Groups}"
         ItemsPath="TopItems"
         d:Source="{Binding Groups, Source={d:DesignData Source=/DataModel/SampleData.json, Type=data:SampleDataSource}}"/>
 
@@ -89,7 +88,7 @@
             </Hub.Header>
             <HubSection Width="780">
                 <HubSection.Background>
-                    <ImageBrush x:Name="MainImage" Stretch="UniformToFill" />
+                    <ImageBrush ImageSource="{Binding MainImage}"  Stretch="UniformToFill" />
                 </HubSection.Background>
             </HubSection>
             <HubSection Width="580" Padding="120,30,40,44"  VerticalAlignment="Top" >

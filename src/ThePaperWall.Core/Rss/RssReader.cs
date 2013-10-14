@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 using ThePaperWall.Core.Models;
-using ThePaperWall.Core.Rss;
 
 namespace ThePaperWall.Core.Rss
 {

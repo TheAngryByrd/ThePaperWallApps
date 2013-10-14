@@ -1,5 +1,6 @@
 ﻿using ThePaperWall.Core.Downloads;
 using ThePaperWall.Core.Feeds;
+using ThePaperWall.Core.Rss;
 using ThePaperWall.WinRT;
 using ThePaperWall.WinRT.Common;
 using ThePaperWall.WinRT.Data;
@@ -17,7 +18,6 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using ThePaperWall.Core;
 using System.Net.Http;
 using Splat;
 using Windows.UI.Core;
@@ -118,16 +118,6 @@ namespace ThePaperWall.WinRT.Views
         {
             navigationHelper.OnNavigatedTo(e);
 
-            var themeService = new ThemeService(WallpaperResource.Feeds);
-            var themes = themeService.GetThemes();
-
-            var fixture = new RssReader();
-
-            var rssForFeed = await fixture.GetFeed(themes.WallPaperOfTheDay.FeedUrl);
-            var imageMetaData = fixture.GetImageMetaData(rssForFeed).First();
-
-            var downloader = new AsyncDownloadManager();
-            MainImage.ImageSource = (await downloader.DownloadImage(imageMetaData)).ToNative();
             //MainImage.ImageSource = (await BlobCache.LocalMachine.LoadImageFromUrl(imageMetaData.imageUrl)).ToNative();
            
         }
