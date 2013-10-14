@@ -14,7 +14,7 @@ namespace ThePaperWall.Core
     public interface IRssReader
     {
        Task<rss> GetFeed(string url);
-       List<ImageMetaData> GetImageUrls(rss feed);
+       List<ImageMetaData> GetImageMetaData(rss feed);
     }
     public class RssReader : IRssReader
     {
@@ -30,7 +30,7 @@ namespace ThePaperWall.Core
             return feed;
         }
 
-        public List<ImageMetaData> GetImageUrls(rss feed)
+        public List<ImageMetaData> GetImageMetaData(rss feed)
         {
             var images = new List<ImageMetaData>();
             foreach (var rssChannelItem in feed.channel.item)

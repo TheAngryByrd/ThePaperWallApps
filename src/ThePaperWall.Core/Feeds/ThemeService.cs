@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using ThePaperWall.Core.Models;
+using ThePaperWall.Core.Themes;
 
-namespace ThePaperWall.Core
+namespace ThePaperWall.Core.Themes
 {
     public class ThemeService : IThemeService
     {

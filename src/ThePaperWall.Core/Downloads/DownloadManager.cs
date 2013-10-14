@@ -19,7 +19,7 @@ namespace ThePaperWall.Core
 
     public class AsyncDownloadManager : IAsyncDownloadManager
     {
-        public async Task<IBitmap> DownloadImage(ImageMetaData image, IProgress<ProgressEvent> progress)
+        public async Task<IBitmap> DownloadImage(ImageMetaData image, IProgress<ProgressEvent> progress = null)
         {            
             using (HttpClient wc = new HttpClient())
             {
