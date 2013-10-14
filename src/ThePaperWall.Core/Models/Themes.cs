@@ -16,5 +16,10 @@ namespace ThePaperWall.Core.Models
         public Theme WallPaperOfTheDay { get { return _all[0]; } }
         public Theme Top4 { get { return _all[1]; } }
         public Theme Recent50 { get { return _all[2]; } }   
+
+        public IEnumerable<Theme> Categories
+        {
+            get { return _all.Except(new[] { WallPaperOfTheDay, Top4, Recent50 }); }
+        }
     }
 }

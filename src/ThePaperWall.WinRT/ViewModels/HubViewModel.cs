@@ -2,7 +2,9 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Reactive.Linq;
 using Caliburn.Micro;
+using LinqToAwait;
 using ReactiveCaliburn;
 using ReactiveUI;
 using Splat;
@@ -11,7 +13,7 @@ using ThePaperWall.Core.Feeds;
 using ThePaperWall.Core.Models;
 using ThePaperWall.Core.Rss;
 using ThePaperWall.WinRT.Common;
-using ThePaperWall.WinRT.Data;
+using Windows.UI.Core;
 using Windows.UI.Xaml.Media;
 
 namespace ThePaperWall.WinRT.ViewModels
@@ -38,8 +40,24 @@ namespace ThePaperWall.WinRT.ViewModels
         protected override async Task OnActivate()
         {
             _themes = _themeService.GetThemes(WallpaperResource.Feeds);
-            GetMainHeroImage();
+            GetWallpaperOfTheDay();
             GetTop4WallPaperItems();
+            GetCategoryItems();
+        }
+  
+        private async void GetCategoryItems()
+        {
+            var dispatcher = Windows.UI.Core.CoreWindow.GetForCurrentThread().Dispatcher;
+            await _themes.Categories.OrderBy(c => c.Name).AsAsync()
+                .ForEachAsync(async c=>
+                {                    
+                    var feed = await _rssReader.GetFeed(c.FeedUrl);
+                    var firstImageFromFeed = _rssReader.GetImageMetaData(feed).First();
+                    firstImageFromFeed.Category = c.Name;
+                    await dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+                    () => CategoryItems.Add(new CategoryItem(_downloadManager, firstImageFromFeed)));
+                    
+                }); 
         }
   
         private async void GetTop4WallPaperItems()
@@ -49,11 +67,11 @@ namespace ThePaperWall.WinRT.ViewModels
 
             foreach(var imd in imageMetaData)
             {
-                Top4Items.Add(new Top4WallPaperItem(_downloadManager,imd));
+                Top4Items.Add(new CategoryItem(_downloadManager,imd));
             }   
         }
   
-        private void GetMainHeroImage()
+        private void GetWallpaperOfTheDay()
         {
             System.Action getMainHeroImage =async () =>
             {
@@ -71,11 +89,16 @@ namespace ThePaperWall.WinRT.ViewModels
             get { return this.defaultViewModel; }
         }
 
-        public ObservableCollection<Top4WallPaperItem> _top4Items = new ObservableCollection<Top4WallPaperItem>();
-
-        public ObservableCollection<Top4WallPaperItem> Top4Items
+        public ObservableCollection<CategoryItem> _top4Items = new ObservableCollection<CategoryItem>();
+        public ObservableCollection<CategoryItem> Top4Items
         {
             get { return _top4Items; }
+        }    
+        
+        public ObservableCollection<CategoryItem> _categoryItems = new ObservableCollection<CategoryItem>();
+        public ObservableCollection<CategoryItem> CategoryItems
+        {
+            get { return _categoryItems; }
         }
 
         private ImageSource _mainImage;
@@ -86,10 +109,10 @@ namespace ThePaperWall.WinRT.ViewModels
         }
     }
 
-    public class Top4WallPaperItem : ReactiveObject
+    public class CategoryItem : ReactiveObject
     {
 
-        public Top4WallPaperItem(IAsyncDownloadManager downloaderManager, ImageMetaData imageMetaData)
+        public CategoryItem(IAsyncDownloadManager downloaderManager, ImageMetaData imageMetaData)
         {
             Category = imageMetaData.Category;
             System.Action lazyImage = async () => 

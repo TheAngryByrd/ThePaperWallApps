@@ -18,7 +18,7 @@
                                 Informational,http://www.thepaperwall.com/rss.category.php?feed=informational,
                                 Animals,http://www.thepaperwall.com/rss.category.php?feed=animals,
                                 Insects,http://www.thepaperwall.com/rss.category.php?feed=insects,
-                                Architecture,http://www.thepaperwall.com/rss.category.php?feed=girls,
+                                Architecture,http://www.thepaperwall.com/rss.category.php?feed=architecture,
                                 CartoonComic,http://www.thepaperwall.com/rss.category.php?feed=cartoon_comic,
                                 LoveHate,http://www.thepaperwall.com/rss.category.php?feed=love_hate,
                                 CityScape,http://www.thepaperwall.com/rss.category.php?feed=cityscape,
