@@ -5,14 +5,18 @@ namespace ThePaperWall.Core.Models
 {
     public class ImageMetaData
     {
-        public string imageThumbnail { get; set; }
+        public ImageMetaData(string thumbnailUrl)
+        {
+            imageThumbnail = thumbnailUrl.Substring(0, thumbnailUrl.IndexOf("?"));
+        }
+        public string imageThumbnail { get; private set; }
 
         public string imageUrl
         {
             get
             {
-                var bigImage = imageThumbnail.Replace("small", "big");
-                return bigImage.Substring(0, bigImage.IndexOf("?"));
+                return imageThumbnail.Replace("small", "big");
+               
             }
         }
 
@@ -26,5 +30,7 @@ namespace ThePaperWall.Core.Models
             string filename = Path.GetFileName(uri.LocalPath);
             return filename;
         }
+
+        public string Category { get; set; }
     }
 }

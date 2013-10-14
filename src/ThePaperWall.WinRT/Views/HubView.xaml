@@ -49,9 +49,7 @@
                     <Image Source="{Binding ImagePath}" Stretch="UniformToFill" AutomationProperties.Name="{Binding Title}"/>
                 </Border>
                 <StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="10,0,0,0">
-                    <TextBlock Text="{Binding Title}" Style="{StaticResource TitleTextBlockStyle}" TextWrapping="NoWrap"/>
-                    <TextBlock Text="{Binding Subtitle}" Style="{StaticResource CaptionTextBlockStyle}" TextWrapping="NoWrap"/>
-                    <TextBlock Text="{Binding Description}" Style="{StaticResource BodyTextBlockStyle}" MaxHeight="60"/>
+                    <TextBlock Text="{Binding Category}" Style="{StaticResource TitleTextBlockStyle}" TextWrapping="NoWrap"/>
                 </StackPanel>
             </Grid>
         </DataTemplate>
@@ -110,9 +108,9 @@
                     </Grid>
                 </DataTemplate>
             </HubSection>
-            <HubSection Padding="40,30,40,44" DataContext="{Binding Path=[0], Source={StaticResource groupedItemsViewSource}}" IsHeaderInteractive="True" >
+            <HubSection Padding="40,30,40,44" IsHeaderInteractive="True" >
                 <HubSection.Header>
-                    <TextBlock x:Uid="Section2Header" TextLineBounds="TrimToBaseline" OpticalMarginAlignment="TrimSideBearings" Text="Section 2"/>
+                    <TextBlock x:Uid="Section2Header" TextLineBounds="TrimToBaseline" OpticalMarginAlignment="TrimSideBearings" Text="Top 4 WallPapers"/>
                 </HubSection.Header>
                 <DataTemplate>
                     <ListView
@@ -120,7 +118,7 @@
                         Margin="-14,-4,0,0"
                         AutomationProperties.AutomationId="ItemListView"
                         AutomationProperties.Name="Grouped Items"
-                        ItemsSource="{Binding Items}"
+                        ItemsSource="{Binding Top4Items}"
                         ItemTemplate="{StaticResource Standard420x130ItemTemplate}"
                         IsSwipeEnabled="False"
                         IsItemClickEnabled="True"

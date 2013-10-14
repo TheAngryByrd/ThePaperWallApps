@@ -28,7 +28,7 @@ namespace ThePaperWall.Core.Rss
             {
                 var html = rssChannelItem.description;
                 var imageUrl = GetImageUrl(html);
-                images.Add(new ImageMetaData { imageThumbnail = imageUrl });
+                images.Add(new ImageMetaData(imageUrl){ Category = rssChannelItem.title });
             }
             return images;
         }

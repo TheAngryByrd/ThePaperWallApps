@@ -1,12 +1,11 @@
 using System;
 using System.Threading.Tasks;
 using Splat;
-using ThePaperWall.Core.Models;
 
 namespace ThePaperWall.Core.Downloads
 {
     public interface IAsyncDownloadManager
     {
-        Task<IBitmap> DownloadImage(ImageMetaData image, IProgress<ProgressEvent> progress = null);    
+        Task<IBitmap> DownloadImage(string imageUrl, IProgress<ProgressEvent> progress = null);    
     }
 }
