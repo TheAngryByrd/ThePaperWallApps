@@ -183,6 +183,12 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.5.0.6\lib\netcore45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="PCLStorage">
+      <HintPath>..\..\lib\PclStorage\PCLStorage.WinRT\PCLStorage.dll</HintPath>
+    </Reference>
+    <Reference Include="PCLStorage.Abstractions">
+      <HintPath>..\..\lib\PclStorage\PCLStorage.WinRT\PCLStorage.Abstractions.dll</HintPath>
+    </Reference>
     <Reference Include="Punchclock">
       <HintPath>..\packages\Punchclock.1.0.0\lib\Portable-Net45+WinRT45+WP8\Punchclock.dll</HintPath>
     </Reference>
