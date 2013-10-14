@@ -16,6 +16,8 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using ThePaperWall.WinRT.ViewModels;
+using System.Reflection;
 
 // The Hub App template is documented at http://go.microsoft.com/fwlink/?LinkId=286574
 
@@ -41,58 +43,10 @@ namespace ThePaperWall.WinRT
         /// will be used such as when the application is launched to open a specific file.
         /// </summary>
         /// <param name="e">Details about the launch request and process.</param>
-        protected override async void OnLaunched(LaunchActivatedEventArgs e)
+        protected override void OnLaunched(LaunchActivatedEventArgs args)
         {
-#if DEBUG
-            if (System.Diagnostics.Debugger.IsAttached)
-            {
-                this.DebugSettings.EnableFrameRateCounter = true;
-            }
-#endif
-
-            Frame rootFrame = Window.Current.Content as Frame;
-
-            // Do not repeat app initialization when the Window already has content,
-            // just ensure that the window is active
-            
-            if (rootFrame == null)
-            {
-                // Create a Frame to act as the navigation context and navigate to the first page
-                rootFrame = new Frame();
-                //Associate the frame with a SuspensionManager key                                
-                SuspensionManager.RegisterFrame(rootFrame, "AppFrame");
-
-                if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
-                {
-                    // Restore the saved session state only when appropriate
-                    try
-                    {
-                        await SuspensionManager.RestoreAsync();
-                    }
-                    catch (SuspensionManagerException)
-                    {
-                        //Something went wrong restoring state.
-                        //Assume there is no state and continue
-                    }
-                }
-
-                // Place the frame in the current Window
-                Window.Current.Content = rootFrame;
-            }
-            if (rootFrame.Content == null)
-            {
-                // When the navigation stack isn't restored navigate to the first page,
-                // configuring the new page by passing required information as a navigation
-                // parameter
-                if (!rootFrame.Navigate(typeof(HubPage)))
-                {
-                    throw new Exception("Failed to create initial page");
-                }
-            }
-            // Ensure the current window is active
-            Window.Current.Activate();
+            DisplayRootViewFor<HubViewModel>();
         }
-
         /// <summary>
         /// Invoked when application execution is being suspended.  Application state is saved
         /// without knowing whether the application will be terminated or resumed with the contents
@@ -106,5 +60,66 @@ namespace ThePaperWall.WinRT
             await SuspensionManager.SaveAsync();
             deferral.Complete();
         }
+
+         private WinRTContainer _container;
+        protected override void Configure()
+        {
+            _container = new WinRTContainer();
+            _container.RegisterWinRTServices();
+
+            AddViewModels();
+            AddView();
+            
+            //TODO: Register your view models at the container
+        }
+
+        private void AddViewModels()
+        {
+            string @namespace = "ThePaperWall.WinRT.ViewModels";
+
+            RegisterType(@namespace);
+        }
+  
+        private void RegisterType(string @namespace)
+        {
+            var types = (from t in typeof(App).GetTypeInfo().Assembly.DefinedTypes
+                         where t.IsClass && t.Namespace == @namespace
+                         select t.AsType()).ToList();
+            foreach (var t in types)
+            {
+                _container.RegisterPerRequest(t, null, t);
+            }
+        }
+
+        private void AddView()
+        {
+            string @namespace = "ThePaperWall.WinRT.Views";
+            RegisterType(@namespace);
+        }
+
+     
+        protected override object GetInstance(Type service, string key)
+        {
+            var instance = _container.GetInstance(service, key);
+            if (instance != null)
+                return instance;
+            throw new Exception("Could not locate any instances.");
+        }
+
+        protected override IEnumerable<object> GetAllInstances(Type service)
+        {
+            return _container.GetAllInstances(service);
+        }
+
+        protected override void BuildUp(object instance)
+        {
+            _container.BuildUp(instance);
+        }
+
+        protected override void PrepareViewFirst(Frame rootFrame)
+        {
+            _container.RegisterNavigationService(rootFrame);
+        }
+    
     }
 }

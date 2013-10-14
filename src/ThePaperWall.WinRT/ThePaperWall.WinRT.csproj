@@ -105,9 +105,6 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="HubPage.xaml.cs">
-      <DependentUpon>HubPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="ReactiveCaliburn\ReactivePropertyChangedBase.cs" />
     <Compile Include="ReactiveCaliburn\ReactiveScreen.cs" />
     <Compile Include="ReactiveCaliburn\ReactiveViewAware.cs" />
@@ -124,6 +121,10 @@
     <Compile Include="Common\RelayCommand.cs" />
     <Compile Include="Common\ObservableDictionary.cs" />
     <Compile Include="Common\BooleanToVisibilityConverter.cs" />
+    <Compile Include="ViewModels\HubViewModel.cs" />
+    <Compile Include="Views\HubView.xaml.cs">
+      <DependentUpon>HubView.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -151,15 +152,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="HubPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="SectionPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="ItemPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\HubView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -238,10 +239,7 @@
       <HintPath>..\packages\Windows.UI.Interactivity.1.1.0.0\lib\win\Windows.UI.Interactivity.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ViewModels\" />
-    <Folder Include="Views\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\ThePaperWall.Core\ThePaperWall.Core.csproj">
       <Project>{4c9de318-b02b-4bf6-9c83-42aaefebc0ce}</Project>

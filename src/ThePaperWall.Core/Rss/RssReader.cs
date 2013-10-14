@@ -7,15 +7,10 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 using ThePaperWall.Core.Models;
+using ThePaperWall.Core.Rss;
 
-namespace ThePaperWall.Core
+namespace ThePaperWall.Core.Rss
 {
-
-    public interface IRssReader
-    {
-       Task<rss> GetFeed(string url);
-       List<ImageMetaData> GetImageMetaData(rss feed);
-    }
     public class RssReader : IRssReader
     {
         public async Task<rss> GetFeed(string url)

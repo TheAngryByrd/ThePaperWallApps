@@ -1,9 +1,7 @@
-﻿using System.Reactive.Linq;
-using Akavache;
+﻿
 using Splat;
 using System;
 using System.Net.Http;
-using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
 using ThePaperWall.Core.Models;
 using System.Collections.Generic;
@@ -16,7 +14,7 @@ namespace ThePaperWall.Core.Downloads
 
         public async Task<IBitmap> DownloadImage(ImageMetaData imageMetaData, IProgress<ProgressEvent> progress = null)
         {
-            //return await BlobCache.LocalMachine.LoadImageFromUrl(imageMetaData.imageUrl).GetAwaiter();
+            //return await BlobCache.LocalMachine.LoadImageFromUrl(imageMetaData.imageUrl);
             IBitmap image = null;
             var shouldFetch = false;
 
@@ -27,12 +25,6 @@ namespace ThePaperWall.Core.Downloads
             }
           
             return image;
-           
-           
-            //BlobCache.LocalMachine.InsertObject(imageMetaData.imageUrl, image);
-
-           //return await BlobCache.LocalMachine.GetOrFetchObject<IBitmap>(image.imageUrl, () => Fetch(image.imageUrl, progress)).ToTask();
-                             
         }
 
         private async Task<IBitmap> Fetch(string imageUrl, IProgress<ProgressEvent> progress = null)

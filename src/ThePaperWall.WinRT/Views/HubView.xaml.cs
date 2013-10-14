@@ -1,5 +1,6 @@
 ﻿using ThePaperWall.Core.Downloads;
 using ThePaperWall.Core.Feeds;
+using ThePaperWall.WinRT;
 using ThePaperWall.WinRT.Common;
 using ThePaperWall.WinRT.Data;
 using System;
@@ -25,12 +26,12 @@ using System.Reactive.Linq;
 
 // The Hub Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=??????
 
-namespace ThePaperWall.WinRT
+namespace ThePaperWall.WinRT.Views
 {
     /// <summary>
     /// A page that displays a grouped collection of items.
     /// </summary>
-    public sealed partial class HubPage : Page
+    public sealed partial class HubView : Page
     {
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
@@ -52,7 +53,7 @@ namespace ThePaperWall.WinRT
             get { return this.defaultViewModel; }
         }
 
-        public HubPage()
+        public HubView()
         {
             this.InitializeComponent();
             this.navigationHelper = new NavigationHelper(this);
