@@ -236,6 +236,12 @@
     <Folder Include="ViewModels\" />
     <Folder Include="Views\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ThePaperWall.Core\ThePaperWall.Core.csproj">
+      <Project>{4c9de318-b02b-4bf6-9c83-42aaefebc0ce}</Project>
+      <Name>ThePaperWall.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
   </PropertyGroup>
