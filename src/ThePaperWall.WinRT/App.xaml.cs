@@ -1,4 +1,6 @@
 ﻿using Caliburn.Micro;
+using ThePaperWall.Core.Downloads;
+using ThePaperWall.Core.Feeds;
 using ThePaperWall.WinRT.Common;
 using System;
 using System.Collections.Generic;
@@ -18,6 +20,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using ThePaperWall.WinRT.ViewModels;
 using System.Reflection;
+using ThePaperWall.Core.Rss;
 
 // The Hub App template is documented at http://go.microsoft.com/fwlink/?LinkId=286574
 
@@ -69,6 +72,11 @@ namespace ThePaperWall.WinRT
 
             AddViewModels();
             AddView();
+
+            _container.PerRequest<IThemeService, ThemeService>();
+            _container.PerRequest<IAsyncDownloadManager, AsyncDownloadManager>();
+            _container.PerRequest<IRssReader, RssReader>();
+
             
             //TODO: Register your view models at the container
         }

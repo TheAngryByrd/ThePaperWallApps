@@ -105,6 +105,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Extentions\TaskEx.cs" />
     <Compile Include="ReactiveCaliburn\ReactivePropertyChangedBase.cs" />
     <Compile Include="ReactiveCaliburn\ReactiveScreen.cs" />
     <Compile Include="ReactiveCaliburn\ReactiveViewAware.cs" />

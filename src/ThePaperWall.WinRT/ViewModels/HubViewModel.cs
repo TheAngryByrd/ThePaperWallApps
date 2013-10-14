@@ -1,4 +1,5 @@
-﻿using ReactiveCaliburn;
+﻿using Caliburn.Micro;
+using ReactiveCaliburn;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,19 +34,27 @@ namespace ThePaperWall.WinRT.ViewModels
 
         protected override async Task OnActivate()
         {
-            var themeService = new ThemeService();
-            var themes = themeService.GetThemes(WallpaperResource.Feeds);
-
-            var fixture = new RssReader();
-
-            var rssForFeed = await fixture.GetFeed(themes.WallPaperOfTheDay.FeedUrl);
-            var imageMetaData = fixture.GetImageMetaData(rssForFeed).First();
-
-            var downloader = new AsyncDownloadManager();
-            MainImage = (await downloader.DownloadImage(imageMetaData)).ToNative();
+            GetMainHeroImage();
 
             var sampleDataGroups = await SampleDataSource.GetGroupsAsync();
             this.DefaultViewModel["Groups"] = sampleDataGroups;
+        }
+  
+        private void GetMainHeroImage()
+        {
+            System.Action getMainHeroImage =async () =>
+            {              
+                var themes = _themeService.GetThemes(WallpaperResource.Feeds);
+
+
+                var rssForFeed = await _rssReader.GetFeed(themes.WallPaperOfTheDay.FeedUrl);
+                var imageMetaData = _rssReader.GetImageMetaData(rssForFeed).First();
+
+                MainImage = (await _downloadManager.DownloadImage(imageMetaData)).ToNative();
+            };
+            getMainHeroImage.OnUIThreadAsync();
+        
+                
         }
 
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
