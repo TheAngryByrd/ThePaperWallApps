@@ -13,6 +13,7 @@ namespace ThePaperWall.Core.Downloads
 
         public async Task<IBitmap> DownloadImage(string imageUrl, IProgress<ProgressEvent> progress = null)
         {
+            
             return await BlobCache.LocalMachine.LoadImageFromUrl(imageUrl);
         }
     }

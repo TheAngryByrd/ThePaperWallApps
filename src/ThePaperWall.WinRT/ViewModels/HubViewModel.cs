@@ -40,25 +40,17 @@ namespace ThePaperWall.WinRT.ViewModels
             _themes = _themeService.GetThemes(WallpaperResource.Feeds);
             GetMainHeroImage();
             GetTop4WallPaperItems();
-
-            var sampleDataGroups = await SampleDataSource.GetGroupsAsync();
-            this.DefaultViewModel["Groups"] = sampleDataGroups;
         }
   
-        private void GetTop4WallPaperItems()
-        {
-            System.Action getMainHeroImage = async () =>
+        private async void GetTop4WallPaperItems()
+        {          
+            var rssForFeed = await _rssReader.GetFeed(_themes.Top4.FeedUrl);
+            var imageMetaData = _rssReader.GetImageMetaData(rssForFeed);
+
+            foreach(var imd in imageMetaData)
             {
-                var rssForFeed = await _rssReader.GetFeed(_themes.Top4.FeedUrl);
-                var imageMetaData = _rssReader.GetImageMetaData(rssForFeed);
-
-               foreach(var imd in imageMetaData)
-               {
-                    Top4Items.Add(new Top4WallPaperItem(_downloadManager,imd));
-               }
-            };
-            getMainHeroImage.OnUIThreadAsync(); 
-
+                Top4Items.Add(new Top4WallPaperItem(_downloadManager,imd));
+            }   
         }
   
         private void GetMainHeroImage()
