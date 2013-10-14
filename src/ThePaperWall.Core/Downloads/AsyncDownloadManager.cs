@@ -1,10 +1,7 @@
 ﻿using Splat;
 using System;
-using System.Net.Http;
 using System.Threading.Tasks;
-using ThePaperWall.Core.Models;
 using System.Collections.Generic;
-using System.IO;
 using Akavache;
 using System.Reactive.Linq;
 
