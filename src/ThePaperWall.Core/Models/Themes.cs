@@ -1,16 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ThePaperWall.Core.Models
 {
     public class Themes
     {
-        private List<Theme> _all;
+        public Themes(IEnumerable<Theme> all)
+        {
+            _all = all;
+        }
+        private IEnumerable<Theme> _all;
 
-        public List<Theme> All
+        public IEnumerable<Theme> All
         {
             get
             {
@@ -18,5 +19,13 @@ namespace ThePaperWall.Core.Models
             }
             
         }
+
+        public Theme WallPaperOfTheDay
+            {
+                get
+                {
+                    return _all.First(t => t.Name == "Wallpaper of the Day");
+                }                
+            }
     }
 }

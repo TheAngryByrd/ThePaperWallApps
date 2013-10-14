@@ -33,8 +33,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="IThemeService.cs" />
+    <Compile Include="Models\Rss.cs" />
     <Compile Include="Models\Theme.cs" />
     <Compile Include="Models\Themes.cs" />
+    <Compile Include="ThemeService.cs" />
     <Compile Include="WallpaperResource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -65,6 +68,9 @@
     </Reference>
     <Reference Include="Splat.Portable">
       <HintPath>..\packages\Splat.0.3.1\lib\Portable-Net45+WinRT45+WP8\Splat.Portable.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Interactive">
+      <HintPath>..\packages\Ix-Main.0.9.0.2\lib\Net45\System.Interactive.dll</HintPath>
     </Reference>
     <Reference Include="System.Reactive.Core">
       <HintPath>..\packages\Rx-Core.2.1.30214.0\lib\Portable-Net45+WinRT45+WP8\System.Reactive.Core.dll</HintPath>
