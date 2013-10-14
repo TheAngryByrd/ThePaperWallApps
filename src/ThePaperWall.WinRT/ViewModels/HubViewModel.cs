@@ -50,7 +50,7 @@ namespace ThePaperWall.WinRT.ViewModels
             System.Action getMainHeroImage = async () =>
             {
                 var rssForFeed = await _rssReader.GetFeed(_themes.Top4.FeedUrl);
-                var imageMetaData = _rssReader.GetImageMetaData(rssForFeed).Take(1);
+                var imageMetaData = _rssReader.GetImageMetaData(rssForFeed);
 
                foreach(var imd in imageMetaData)
                {
@@ -96,14 +96,13 @@ namespace ThePaperWall.WinRT.ViewModels
 
     public class Top4WallPaperItem : ReactiveObject
     {
-        private AsyncLazy<IBitmap> _lazyImage;
 
         public Top4WallPaperItem(IAsyncDownloadManager downloaderManager, ImageMetaData imageMetaData)
         {
             Category = imageMetaData.Category;
             System.Action lazyImage = async () => 
                 {
-                    ImagePath = (await downloaderManager.DownloadImage(imageMetaData.imageThumbnail)).ToNative();
+                    ImagePath = (await downloaderManager.DownloadImage(imageMetaData.imageUrl)).ToNative();
                 };
             lazyImage.BeginOnUIThread();
         }
@@ -123,104 +122,4 @@ namespace ThePaperWall.WinRT.ViewModels
             }
         }
     }
-
-    /// <summary>
-    /// Provides support for lazy initialization in asyncronous manner.
-    /// </summary>
-    /// <typeparam name="T">Specifies the type of object that is being lazily initialized.</typeparam>
-    public sealed class AsyncLazy<T>
-    {
-        #region Fields
-
-        private object _syncObject = new object();
-        private Task<T> _initializeTask;
-
-        #endregion
-
-        #region Constructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AsyncLazy"/> class.
-        /// When lazy initialization occurs, the specified initialization function is used.
-        /// </summary>
-        /// <param name="valueFactory">The delegate that is invoked to produce the lazily initialized value when
-        /// it is needed.</param>
-        public AsyncLazy(Func<T> valueFactory)
-        {
-            if (valueFactory == null)
-            {
-                throw new ArgumentNullException("valueFactory");
-            }
-            _initializeTask = new Task<T>(valueFactory);
-        }
-
-        public AsyncLazy(Task<T> valueFactory)
-        {
-            if (valueFactory == null)
-            {
-                throw new ArgumentNullException("valueFactory");
-            }
-            _initializeTask = valueFactory;
-        }
-
-        #endregion
-
-        /// <summary>
-        ///  Gets the lazily initialized value of the current instance.
-        ///  If value have not been initialized, block calling thread until value get initialized.
-        ///  If during initialization exception have been thrown, it will wrapped into <see cref="AggregateException"/>
-        ///  and rethrowned on accessing this property.
-        /// </summary>
-        public T Value
-        {
-            get
-            {
-                if (_initializeTask.Status == TaskStatus.Created)
-                {
-                    lock (_syncObject)
-                    {
-                        if (_initializeTask.Status == TaskStatus.Created)
-                        {
-                            _initializeTask.RunSynchronously();
-                        }
-                    }
-                }
-
-                return _initializeTask.Result;
-            }
-        }
-
-        /// <summary>
-        /// Gets a value that indicates whether a value has been created for this instance.
-        /// </summary>
-        /// <value>
-        ///     <c>true</c> if a value has been created; otherwise, <c>false</c>.
-        /// </value>
-        public bool IsValueCreated
-        {
-            get
-            {
-                return _initializeTask.IsCompleted;
-            }
-        }
-
-        /// <summary>
-        /// Initializes value on background thread.
-        /// Calling thread will never be blocked.
-        /// </summary>
-        public void InitializeAsync()
-        {
-            if (_initializeTask.Status == TaskStatus.Created)
-            {
-                lock (_syncObject)
-                {
-                    if (_initializeTask.Status == TaskStatus.Created)
-                    {
-                        _initializeTask.Start();
-                    }
-                }
-            }
-        }
-    }
-  
 }
