@@ -126,8 +126,8 @@ namespace ThePaperWall.WinRT
             var imageMetaData = fixture.GetImageMetaData(rssForFeed).First();
 
             var downloader = new AsyncDownloadManager();
-           // MainImage.ImageSource = (await downloader.DownloadImage(imageMetaData)).ToNative();
-            MainImage.ImageSource = (await BlobCache.LocalMachine.LoadImageFromUrl(imageMetaData.imageUrl)).ToNative();
+            MainImage.ImageSource = (await downloader.DownloadImage(imageMetaData)).ToNative();
+            //MainImage.ImageSource = (await BlobCache.LocalMachine.LoadImageFromUrl(imageMetaData.imageUrl)).ToNative();
            
         }
 
