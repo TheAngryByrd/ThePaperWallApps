@@ -131,58 +131,8 @@
                         </ListView.ItemsPanel>
                     </ListView>
                 </DataTemplate>
-            </HubSection>
-            <HubSection Padding="7,30,40,44">
-                <HubSection.Header>
-                    <TextBlock x:Uid="Section3Header" TextLineBounds="TrimToBaseline" OpticalMarginAlignment="TrimSideBearings" Text="Section 3"/>
-                </HubSection.Header>
-                <DataTemplate>
-                    <!-- width of 400 -->
-                    <StackPanel Orientation="Vertical" Margin="2,10,0,0">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="130"/>
-                                <ColumnDefinition Width="5"/>
-                                <ColumnDefinition Width="130"/>
-                                <ColumnDefinition Width="5"/>
-                                <ColumnDefinition Width="130"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="270"/>
-                                <RowDefinition Height="95"/>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
-                            <Image Grid.ColumnSpan="5" Source="Assets/MediumGray.png" Stretch="Fill" Margin="0,0,0,10"/>
-                            <Image Grid.Row="1" Source="Assets/MediumGray.png" Stretch="Fill"/>
-                            <Image Grid.Row="1" Grid.Column="2" Source="Assets/MediumGray.png" Stretch="Fill"/>
-                            <Image Grid.Row="1" Grid.Column="4" Source="Assets/MediumGray.png" Stretch="Fill"/>
-                            <TextBlock Grid.Row="2" Grid.ColumnSpan="5" x:Uid="DescriptionHeader" Margin="0,15,0,0" Style="{StaticResource TitleTextBlockStyle}"/>
-                            <TextBlock Grid.Row="3" Grid.ColumnSpan="5" x:Uid="LongText" Style="{StaticResource BodyTextBlockStyle}"/>
-                        </Grid>
-                    </StackPanel>
-                </DataTemplate>
-            </HubSection>
-            <HubSection Width="520" Padding="40,30,40,44">
-                <HubSection.Header>
-                    <TextBlock x:Uid="Section4Header" TextLineBounds="TrimToBaseline" OpticalMarginAlignment="TrimSideBearings" Text="Section 4"/>
-                </HubSection.Header>
-                <DataTemplate>
-                    <Grid Margin="2,10,0,0">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
-                        <TextBlock x:Uid="ItemTitle" Margin="0,0,0,10" Style="{StaticResource TitleTextBlockStyle}" Text="Item Title" />
-                        <TextBlock Grid.Row="1" x:Uid="Section4UnderTitle" Style="{StaticResource SubheaderTextBlockStyle}" Text="Quisque in porta lorem dolor amet sed consectetuer ising elit, sed diam non my nibh uis mod wisi quip."/>
-                        <TextBlock Grid.Row="2" x:Uid="ItemSubTitle" Margin="0,20,0,0" Style="{StaticResource SubtitleTextBlockStyle}" Text="Item Sub Title"/>
-                        <TextBlock Grid.Row="3" x:Uid="LongText" Style="{StaticResource BodyTextBlockStyle}" Text="Lorem ipsum dolor sit amet, consectetuer ising elit, sed diam nonummy nibh uismod tincidunt ut laoreet suscipit lobortis ni ut wisi quipexerci quis consequat minim veniam, quis nostrud exerci tation ullam corper. Lorem ipsum dolor sit amet, consectetuer ising elit, sed diam nonummy nibh uismod tincidunt ut laoreet suscipit lobortis ni ut wisi quipexerci quis consequat minim veniam, quis nostrud exerci tation ullam corper."/>
-                    </Grid>
-                </DataTemplate>
-            </HubSection>
-            <HubSection Padding="40,30,150,44">
+            </HubSection>       
+            <HubSection>
                 <HubSection.Header>
                     <TextBlock x:Uid="Section5Header" TextLineBounds="TrimToBaseline" OpticalMarginAlignment="TrimSideBearings" Text="Section 5"/>
                 </HubSection.Header>
