@@ -88,7 +88,7 @@
                     <ImageBrush ImageSource="{Binding MainImage}"  Stretch="UniformToFill" />
                 </HubSection.Background>
             </HubSection>
-            <HubSection Width="580" Padding="120,30,40,44"  VerticalAlignment="Top" >
+            <HubSection Width="580" Padding="120,0,40,44"  VerticalAlignment="Top" >
                 <HubSection.Header>
                     <TextBlock x:Uid="Section1Header" TextLineBounds="TrimToBaseline" OpticalMarginAlignment="TrimSideBearings" Text="Wallpaper Of The Day"/>
                 </HubSection.Header>
@@ -107,7 +107,7 @@
                     </Grid>
                 </DataTemplate>
             </HubSection>
-            <HubSection Padding="40,30,40,44" IsHeaderInteractive="True" >
+            <HubSection IsHeaderInteractive="True" >
                 <HubSection.Header>
                     <TextBlock x:Uid="Section2Header" TextLineBounds="TrimToBaseline" OpticalMarginAlignment="TrimSideBearings" Text="Top 4 WallPapers"/>
                 </HubSection.Header>

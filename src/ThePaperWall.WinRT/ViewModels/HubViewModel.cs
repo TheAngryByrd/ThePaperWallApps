@@ -28,8 +28,6 @@ namespace ThePaperWall.WinRT.ViewModels
         private readonly IRssReader _rssReader;
         private readonly IAsyncDownloadManager _downloadManager;
 
-       
-
         public HubViewModel(IThemeService themeService,
             IRssReader rssReader,
             IAsyncDownloadManager downloadManager)
@@ -70,10 +68,10 @@ namespace ThePaperWall.WinRT.ViewModels
             var firstImageFromFeed = _rssReader.GetImageMetaData(feed).First();
             firstImageFromFeed.Category = theme.Name;
             await _dispatcher.RunAsync(CoreDispatcherPriority.Normal,
-            () => CategoryItems.Add(new CategoryItem(_downloadManager, firstImageFromFeed)));
+                () => CategoryItems.Add(new CategoryItem(_downloadManager, firstImageFromFeed)));
         }
   
-        private async Task GetTop4WallPaperItems()
+        private async void GetTop4WallPaperItems()
         {          
             var rssForFeed = await _rssReader.GetFeed(_themes.Top4.FeedUrl);
             var imageMetaData = _rssReader.GetImageMetaData(rssForFeed);
@@ -84,7 +82,7 @@ namespace ThePaperWall.WinRT.ViewModels
             }   
         }
   
-        private async Task GetWallpaperOfTheDay()
+        private async void GetWallpaperOfTheDay()
         {
            
             var rssForFeed = await _rssReader.GetFeed(_themes.WallPaperOfTheDay.FeedUrl);
@@ -98,11 +96,6 @@ namespace ThePaperWall.WinRT.ViewModels
             
         }
 
-        private ObservableDictionary defaultViewModel = new ObservableDictionary();
-        public ObservableDictionary DefaultViewModel
-        {
-            get { return this.defaultViewModel; }
-        }
 
         public ObservableCollection<CategoryItem> _top4Items = new ObservableCollection<CategoryItem>();
         public ObservableCollection<CategoryItem> Top4Items
