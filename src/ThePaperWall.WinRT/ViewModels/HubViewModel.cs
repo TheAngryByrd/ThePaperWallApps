@@ -8,6 +8,7 @@ using Caliburn.Micro;
 using ReactiveCaliburn;
 using ReactiveUI;
 using Splat;
+using Splat;
 using ThePaperWall.Core.Downloads;
 using ThePaperWall.Core.Feeds;
 using ThePaperWall.Core.Models;
@@ -20,6 +21,13 @@ using Punchclock;
 using System.Reactive;
 using System.Collections.Generic;
 using ThePaperWall.Core.Framework;
+using Windows.ApplicationModel.Core;
+using Windows.Storage.Streams;
+using System.IO;
+using Windows.Graphics.Imaging;
+using Windows.UI.Xaml.Media.Imaging;
+using Windows.Foundation;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace ThePaperWall.WinRT.ViewModels
 {
@@ -57,8 +65,7 @@ namespace ThePaperWall.WinRT.ViewModels
         {
 
             _themes.Categories
-                         .ToObservable()                         
-                         //.SubscribeOnDispatcher()
+                         .ToObservable()            
                          .Subscribe(GetCategory); 
         }
 
@@ -67,8 +74,7 @@ namespace ThePaperWall.WinRT.ViewModels
             var feed = await _rssReader.GetFeed(theme.FeedUrl);
             var firstImageFromFeed = _rssReader.GetImageMetaData(feed).First();
             firstImageFromFeed.Category = theme.Name;
-            System.Action action = () => CategoryItems.Add(new CategoryItem(_downloadManager, firstImageFromFeed));
-            action.BeginOnUIThread();
+            Execute.BeginOnUIThread((() => CategoryItems.Add(new CategoryItem(_downloadManager, firstImageFromFeed))));
         }
   
         private async void GetTop4WallPaperItems()
@@ -87,8 +93,8 @@ namespace ThePaperWall.WinRT.ViewModels
             var rssForFeed = await _rssReader.GetFeed(_themes.WallPaperOfTheDay.FeedUrl);
             var imageMetaData = _rssReader.GetImageMetaData(rssForFeed).First();
             var image = await _downloadManager.DownloadImage(imageMetaData.imageUrl, priority:10);
-            System.Action action = () => MainImage = image.ToNative();
-            action.BeginOnUIThread();
+            Execute.BeginOnUIThread(async () => {                
+                MainImage = image.ToNative();});
         }
 
 
@@ -110,7 +116,6 @@ namespace ThePaperWall.WinRT.ViewModels
             get { return _mainImage; }
             set { this.RaiseAndSetIfChanged(ref _mainImage, value); }
         }
-    }
-
- 
+    }  
+    
 }

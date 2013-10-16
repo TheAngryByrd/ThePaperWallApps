@@ -38,6 +38,8 @@ namespace ThePaperWall.Core.Downloads
             }
             return Splat.BitmapLoader.Current.Create(1,1);
         }
+
+
     }
 }
 

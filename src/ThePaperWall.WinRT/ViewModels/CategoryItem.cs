@@ -5,6 +5,7 @@ using Splat;
 using ThePaperWall.Core.Downloads;
 using ThePaperWall.Core.Models;
 using Windows.UI.Xaml.Media;
+using System.Threading.Tasks;
 
 namespace ThePaperWall.WinRT.ViewModels
 {
@@ -14,12 +15,16 @@ namespace ThePaperWall.WinRT.ViewModels
             ImageMetaData imageMetaData, int priority = 1)
         {
             Category = imageMetaData.Category;
-            System.Action lazyImage = async () => 
-            {
-                ImagePath = (await downloaderManager.DownloadImage(imageMetaData.imageUrl, priority:priority)).ToNative();
-            };
-            lazyImage.BeginOnUIThread();
+            LazyLoadImage(downloaderManager, imageMetaData, priority);
         }
+  
+        private async void LazyLoadImage(IAsyncDownloadManager downloaderManager, ImageMetaData imageMetaData, int priority)
+        {
+            var image = (await downloaderManager.DownloadImage(imageMetaData.imageThumbnail, priority:priority));
+            Execute.BeginOnUIThread(() => ImagePath = image.ToNative());
+        }
+
+
 
         public string Category { get; set; }
 

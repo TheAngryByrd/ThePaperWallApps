@@ -1,24 +1,46 @@
-﻿using System.Collections.Generic;
+﻿using Akavache;
+using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 using ThePaperWall.Core.Models;
+using System.Reactive.Linq;
+using System.Net.Http;
+using System.IO;
+using Punchclock;
 
 namespace ThePaperWall.Core.Rss
 {
     public class RssReader : IRssReader
     {
+        static OperationQueue opQueue = new OperationQueue(10);
         public async Task<rss> GetFeed(string url)
         {
             XmlSerializer serializer = new XmlSerializer(typeof(rss));
             rss feed = null;
-            XmlReader reader = await Task.Run(() => XmlReader.Create(url));
+
+            var rssFeed = await BlobCache.LocalMachine.GetOrFetchObject(url, () => FetchRssFeedQueued(url), DateTimeOffset.Now.AddMinutes(30));
+            
+            var reader = XmlReader.Create(new MemoryStream(rssFeed));
+
             using (reader)
             {
                 feed = (rss)serializer.Deserialize(reader);
             }
             return feed;
+        }
+        public Task<byte[]> FetchRssFeedQueued(string url)
+        {
+            return opQueue.Enqueue(1, () => FetchRssFeed(url));
+        }
+        public async Task<byte[]> FetchRssFeed(string url)
+        {
+            using (var client = new HttpClient())
+            {
+                return await client.GetByteArrayAsync(url);
+            }
         }
 
         public List<ImageMetaData> GetImageMetaData(rss feed)
