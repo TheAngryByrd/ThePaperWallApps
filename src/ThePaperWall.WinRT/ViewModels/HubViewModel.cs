@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using System.Reactive.Threading.Tasks;
 using System.Reactive.Linq;
 using Caliburn.Micro;
-using LinqToAwait;
 using ReactiveCaliburn;
 using ReactiveUI;
 using Splat;
@@ -35,7 +34,7 @@ namespace ThePaperWall.WinRT.ViewModels
             _themeService = themeService;
             _rssReader = rssReader;
             _downloadManager = downloadManager;
-            BlobCache.LocalMachine.Dispose();
+           // BlobCache.LocalMachine.Dispose();
         }
 
         private Themes _themes;
@@ -45,21 +44,20 @@ namespace ThePaperWall.WinRT.ViewModels
         {
             _dispatcher = Windows.UI.Core.CoreWindow.GetForCurrentThread().Dispatcher;
             _themes = _themeService.GetThemes(WallpaperResource.Feeds);
-
+            BlobCache.ApplicationName = "ThePaperWall";
             GetWallpaperOfTheDay();
-            GetTop4WallPaperItems();       
-            GetCategoryItems();
+            //GetTop4WallPaperItems();       
+            //GetCategoryItems();
         }
   
         private CoreDispatcher _dispatcher;
 
-        private async void GetCategoryItems()
+        private void GetCategoryItems()
         {
     
-            await _themes.Categories
+            _themes.Categories
                          .OrderBy(c => c.Name)
-                         .AsAsync()
-                         .ForEachAsync(GetCategory); 
+                         .ToObservable().Subscribe(GetCategory); 
         }
 
         private async void GetCategory(Theme theme)

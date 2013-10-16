@@ -13,17 +13,40 @@ namespace ThePaperWall.Core.Downloads
     {
         private static OperationQueue _opQueue = new OperationQueue(2);
 
-        public Task<IBitmap> DownloadImage(string imageUrl, IProgress<ProgressEvent> progress = null)
+        public async Task<IBitmap> DownloadImage(string imageUrl, IProgress<ProgressEvent> progress = null)
         {
             try
             {
-                return _opQueue.Enqueue(1, () => BlobCache.LocalMachine.LoadImageFromUrl(imageUrl).ToTask());
+                return await _opQueue.EnqueueObservableOperation(1, () =>
+                {
+                    try
+                    {
+                        return BlobCache.LocalMachine.LoadImageFromUrl(imageUrl);
+                    }
+                    catch (Exception e)
+                    {
+                        throw;
+                    }
+                });
+                //return await BlobCache.LocalMachine.LoadImageFromUrl(imageUrl);
+                return await _opQueue.Enqueue(1, () =>
+                {
+                    
+                    try
+                    {
+                        return BlobCache.LocalMachine.LoadImageFromUrl(imageUrl).ToTask();
+                    }
+                    catch (Exception e)
+                    {
+                        throw e;
+                    }
+                    });
             }
             catch(Exception _)
             {
                 
             }
-            return Task.Run(() => Splat.BitmapLoader.Current.Create(1,1));
+            return Splat.BitmapLoader.Current.Create(1,1);
         }
     }
 }

@@ -21,6 +21,7 @@ using Windows.UI.Xaml.Navigation;
 using ThePaperWall.WinRT.ViewModels;
 using System.Reflection;
 using ThePaperWall.Core.Rss;
+using Akavache;
 
 // The Hub App template is documented at http://go.microsoft.com/fwlink/?LinkId=286574
 
@@ -48,6 +49,7 @@ namespace ThePaperWall.WinRT
         /// <param name="e">Details about the launch request and process.</param>
         protected override void OnLaunched(LaunchActivatedEventArgs args)
         {
+            BlobCache.ApplicationName = "ThePaperWall";
             DisplayRootViewFor<HubViewModel>();
         }
         /// <summary>
@@ -77,7 +79,6 @@ namespace ThePaperWall.WinRT
             _container.PerRequest<IAsyncDownloadManager, AsyncDownloadManager>();
             _container.PerRequest<IRssReader, RssReader>();
 
-            
             //TODO: Register your view models at the container
         }
 
