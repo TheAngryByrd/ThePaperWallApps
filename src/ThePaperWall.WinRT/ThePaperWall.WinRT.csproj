@@ -123,6 +123,7 @@
     <Compile Include="Common\RelayCommand.cs" />
     <Compile Include="Common\ObservableDictionary.cs" />
     <Compile Include="Common\BooleanToVisibilityConverter.cs" />
+    <Compile Include="ViewModels\CategoryItem.cs" />
     <Compile Include="ViewModels\HubViewModel.cs" />
     <Compile Include="Views\HubView.xaml.cs">
       <DependentUpon>HubView.xaml</DependentUpon>

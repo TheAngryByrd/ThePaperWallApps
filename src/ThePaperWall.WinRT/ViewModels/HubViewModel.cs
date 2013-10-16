@@ -18,6 +18,7 @@ using Windows.UI.Xaml.Media;
 using Akavache;
 using Punchclock;
 using System.Reactive;
+using System.Collections.Generic;
 
 namespace ThePaperWall.WinRT.ViewModels
 {
@@ -34,6 +35,7 @@ namespace ThePaperWall.WinRT.ViewModels
             _themeService = themeService;
             _rssReader = rssReader;
             _downloadManager = downloadManager;
+            BlobCache.LocalMachine.Dispose();
         }
 
         private Themes _themes;
@@ -53,10 +55,11 @@ namespace ThePaperWall.WinRT.ViewModels
 
         private void GetCategoryItems()
         {
-    
+
             _themes.Categories
-                         .OrderBy(c => c.Name)
-                         .ToObservable().Subscribe(GetCategory); 
+                         .ToObservable()                         
+                         .SubscribeOnDispatcher()
+                         .Subscribe(GetCategory); 
         }
 
         private async void GetCategory(Theme theme)
@@ -64,8 +67,7 @@ namespace ThePaperWall.WinRT.ViewModels
             var feed = await _rssReader.GetFeed(theme.FeedUrl);
             var firstImageFromFeed = _rssReader.GetImageMetaData(feed).First();
             firstImageFromFeed.Category = theme.Name;
-            await _dispatcher.RunAsync(CoreDispatcherPriority.Normal,
-                () => CategoryItems.Add(new CategoryItem(_downloadManager, firstImageFromFeed)));
+            CategoryItems.Add(new CategoryItem(_downloadManager, firstImageFromFeed));
         }
   
         private async void GetTop4WallPaperItems()
@@ -75,7 +77,7 @@ namespace ThePaperWall.WinRT.ViewModels
 
             foreach(var imd in imageMetaData)
             {
-                Top4Items.Add(new CategoryItem(_downloadManager,imd));
+                Top4Items.Add(new CategoryItem(_downloadManager,imd,2));
             }   
         }
   
@@ -84,7 +86,7 @@ namespace ThePaperWall.WinRT.ViewModels
            
             var rssForFeed = await _rssReader.GetFeed(_themes.WallPaperOfTheDay.FeedUrl);
             var imageMetaData = _rssReader.GetImageMetaData(rssForFeed).First();
-            var image = await _downloadManager.DownloadImage(imageMetaData.imageUrl);
+            var image = await _downloadManager.DownloadImage(imageMetaData.imageUrl, priority:10);
             _dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
             {
                 MainImage = image.ToNative();
@@ -94,14 +96,14 @@ namespace ThePaperWall.WinRT.ViewModels
         }
 
 
-        public ObservableCollection<CategoryItem> _top4Items = new ObservableCollection<CategoryItem>();
-        public ObservableCollection<CategoryItem> Top4Items
+        public SortableObservableCollection<CategoryItem> _top4Items = new SortableObservableCollection<CategoryItem>();
+        public SortableObservableCollection<CategoryItem> Top4Items
         {
             get { return _top4Items; }
-        }    
-        
-        public ObservableCollection<CategoryItem> _categoryItems = new ObservableCollection<CategoryItem>();
-        public ObservableCollection<CategoryItem> CategoryItems
+        }
+
+        public SortableObservableCollection<CategoryItem> _categoryItems = new SortableObservableCollection<CategoryItem>();
+        public SortableObservableCollection<CategoryItem> CategoryItems
         {
             get { return _categoryItems; }
         }
@@ -114,32 +116,42 @@ namespace ThePaperWall.WinRT.ViewModels
         }
     }
 
-    public class CategoryItem : ReactiveObject
+    public class SortableObservableCollection<T> : ObservableCollection<T> where T : IComparable<T>
     {
-
-        public CategoryItem(IAsyncDownloadManager downloaderManager, ImageMetaData imageMetaData)
+        public SortableObservableCollection()
         {
-            Category = imageMetaData.Category;
-            System.Action lazyImage = async () => 
-                {
-                    ImagePath = (await downloaderManager.DownloadImage(imageMetaData.imageUrl)).ToNative();
-                };
-            lazyImage.BeginOnUIThread();
         }
 
-        public string Category { get; set; }
-        public ImageSource _imagePath;
-
-        public ImageSource ImagePath
+        public SortableObservableCollection(IEnumerable<T> list)
         {
-            get
-            {
-                return _imagePath;
-            }     
-            set
-            {
-                this.RaiseAndSetIfChanged(ref _imagePath, value);
-            }
+            if (list == null)
+                throw new ArgumentNullException("list");
+            foreach (T item in list)
+                Add(item);
+        }
+
+        public new void Add(T item)
+        {
+            base.Add(item);
+            MoveItemIntoSortedList(item);
+        }
+
+        private void MoveItemIntoSortedList(T item)
+        {
+            MoveItem(Count - 1, GetBinarySearchIndex(item, 0, Count - 1));
+        }
+
+        private int GetBinarySearchIndex(T item, int low, int high)
+        {
+            if (high < low)
+                return low;
+            int mid = low + ((high - low) / 2);
+            if (base[mid].CompareTo(item) > 0)
+                return GetBinarySearchIndex(item, low, mid - 1);
+            if (base[mid].CompareTo(item) < 0)
+                return GetBinarySearchIndex(item, mid + 1, high);
+            return mid;
         }
     }
+
 }

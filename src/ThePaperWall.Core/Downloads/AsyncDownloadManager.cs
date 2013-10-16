@@ -13,11 +13,13 @@ namespace ThePaperWall.Core.Downloads
     {
         private static OperationQueue _opQueue = new OperationQueue(2);
 
-        public async Task<IBitmap> DownloadImage(string imageUrl, IProgress<ProgressEvent> progress = null)
+        public async Task<IBitmap> DownloadImage(string imageUrl, 
+            IProgress<ProgressEvent> progress = null,
+            int priority = 1)
         {
             try
             {
-                return await _opQueue.EnqueueObservableOperation(1, () =>
+                return await _opQueue.EnqueueObservableOperation(priority, () =>
                 {
                     try
                     {
