@@ -19,6 +19,7 @@ using Akavache;
 using Punchclock;
 using System.Reactive;
 using System.Collections.Generic;
+using ThePaperWall.Core.Framework;
 
 namespace ThePaperWall.WinRT.ViewModels
 {
@@ -35,7 +36,6 @@ namespace ThePaperWall.WinRT.ViewModels
             _themeService = themeService;
             _rssReader = rssReader;
             _downloadManager = downloadManager;
-            BlobCache.LocalMachine.Dispose();
         }
 
         private Themes _themes;
@@ -58,7 +58,7 @@ namespace ThePaperWall.WinRT.ViewModels
 
             _themes.Categories
                          .ToObservable()                         
-                         .SubscribeOnDispatcher()
+                         //.SubscribeOnDispatcher()
                          .Subscribe(GetCategory); 
         }
 
@@ -67,7 +67,8 @@ namespace ThePaperWall.WinRT.ViewModels
             var feed = await _rssReader.GetFeed(theme.FeedUrl);
             var firstImageFromFeed = _rssReader.GetImageMetaData(feed).First();
             firstImageFromFeed.Category = theme.Name;
-            CategoryItems.Add(new CategoryItem(_downloadManager, firstImageFromFeed));
+            System.Action action = () => CategoryItems.Add(new CategoryItem(_downloadManager, firstImageFromFeed));
+            action.BeginOnUIThread();
         }
   
         private async void GetTop4WallPaperItems()
@@ -82,17 +83,12 @@ namespace ThePaperWall.WinRT.ViewModels
         }
   
         private async void GetWallpaperOfTheDay()
-        {
-           
+        {           
             var rssForFeed = await _rssReader.GetFeed(_themes.WallPaperOfTheDay.FeedUrl);
             var imageMetaData = _rssReader.GetImageMetaData(rssForFeed).First();
             var image = await _downloadManager.DownloadImage(imageMetaData.imageUrl, priority:10);
-            _dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
-            {
-                MainImage = image.ToNative();
-            });
-                
-            
+            System.Action action = () => MainImage = image.ToNative();
+            action.BeginOnUIThread();
         }
 
 
@@ -116,42 +112,5 @@ namespace ThePaperWall.WinRT.ViewModels
         }
     }
 
-    public class SortableObservableCollection<T> : ObservableCollection<T> where T : IComparable<T>
-    {
-        public SortableObservableCollection()
-        {
-        }
-
-        public SortableObservableCollection(IEnumerable<T> list)
-        {
-            if (list == null)
-                throw new ArgumentNullException("list");
-            foreach (T item in list)
-                Add(item);
-        }
-
-        public new void Add(T item)
-        {
-            base.Add(item);
-            MoveItemIntoSortedList(item);
-        }
-
-        private void MoveItemIntoSortedList(T item)
-        {
-            MoveItem(Count - 1, GetBinarySearchIndex(item, 0, Count - 1));
-        }
-
-        private int GetBinarySearchIndex(T item, int low, int high)
-        {
-            if (high < low)
-                return low;
-            int mid = low + ((high - low) / 2);
-            if (base[mid].CompareTo(item) > 0)
-                return GetBinarySearchIndex(item, low, mid - 1);
-            if (base[mid].CompareTo(item) < 0)
-                return GetBinarySearchIndex(item, mid + 1, high);
-            return mid;
-        }
-    }
-
+ 
 }

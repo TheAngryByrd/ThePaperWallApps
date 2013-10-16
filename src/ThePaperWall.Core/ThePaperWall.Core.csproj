@@ -38,6 +38,7 @@
     <Compile Include="Downloads\IAsyncDownloadManager.cs" />
     <Compile Include="Downloads\ProgressEvent.cs" />
     <Compile Include="Feeds\IThemeService.cs" />
+    <Compile Include="Framework\SortableObservableCollection.cs" />
     <Compile Include="Models\ImageMetaData.cs" />
     <Compile Include="Rss\IRssReader.cs" />
     <Compile Include="Rss\Rss.cs" />
