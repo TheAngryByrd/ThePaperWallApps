@@ -44,6 +44,7 @@ namespace ThePaperWall.WinRT.ViewModels
             _themeService = themeService;
             _rssReader = rssReader;
             _downloadManager = downloadManager;
+
         }
 
         private Themes _themes;
@@ -53,7 +54,6 @@ namespace ThePaperWall.WinRT.ViewModels
         {
             _dispatcher = Windows.UI.Core.CoreWindow.GetForCurrentThread().Dispatcher;
             _themes = _themeService.GetThemes(WallpaperResource.Feeds);
-            BlobCache.ApplicationName = "ThePaperWall";
             GetWallpaperOfTheDay();
             GetTop4WallPaperItems();       
             GetCategoryItems();
