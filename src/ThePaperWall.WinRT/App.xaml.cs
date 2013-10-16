@@ -50,6 +50,8 @@ namespace ThePaperWall.WinRT
         protected override void OnLaunched(LaunchActivatedEventArgs args)
         {
             BlobCache.ApplicationName = "ThePaperWall";
+            //Because Paul Betts says so
+            BlobCache.LocalMachine.InsertObject("dumb", "winrt is dumb");
             DisplayRootViewFor<HubViewModel>();
         }
         /// <summary>

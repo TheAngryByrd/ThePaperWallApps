@@ -21,26 +21,14 @@ namespace ThePaperWall.Core.Downloads
                 {
                     try
                     {
-                        return BlobCache.LocalMachine.LoadImageFromUrl(imageUrl);
+                        return BlobCache.LocalMachine.LoadImageFromUrl(imageUrl,absoluteExpiration: DateTimeOffset.Now.AddDays(1));
                     }
                     catch (Exception e)
                     {
                         throw;
                     }
                 });
-                //return await BlobCache.LocalMachine.LoadImageFromUrl(imageUrl);
-                return await _opQueue.Enqueue(1, () =>
-                {
-                    
-                    try
-                    {
-                        return BlobCache.LocalMachine.LoadImageFromUrl(imageUrl).ToTask();
-                    }
-                    catch (Exception e)
-                    {
-                        throw e;
-                    }
-                    });
+               
             }
             catch(Exception _)
             {
