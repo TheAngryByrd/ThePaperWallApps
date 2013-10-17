@@ -33,37 +33,9 @@ namespace ThePaperWall.WinRT.Views
     /// </summary>
     public sealed partial class HubView : Page
     {
-
         public HubView()
         {
             this.InitializeComponent();
         }
-
-        /// <summary>
-        /// Invoked when a HubSection header is clicked.
-        /// </summary>
-        /// <param name="sender">The Hub that contains the HubSection whose header was clicked.</param>
-        /// <param name="e">Event data that describes how the click was initiated.</param>
-        void Hub_SectionHeaderClick(object sender, HubSectionHeaderClickEventArgs e)
-        {
-            HubSection section = e.Section;
-            var group = section.DataContext;
-            this.Frame.Navigate(typeof(SectionPage), ((SampleDataGroup)group).UniqueId);
-        }
-
-        /// <summary>
-        /// Invoked when an item within a section is clicked.
-        /// </summary>
-        /// <param name="sender">The GridView or ListView
-        /// displaying the item clicked.</param>
-        /// <param name="e">Event data that describes the item clicked.</param>
-        void ItemView_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            // Navigate to the appropriate destination page, configuring the new page
-            // by passing required information as a navigation parameter
-            var itemId = ((SampleDataItem)e.ClickedItem).UniqueId;
-            this.Frame.Navigate(typeof(ItemPage), itemId);
-        }
-      
     }
 }
