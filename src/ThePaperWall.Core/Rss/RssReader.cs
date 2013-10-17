@@ -21,8 +21,8 @@ namespace ThePaperWall.Core.Rss
             XmlSerializer serializer = new XmlSerializer(typeof(rss));
             rss feed = null;
 
-            var rssFeed = await BlobCache.LocalMachine.GetOrFetchObject(url, () => FetchRssFeedQueued(url), DateTimeOffset.Now.AddMinutes(30));
-            
+            //var rssFeed = await BlobCache.LocalMachine.GetOrFetchObject(url, () => FetchRssFeedQueued(url), DateTimeOffset.Now.AddMinutes(30));
+            var rssFeed = await FetchRssFeedQueued(url);
             var reader = XmlReader.Create(new MemoryStream(rssFeed));
 
             using (reader)
