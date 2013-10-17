@@ -44,7 +44,7 @@ namespace ThePaperWall.WinRT.ViewModels
             _themeService = themeService;
             _rssReader = rssReader;
             _downloadManager = downloadManager;
-
+            BlobCache.LocalMachine.Dispose();
         }
 
         private Themes _themes;
@@ -92,9 +92,12 @@ namespace ThePaperWall.WinRT.ViewModels
         {           
             var rssForFeed = await _rssReader.GetFeed(_themes.WallPaperOfTheDay.FeedUrl);
             var imageMetaData = _rssReader.GetImageMetaData(rssForFeed).First();
-            var image = await _downloadManager.DownloadImage(imageMetaData.imageUrl, priority:10);
-            Execute.BeginOnUIThread(async () => {                
-                MainImage = image.ToNative();});
+            var imageTask = _downloadManager.DownloadImage(imageMetaData.imageUrl, priority: 10);
+            var lowResImageTask = _downloadManager.DownloadImage(imageMetaData.imageThumbnail, priority: 10);           
+          
+
+            await Execute.OnUIThreadAsync(async () => MainImage = (await lowResImageTask).ToNative());
+            Execute.BeginOnUIThread(async () => MainImage = (await imageTask).ToNative());
         }
 
 
