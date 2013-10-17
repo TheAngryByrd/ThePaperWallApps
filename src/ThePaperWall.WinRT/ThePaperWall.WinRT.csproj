@@ -125,6 +125,7 @@
     <Compile Include="Common\BooleanToVisibilityConverter.cs" />
     <Compile Include="ViewModels\CategoryItem.cs" />
     <Compile Include="ViewModels\HubViewModel.cs" />
+    <Compile Include="ViewModels\MainPageViewModelBase.cs" />
     <Compile Include="Views\HubView.xaml.cs">
       <DependentUpon>HubView.xaml</DependentUpon>
     </Compile>

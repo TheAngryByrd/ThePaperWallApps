@@ -96,8 +96,8 @@ namespace ThePaperWall.WinRT.ViewModels
             var lowResImageTask = _downloadManager.DownloadImage(imageMetaData.imageThumbnail, priority: 10);           
           
 
-            await Execute.OnUIThreadAsync(async () => MainImage = (await lowResImageTask).ToNative());
-            Execute.BeginOnUIThread(async () => MainImage = (await imageTask).ToNative());
+            await Execute.OnUIThreadAsync(async () => WallpaperOfTheDay = (await lowResImageTask).ToNative());
+            Execute.BeginOnUIThread(async () => WallpaperOfTheDay = (await imageTask).ToNative());
         }
 
 
@@ -113,11 +113,11 @@ namespace ThePaperWall.WinRT.ViewModels
             get { return _categoryItems; }
         }
 
-        private ImageSource _mainImage;
-        public ImageSource MainImage
+        private ImageSource _wallpaperOfTheDay;
+        public ImageSource WallpaperOfTheDay
         {
-            get { return _mainImage; }
-            set { this.RaiseAndSetIfChanged(ref _mainImage, value); }
+            get { return _wallpaperOfTheDay; }
+            set { this.RaiseAndSetIfChanged(ref _wallpaperOfTheDay, value); }
         }
     }  
     

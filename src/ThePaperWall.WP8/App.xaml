@@ -4,10 +4,13 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
-    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    xmlns:local="clr-namespace:ThePaperWall.WP8"
+    xmlns:caliburnMicro="clr-namespace:Caliburn.Micro;assembly=Caliburn.Micro">
 
     <!--Application Resources-->
     <Application.Resources>
+        <local:Bootstrapper x:Key="bootstrapper" />
         <sys:Double x:Key="PanoramaItemHeaderFontSize">66</sys:Double>
 
         <Style x:Key="PanoramaItemHeaderTextStyle" TargetType="TextBlock">
@@ -17,13 +20,8 @@
         </Style>
         
         <local:LocalizedStrings xmlns:local="clr-namespace:ThePaperWall.WP8" x:Key="LocalizedStrings"/>
+        
     </Application.Resources>
 
-    <Application.ApplicationLifetimeObjects>
-        <!--Required object that handles lifetime events for the application-->
-        <shell:PhoneApplicationService 
-            Launching="Application_Launching" Closing="Application_Closing" 
-            Activated="Application_Activated" Deactivated="Application_Deactivated"/>
-    </Application.ApplicationLifetimeObjects>
 
 </Application>
