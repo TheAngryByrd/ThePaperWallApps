@@ -22,6 +22,8 @@ namespace ThePaperWall.WinRT.ViewModels
         private readonly IRssReader _rssReader;
         private readonly IAsyncDownloadManager _downloadManager;
 
+   
+
         public HubViewModel(IThemeService themeService,
             IRssReader rssReader,
             IAsyncDownloadManager downloadManager)
@@ -29,6 +31,8 @@ namespace ThePaperWall.WinRT.ViewModels
             _themeService = themeService;
             _rssReader = rssReader;
             _downloadManager = downloadManager;
+            WallpaperOfTheDayCommand = new ReactiveCommand();
+            WallpaperOfTheDayCommand.Subscribe(_ => CommandBarIsOpen = true);
         }
 
         private CoreDispatcher _dispatcher;
@@ -100,6 +104,21 @@ namespace ThePaperWall.WinRT.ViewModels
         public SortableObservableCollection<CategoryItem> CategoryItems
         {
             get { return _categoryItems; }
-        }      
-    }      
+        }
+
+        public ReactiveCommand WallpaperOfTheDayCommand {get; private set;}
+
+        private bool _commandBarIsOpen;
+        public bool CommandBarIsOpen
+        {
+            get
+            {
+                return this._commandBarIsOpen;
+            }
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _commandBarIsOpen, value);
+            }
+        }
+    }
 }
