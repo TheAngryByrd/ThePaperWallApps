@@ -7,6 +7,8 @@ using ThePaperWall.Core.Downloads;
 using ThePaperWall.Core.Feeds;
 using ThePaperWall.Core.Rss;
 using Windows.UI.Xaml.Media;
+using System.Threading.Tasks;
+using Windows.UI.Core;
 
 namespace ThePaperWall.WinRT.ViewModels
 {
@@ -40,12 +42,16 @@ namespace ThePaperWall.WinRT.ViewModels
             var feed = await _rssReader.GetFeed(theme.FeedUrl);
             var imageMetaData = _rssReader.GetImageMetaData(feed).First(img => img.Category == Title);
 
+            
 
-            var lowResImageTask = _downloadManager.DownloadImage(imageMetaData.imageThumbnail, priority: 10);
-            var imageTask = _downloadManager.DownloadImage(imageMetaData.imageUrl, priority: 10);
+            Task<IBitmap> lowResImageTask = _downloadManager.DownloadImage(imageMetaData.imageThumbnail, priority: 10);
+            Task<IBitmap> imageTask = _downloadManager.DownloadImage(imageMetaData.imageUrl, priority: 10);
 
-            await Execute.OnUIThreadAsync(async () => ImageSource = (await lowResImageTask).ToNative());
-             await Execute.OnUIThreadAsync(async () => ImageSource = (await imageTask).ToNative());
+            var lowResImage = await lowResImageTask;
+            await Execute.OnUIThreadAsync(() => ImageSource = (lowResImage).ToNative());
+            var image = await imageTask;
+            await Execute.OnUIThreadAsync(() => ImageSource = (image).ToNative());
+            ProgressBarIsVisible = false;
 
         }
         private ImageSource imageSource;
@@ -58,6 +64,19 @@ namespace ThePaperWall.WinRT.ViewModels
             set
             {
                 this.RaiseAndSetIfChanged(ref imageSource,value);
+            }
+        }
+
+        private bool _progressBarIsVisible = true;
+        public bool ProgressBarIsVisible
+        {
+            get
+            {
+                return _progressBarIsVisible;
+            }
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _progressBarIsVisible, value);
             }
         }
     }
