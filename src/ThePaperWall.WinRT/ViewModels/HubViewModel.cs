@@ -14,6 +14,7 @@ using ThePaperWall.Core.Rss;
 using Windows.UI.Core;
 using Windows.UI.Xaml.Media;
 using ThePaperWall.Core.Framework;
+using Akavache;
 
 namespace ThePaperWall.WinRT.ViewModels
 {
@@ -23,6 +24,8 @@ namespace ThePaperWall.WinRT.ViewModels
         private readonly IRssReader _rssReader;
         private readonly IAsyncDownloadManager _downloadManager;
         private readonly INavigationService _navigationService;
+
+       
 
         public HubViewModel(IThemeService themeService,
             IRssReader rssReader,
@@ -47,6 +50,7 @@ namespace ThePaperWall.WinRT.ViewModels
                 {
                 }        
             });
+            BlobCache.LocalMachine.Dispose();
         }   
 
         private CoreDispatcher _dispatcher;
@@ -55,9 +59,11 @@ namespace ThePaperWall.WinRT.ViewModels
         {
             _dispatcher = Windows.UI.Core.CoreWindow.GetForCurrentThread().Dispatcher;
             _themes = _themeService.GetThemes(WallpaperResource.Feeds);
-            GetWallpaperOfTheDay();
-            GetTop4WallPaperItems();       
-            GetCategoryItems();
+            var t1 = GetWallpaperOfTheDay();
+            var t2 = GetTop4WallPaperItems();       
+            var t3 = GetCategoryItems();
+            await Task.WhenAll(t1,t2,t3);
+            ProgressBarIsVisible = false;
         }
 
         private async Task GetWallpaperOfTheDay()
@@ -65,11 +71,13 @@ namespace ThePaperWall.WinRT.ViewModels
             var rssForFeed = await _rssReader.GetFeed(_themes.WallPaperOfTheDay.FeedUrl);
             var imageMetaData = _rssReader.GetImageMetaData(rssForFeed).First();
 
-            var lowResImageTask = _downloadManager.DownloadImage(imageMetaData.imageThumbnail, priority: 10);
-            var imageTask = _downloadManager.DownloadImage(imageMetaData.imageUrl, priority: 10);
+            Task<IBitmap> lowResImageTask = _downloadManager.DownloadImage(imageMetaData.imageThumbnail, priority: 10);
+            Task<IBitmap> imageTask = _downloadManager.DownloadImage(imageMetaData.imageUrl, priority: 10);
 
-            await Execute.OnUIThreadAsync(async () => WallpaperOfTheDay = (await lowResImageTask).ToNative());
-            await _dispatcher.RunAsync(CoreDispatcherPriority.High, async () => WallpaperOfTheDay = (await imageTask).ToNative());
+            var lowResImage = await lowResImageTask;
+            await Execute.OnUIThreadAsync(async () => WallpaperOfTheDay = (lowResImage).ToNative());
+            var image = await imageTask;
+            await _dispatcher.RunAsync(CoreDispatcherPriority.High, async () => WallpaperOfTheDay = (image).ToNative());
         }
         private async Task GetTop4WallPaperItems()
         {
@@ -132,6 +140,19 @@ namespace ThePaperWall.WinRT.ViewModels
             set
             {
                 this.RaiseAndSetIfChanged(ref _commandBarIsOpen, value);
+            }
+        }
+
+        private bool _progressBarIsVisible = true;
+        public bool ProgressBarIsVisible
+        {
+            get
+            {
+                return _progressBarIsVisible;
+            }
+            set
+            {
+               this.RaiseAndSetIfChanged(ref _progressBarIsVisible, value);
             }
         }
     }

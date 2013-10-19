@@ -70,6 +70,8 @@
                 <EntranceThemeTransition/>
             </TransitionCollection>
         </Grid.ChildrenTransitions>
+        <Canvas></Canvas>
+        
         <Hub Padding="40,40,0,0">
             <Hub.Header>
                 <!-- Back button and page title -->
@@ -158,5 +160,6 @@
                 </DataTemplate>
             </HubSection>
         </Hub>
+        <ProgressBar VerticalAlignment="Top" x:Name="ProgressBar" IsIndeterminate="True" Height="10"></ProgressBar>
     </Grid>
 </Page>
