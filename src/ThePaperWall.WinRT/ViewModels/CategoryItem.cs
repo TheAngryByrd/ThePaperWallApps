@@ -19,8 +19,7 @@ namespace ThePaperWall.WinRT.ViewModels
 
         private async void LoadImage(Func<Task<IBitmap>> lazyImageFactory)
         {
-            var imageTask = lazyImageFactory();
-            var image = await imageTask;
+            var image = await lazyImageFactory();
             Execute.BeginOnUIThread(() => ImagePath = image.ToNative());
         }
 
