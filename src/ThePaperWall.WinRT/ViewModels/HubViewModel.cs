@@ -31,8 +31,8 @@ namespace ThePaperWall.WinRT.ViewModels
             _themeService = themeService;
             _rssReader = rssReader;
             _downloadManager = downloadManager;
-            WallpaperOfTheDayCommand = new ReactiveCommand();
-            WallpaperOfTheDayCommand.Subscribe(_ => CommandBarIsOpen = true);
+            OpenAppBar = new ReactiveCommand();
+            OpenAppBar.Subscribe(_ => CommandBarIsOpen = true);            
         }
 
         private CoreDispatcher _dispatcher;
@@ -106,7 +106,7 @@ namespace ThePaperWall.WinRT.ViewModels
             get { return _categoryItems; }
         }
 
-        public ReactiveCommand WallpaperOfTheDayCommand {get; private set;}
+        public ReactiveCommand OpenAppBar {get; private set;}
 
         private bool _commandBarIsOpen;
         public bool CommandBarIsOpen

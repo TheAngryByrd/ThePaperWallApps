@@ -17,7 +17,6 @@ namespace ThePaperWall.WinRT.Views
         {
             this.InitializeComponent();
             this.Loaded += loadingThis;
-           
         }
 
         private void loadingThis(object sender, Windows.UI.Xaml.RoutedEventArgs e)
@@ -31,6 +30,7 @@ namespace ThePaperWall.WinRT.Views
         {
             var vm = DataContext as HubViewModel;
             vm.CommandBarIsOpen = false;
+           
         }
     }
 }
