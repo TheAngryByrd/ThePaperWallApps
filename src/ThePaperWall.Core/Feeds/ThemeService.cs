@@ -7,7 +7,7 @@ namespace ThePaperWall.Core.Feeds
     public class ThemeService : IThemeService
     {   
 
-        public Themes GetThemes(string feed)
+        public Themes GetThemes(string feed = WallpaperResource.Feeds)
         {
             var themes = feed.Split(',');
             var foo = themes.AsEnumerable();

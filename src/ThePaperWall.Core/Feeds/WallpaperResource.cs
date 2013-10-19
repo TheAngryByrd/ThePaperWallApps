@@ -2,15 +2,7 @@
 {
     public class WallpaperResource
     {   
-        public static string Feeds
-        {         
-           get
-           {
-               return feeds;
-           }
-        }
-
-        static string feeds = @"Wallpaper of the Day, http://www.thepaperwall.com/rss.day.php,
+        public const string Feeds = @"Wallpaper of the Day, http://www.thepaperwall.com/rss.day.php,
                                 Top 4 Wallpapers Today, http://www.thepaperwall.com/rss.topfour.php,
                                 Recent 50 Added, http://www.thepaperwall.com/rss.recentfifty.php,
                                 Bikes,http://www.thepaperwall.com/rss.category.php?feed=bikes,

@@ -38,7 +38,7 @@ namespace ThePaperWall.WinRT.ViewModels
             CategoryCommand.Subscribe(item => 
             {
                 var categoryItem = item as CategoryItem;
-                _navigationService.UriFor<CategoryListViewModel>().WithParam(x => x.Category,categoryItem.Category).Navigate();
+                _navigationService.UriFor<CategoryListViewModel>().WithParam(x => x.Category,categoryItem.Name).Navigate();
             });
 
         }   

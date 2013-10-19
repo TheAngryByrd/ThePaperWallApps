@@ -4,6 +4,6 @@ namespace ThePaperWall.Core.Feeds
 {
     public interface IThemeService
     {
-        Themes GetThemes(string feed);
+        Themes GetThemes(string feed = WallpaperResource.Feeds);
     }
 }
