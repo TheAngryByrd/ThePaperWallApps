@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Caliburn.Micro;
-using ReactiveCaliburn;
 using ReactiveUI;
 using ThePaperWall.Core.Downloads;
 using ThePaperWall.Core.Feeds;
@@ -13,7 +10,6 @@ using ThePaperWall.Core.Rss;
 using Splat;
 using ThePaperWall.Core.Models;
 using System.Collections.ObjectModel;
-using ThePaperWall.Core.Framework;
 
 namespace ThePaperWall.WinRT.ViewModels
 {

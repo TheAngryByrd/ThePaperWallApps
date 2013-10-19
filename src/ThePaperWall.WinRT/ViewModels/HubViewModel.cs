@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Reactive.Linq;
 using Caliburn.Micro;
+using LinqToAwait;
 using ReactiveCaliburn;
 using ReactiveUI;
 using Splat;
@@ -35,12 +36,17 @@ namespace ThePaperWall.WinRT.ViewModels
             OpenAppBar = new ReactiveCommand();
             OpenAppBar.Subscribe(_ => CommandBarIsOpen = true);    
             CategoryCommand = new ReactiveCommand();
-            CategoryCommand.Subscribe(item => 
+            CategoryCommand.Subscribe(item =>             
             {
-                var categoryItem = item as CategoryItem;
-                _navigationService.UriFor<CategoryListViewModel>().WithParam(x => x.Category,categoryItem.Name).Navigate();
+                try
+                {
+                    var categoryItem = item as CategoryItem;
+                    _navigationService.UriFor<CategoryListViewModel>().WithParam(x => x.Category, categoryItem.Name).Navigate();
+                }
+                catch (Exception  e)
+                {
+                }        
             });
-
         }   
 
         private CoreDispatcher _dispatcher;
@@ -54,7 +60,7 @@ namespace ThePaperWall.WinRT.ViewModels
             GetCategoryItems();
         }
 
-        private async void GetWallpaperOfTheDay()
+        private async Task GetWallpaperOfTheDay()
         {
             var rssForFeed = await _rssReader.GetFeed(_themes.WallPaperOfTheDay.FeedUrl);
             var imageMetaData = _rssReader.GetImageMetaData(rssForFeed).First();
@@ -63,9 +69,9 @@ namespace ThePaperWall.WinRT.ViewModels
             var imageTask = _downloadManager.DownloadImage(imageMetaData.imageUrl, priority: 10);
 
             await Execute.OnUIThreadAsync(async () => WallpaperOfTheDay = (await lowResImageTask).ToNative());
-            _dispatcher.RunAsync(CoreDispatcherPriority.High, async () => WallpaperOfTheDay = (await imageTask).ToNative());
+            await _dispatcher.RunAsync(CoreDispatcherPriority.High, async () => WallpaperOfTheDay = (await imageTask).ToNative());
         }
-        private async void GetTop4WallPaperItems()
+        private async Task GetTop4WallPaperItems()
         {
             var rssForFeed = await _rssReader.GetFeed(_themes.Top4.FeedUrl);
             var imageMetaData = _rssReader.GetImageMetaData(rssForFeed);
@@ -77,22 +83,21 @@ namespace ThePaperWall.WinRT.ViewModels
             }
         }  
 
-        private void GetCategoryItems()
+        private async Task GetCategoryItems()
         {
-
-            _themes.Categories
-                         .ToObservable()            
-                         .Subscribe(GetCategory); 
+            await _themes.Categories
+                .ToObservable()
+                .ForEachAsync(async x => await GetCategory(x));                         
         }
 
-        private async void GetCategory(Theme theme)
+        private async Task GetCategory(Theme theme)
         {
             var feed = await _rssReader.GetFeed(theme.FeedUrl);
             var firstImageFromFeed = _rssReader.GetImageMetaData(feed).First();
             firstImageFromFeed.Category = theme.Name;
             Func<Task<IBitmap>> lazyImageFactory = () => _downloadManager.DownloadImage(firstImageFromFeed.imageThumbnail);
 
-            Execute.BeginOnUIThread((() => CategoryItems.Add(new CategoryItem(firstImageFromFeed.Category,lazyImageFactory))));
+            Execute.OnUIThreadAsync((() => CategoryItems.Add(new CategoryItem(firstImageFromFeed.Category, lazyImageFactory))));
         }
 
         private ImageSource _wallpaperOfTheDay;
