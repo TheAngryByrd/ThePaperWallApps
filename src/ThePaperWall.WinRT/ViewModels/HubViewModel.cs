@@ -21,19 +21,27 @@ namespace ThePaperWall.WinRT.ViewModels
         private readonly IThemeService _themeService;
         private readonly IRssReader _rssReader;
         private readonly IAsyncDownloadManager _downloadManager;
-
-   
+        private readonly INavigationService _navigationService;
 
         public HubViewModel(IThemeService themeService,
             IRssReader rssReader,
-            IAsyncDownloadManager downloadManager)
+            IAsyncDownloadManager downloadManager,
+            INavigationService navigationService)
         {
             _themeService = themeService;
             _rssReader = rssReader;
             _downloadManager = downloadManager;
+            _navigationService = navigationService;
             OpenAppBar = new ReactiveCommand();
-            OpenAppBar.Subscribe(_ => CommandBarIsOpen = true);            
-        }
+            OpenAppBar.Subscribe(_ => CommandBarIsOpen = true);    
+            CategoryCommand = new ReactiveCommand();
+            CategoryCommand.Subscribe(item => 
+            {
+                var categoryItem = item as CategoryItem;
+                _navigationService.UriFor<CategoryListViewModel>().WithParam(x => x.Category,categoryItem.Category).Navigate();
+            });
+
+        }   
 
         private CoreDispatcher _dispatcher;
         private Themes _themes;
@@ -107,6 +115,7 @@ namespace ThePaperWall.WinRT.ViewModels
         }
 
         public ReactiveCommand OpenAppBar {get; private set;}
+        public ReactiveCommand CategoryCommand { get; private set; }
 
         private bool _commandBarIsOpen;
         public bool CommandBarIsOpen

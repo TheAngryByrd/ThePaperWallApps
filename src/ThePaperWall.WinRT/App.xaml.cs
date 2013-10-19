@@ -22,6 +22,7 @@ using ThePaperWall.WinRT.ViewModels;
 using System.Reflection;
 using ThePaperWall.Core.Rss;
 using Akavache;
+using ThePaperWall.WinRT.Views;
 
 // The Hub App template is documented at http://go.microsoft.com/fwlink/?LinkId=286574
 
@@ -52,7 +53,7 @@ namespace ThePaperWall.WinRT
             BlobCache.ApplicationName = "ThePaperWall";
             //Because Paul Betts says so
             BlobCache.LocalMachine.InsertObject("dumb", "winrt is dumb");
-            DisplayRootViewFor<HubViewModel>();
+            DisplayRootView<HubView>();
         }
         /// <summary>
         /// Invoked when application execution is being suspended.  Application state is saved

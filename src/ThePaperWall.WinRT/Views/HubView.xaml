@@ -8,6 +8,7 @@
     xmlns:common="using:ThePaperWall.WinRT.Common"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:fixin="using:ThePaperWall.WinRT.Fixins"
     mc:Ignorable="d">
 
     <Page.Resources>
@@ -151,7 +152,9 @@
                         ItemTemplate="{StaticResource Standard310x260ItemTemplate}"
                         SelectionMode="None"
                         IsSwipeEnabled="false"
-                        IsItemClickEnabled="True">
+                        IsItemClickEnabled="True"
+                        fixin:GridViewItemCommand.Command="{Binding CategoryCommand}"
+                        >
                     </GridView>
                 </DataTemplate>
             </HubSection>

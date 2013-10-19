@@ -9,5 +9,16 @@ namespace ThePaperWall.WinRT.ViewModels
 {
     public class CategoryListViewModel : ReactiveScreen
     {
+        public CategoryListViewModel()
+        {
+
+        }
+
+        public string Category { get; set; }
+
+        protected override async Task OnActivate()
+        {
+            
+        }
     }
 }

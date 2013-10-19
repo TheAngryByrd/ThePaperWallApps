@@ -107,6 +107,7 @@
     </Compile>
     <Compile Include="Extentions\ListEx.cs" />
     <Compile Include="Extentions\TaskEx.cs" />
+    <Compile Include="Fixins\GridViewItemCommand.cs" />
     <Compile Include="ReactiveCaliburn\ReactivePropertyChangedBase.cs" />
     <Compile Include="ReactiveCaliburn\ReactiveScreen.cs" />
     <Compile Include="ReactiveCaliburn\ReactiveViewAware.cs" />
