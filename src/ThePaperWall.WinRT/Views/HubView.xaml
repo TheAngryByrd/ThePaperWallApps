@@ -106,7 +106,7 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
-                        <Button BorderBrush="Transparent" Command="{Binding WallpaperOfTheDayCommand}">
+                        <Button BorderBrush="Transparent" Padding="2" Command="{Binding WallpaperOfTheDayCommand}">
                             <Image Source="{Binding WallpaperOfTheDay}" Stretch="Fill" Width="420" Height="280"/>
                         </Button>                        
                         <TextBlock Grid.Row="1" x:Uid="Section1Subtitle" Style="{StaticResource SubheaderTextBlockStyle}" TextWrapping="Wrap"  Margin="0,10,0,0" Text="Lorem ipsum dolor sit nonumy sed consectetuer ising elit, sed diam"/>
