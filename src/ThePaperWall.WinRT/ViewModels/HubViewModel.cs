@@ -74,7 +74,9 @@ namespace ThePaperWall.WinRT.ViewModels
             var feed = await _rssReader.GetFeed(theme.FeedUrl);
             var firstImageFromFeed = _rssReader.GetImageMetaData(feed).First();
             firstImageFromFeed.Category = theme.Name;
-            Execute.BeginOnUIThread((() => CategoryItems.Add(new CategoryItem(_downloadManager, firstImageFromFeed))));
+            Func<Task<IBitmap>> lazyImageFactory = () => _downloadManager.DownloadImage(firstImageFromFeed.imageThumbnail);
+
+            Execute.BeginOnUIThread((() => CategoryItems.Add(new CategoryItem(firstImageFromFeed.Category,lazyImageFactory))));
         }
   
         private async void GetTop4WallPaperItems()
@@ -84,7 +86,8 @@ namespace ThePaperWall.WinRT.ViewModels
 
             foreach(var imd in imageMetaData)
             {
-                Top4Items.Add(new CategoryItem(_downloadManager,imd,2));
+                Func<Task<IBitmap>> lazyImageFactory = () => _downloadManager.DownloadImage(imd.imageThumbnail);
+                Top4Items.Add(new CategoryItem(imd.Category, lazyImageFactory));
             }   
         }
   

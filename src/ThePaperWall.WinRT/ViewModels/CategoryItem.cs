@@ -11,18 +11,19 @@ namespace ThePaperWall.WinRT.ViewModels
 {
     public class CategoryItem : ReactiveObject, IComparable<CategoryItem>
     {
-        public CategoryItem(IAsyncDownloadManager downloaderManager,
-            ImageMetaData imageMetaData, int priority = 1)
+        public CategoryItem(string category, Func<Task<IBitmap>> lazyImageFactory)
         {
-            Category = imageMetaData.Category;
-            LazyLoadImage(downloaderManager, imageMetaData, priority);
+            Category = category;
+            LoadImage(lazyImageFactory);
         }
-  
-        private async void LazyLoadImage(IAsyncDownloadManager downloaderManager, ImageMetaData imageMetaData, int priority)
+
+        private async void LoadImage(Func<Task<IBitmap>> lazyImageFactory)
         {
-            var image = (await downloaderManager.DownloadImage(imageMetaData.imageThumbnail, priority:priority));
+            var imageTask = lazyImageFactory();
+            var image = await imageTask;
             Execute.BeginOnUIThread(() => ImagePath = image.ToNative());
         }
+
 
 
 

@@ -19,7 +19,7 @@ namespace ThePaperWall.Core.Models
 
         public IEnumerable<Theme> Categories
         {
-            get { return _all.Except(new[] { WallPaperOfTheDay, Top4, Recent50 }); }
+            get { return _all.Except(new[] { WallPaperOfTheDay, Top4, Recent50 }.OrderBy(t => t.Name)); }
         }
     }
 }
