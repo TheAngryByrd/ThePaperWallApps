@@ -2,8 +2,6 @@ using System;
 using Caliburn.Micro;
 using ReactiveUI;
 using Splat;
-using ThePaperWall.Core.Downloads;
-using ThePaperWall.Core.Models;
 using Windows.UI.Xaml.Media;
 using System.Threading.Tasks;
 
@@ -23,18 +21,9 @@ namespace ThePaperWall.WinRT.ViewModels
             Execute.BeginOnUIThread(() => ImagePath = image.ToNative());
         }
 
-
-
-
         public string Category { get; set; }
-
+ 
         public ImageSource _imagePath;
-
-        public int CompareTo(CategoryItem other)
-        {
-            return string.Compare(this.Category, other.Category);
-        }
-
         public ImageSource ImagePath
         {
             get
@@ -46,5 +35,11 @@ namespace ThePaperWall.WinRT.ViewModels
                 this.RaiseAndSetIfChanged(ref _imagePath, value);
             }
         }
+
+        public int CompareTo(CategoryItem other)
+        {
+            return string.Compare(this.Category, other.Category);
+        }
+
     }
 }
