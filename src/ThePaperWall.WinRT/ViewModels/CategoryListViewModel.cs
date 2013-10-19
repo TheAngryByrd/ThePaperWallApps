@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Caliburn.Micro;
 using ReactiveCaliburn;
+using ReactiveUI;
 using ThePaperWall.Core.Downloads;
 using ThePaperWall.Core.Feeds;
 using ThePaperWall.Core.Rss;
@@ -32,6 +33,16 @@ namespace ThePaperWall.WinRT.ViewModels
             this.rssReader = rssReader;
             this.downloadManager = downloadManager;
             this.navigationService = navigationService;
+            CategoryItemCommand = new ReactiveCommand();
+            CategoryItemCommand.Subscribe(item => 
+                {
+                    var categoryItem = item as CategoryItem;
+                    navigationService
+                        .UriFor<ImageDetailsViewModel>()
+                        .WithParam(x => x.Category, Category)
+                        .WithParam(x => x.Title, categoryItem.Name)
+                        .Navigate();
+                });
         }
 
         public string Category { get; set; }
@@ -53,6 +64,8 @@ namespace ThePaperWall.WinRT.ViewModels
             Func<Task<IBitmap>> lazyImageFactory = () => downloadManager.DownloadImage(imageMetaData.imageThumbnail);
             Execute.BeginOnUIThread((() => CategoryItems.Add(new CategoryItem(imageMetaData.Category, lazyImageFactory))));
         }
+
+        public ReactiveCommand CategoryItemCommand { get; private set; }
 
         
         

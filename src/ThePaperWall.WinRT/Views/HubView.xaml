@@ -79,12 +79,11 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <StackPanel Height="40">
-                        <AppBarButton x:Name="backButton" Icon="Back" Margin="-30,-14,0,0"
-                              Command="{Binding NavigationHelper.GoBackCommand, ElementName=pageRoot}" 
-                              Visibility="{Binding IsEnabled, Converter={StaticResource BooleanToVisibilityConverter}, RelativeSource={RelativeSource Mode=Self}}"
-                              AutomationProperties.Name="Back"
-                              AutomationProperties.AutomationId="BackButton"
-                              AutomationProperties.ItemType="Navigation Button"/>
+                        <AppBarButton x:Name="GoBack" Icon="Back" Height="95" Margin="10,46,10,0"
+                          Visibility="{Binding CanGoBack, Converter={StaticResource BooleanToVisibilityConverter}, RelativeSource={RelativeSource Mode=Self}}"
+                          AutomationProperties.Name="Back"
+                          AutomationProperties.AutomationId="BackButton"
+                          AutomationProperties.ItemType="Navigation Button"/>
                     </StackPanel>
                     <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="1" 
                        IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Top"/>
