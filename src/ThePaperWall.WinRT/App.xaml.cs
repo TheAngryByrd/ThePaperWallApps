@@ -69,18 +69,18 @@ namespace ThePaperWall.WinRT
             deferral.Complete();
         }
 
-         private WinRTContainer _container;
+        public WinRTContainer Container;
         protected override void Configure()
         {
-            _container = new WinRTContainer();
-            _container.RegisterWinRTServices();
+            Container = new WinRTContainer();
+            Container.RegisterWinRTServices();
 
             AddViewModels();
             AddView();
 
-            _container.PerRequest<IThemeService, ThemeService>();
-            _container.PerRequest<IAsyncDownloadManager, AsyncDownloadManager>();
-            _container.PerRequest<IRssReader, RssReader>();
+            Container.PerRequest<IThemeService, ThemeService>();
+            Container.PerRequest<IAsyncDownloadManager, AsyncDownloadManager>();
+            Container.PerRequest<IRssReader, RssReader>();
 
             //TODO: Register your view models at the container
         }
@@ -99,7 +99,7 @@ namespace ThePaperWall.WinRT
                          select t.AsType()).ToList();
             foreach (var t in types)
             {
-                _container.RegisterPerRequest(t, null, t);
+                Container.RegisterPerRequest(t, null, t);
             }
         }
 
@@ -112,7 +112,7 @@ namespace ThePaperWall.WinRT
      
         protected override object GetInstance(Type service, string key)
         {
-            var instance = _container.GetInstance(service, key);
+            var instance = Container.GetInstance(service, key);
             if (instance != null)
                 return instance;
             throw new Exception("Could not locate any instances.");
@@ -120,17 +120,17 @@ namespace ThePaperWall.WinRT
 
         protected override IEnumerable<object> GetAllInstances(Type service)
         {
-            return _container.GetAllInstances(service);
+            return Container.GetAllInstances(service);
         }
 
         protected override void BuildUp(object instance)
         {
-            _container.BuildUp(instance);
+            Container.BuildUp(instance);
         }
 
         protected override void PrepareViewFirst(Frame rootFrame)
         {
-            _container.RegisterNavigationService(rootFrame);
+            Container.RegisterNavigationService(rootFrame);
         }
     
     }

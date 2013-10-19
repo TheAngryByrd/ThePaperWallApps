@@ -107,6 +107,7 @@
     </Compile>
     <Compile Include="Extentions\ListEx.cs" />
     <Compile Include="Extentions\TaskEx.cs" />
+    <Compile Include="Fixins\CaliburnEx.cs" />
     <Compile Include="Fixins\GridViewItemCommand.cs" />
     <Compile Include="ReactiveCaliburn\ReactivePropertyChangedBase.cs" />
     <Compile Include="ReactiveCaliburn\ReactiveScreen.cs" />
@@ -124,6 +125,7 @@
     <Compile Include="Common\RelayCommand.cs" />
     <Compile Include="Common\ObservableDictionary.cs" />
     <Compile Include="Common\BooleanToVisibilityConverter.cs" />
+    <Compile Include="ViewModels\BaseReactiveScreen.cs" />
     <Compile Include="ViewModels\CategoryItem.cs" />
     <Compile Include="ViewModels\CategoryListViewModel.cs" />
     <Compile Include="ViewModels\HubViewModel.cs" />

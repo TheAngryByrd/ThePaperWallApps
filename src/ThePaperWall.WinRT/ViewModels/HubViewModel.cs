@@ -16,7 +16,7 @@ using ThePaperWall.Core.Framework;
 
 namespace ThePaperWall.WinRT.ViewModels
 {
-    public class HubViewModel : ReactiveScreen
+    public class HubViewModel : BaseReactiveScreen
     {
         private readonly IThemeService _themeService;
         private readonly IRssReader _rssReader;

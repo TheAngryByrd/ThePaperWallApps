@@ -62,8 +62,7 @@
                 <ColumnDefinition Width="120"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <AppBarButton x:Name="backButton" Icon="Back" Height="95" Margin="10,46,10,0"
-                          Command="{Binding NavigationHelper.GoBackCommand, ElementName=pageRoot}" 
+            <AppBarButton x:Name="GoBack" Icon="Back" Height="95" Margin="10,46,10,0"
                           Visibility="{Binding IsEnabled, Converter={StaticResource BooleanToVisibilityConverter}, RelativeSource={RelativeSource Mode=Self}}"
                           AutomationProperties.Name="Back"
                           AutomationProperties.AutomationId="BackButton"
