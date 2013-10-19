@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ReactiveCaliburn;
 
 namespace ThePaperWall.WinRT.ViewModels
 {
-    class CategoryListViewModel
+    public class CategoryListViewModel : ReactiveScreen
     {
     }
 }

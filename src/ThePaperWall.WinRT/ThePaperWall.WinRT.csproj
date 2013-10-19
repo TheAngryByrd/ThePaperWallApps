@@ -124,8 +124,12 @@
     <Compile Include="Common\ObservableDictionary.cs" />
     <Compile Include="Common\BooleanToVisibilityConverter.cs" />
     <Compile Include="ViewModels\CategoryItem.cs" />
+    <Compile Include="ViewModels\CategoryListViewModel.cs" />
     <Compile Include="ViewModels\HubViewModel.cs" />
     <Compile Include="ViewModels\MainPageViewModelBase.cs" />
+    <Compile Include="Views\CategoryListView.xaml.cs">
+      <DependentUpon>CategoryListView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\HubView.xaml.cs">
       <DependentUpon>HubView.xaml</DependentUpon>
     </Compile>
@@ -163,6 +167,10 @@
     <Page Include="ItemPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\CategoryListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\HubView.xaml">
       <Generator>MSBuild:Compile</Generator>
