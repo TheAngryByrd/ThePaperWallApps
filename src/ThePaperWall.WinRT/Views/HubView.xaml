@@ -56,7 +56,7 @@
     <Page.BottomAppBar>
         <CommandBar Closed="CommandBar_Closed"  
                     x:Name="CommandBar">
-            <!-- CommandBar content -->
+            <AppBarButton AutomationProperties.Name="Set as Lockscreen" ToolTipService.ToolTip="Set As Lockscreen"> </AppBarButton>
         </CommandBar>
     </Page.BottomAppBar>
 
