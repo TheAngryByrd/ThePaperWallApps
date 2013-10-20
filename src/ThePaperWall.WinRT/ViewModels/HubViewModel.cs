@@ -45,13 +45,15 @@ namespace ThePaperWall.WinRT.ViewModels
                 try
                 {
                     var categoryItem = item as CategoryItem;
-                    _navigationService.UriFor<CategoryListViewModel>().WithParam(x => x.Category, categoryItem.Name).Navigate();
+                    _navigationService.UriFor<CategoryListViewModel>()
+                        .WithParam(x => x.Category, categoryItem.Name)
+                        .Navigate();
                 }
                 catch (Exception  e)
                 {
                 }        
             });
-            BlobCache.LocalMachine.Dispose();
+            //BlobCache.LocalMachine.Dispose();
         }   
 
         private CoreDispatcher _dispatcher;
