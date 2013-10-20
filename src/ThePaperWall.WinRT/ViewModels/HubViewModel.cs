@@ -97,9 +97,7 @@ namespace ThePaperWall.WinRT.ViewModels
 
         private async Task GetCategoryItems()
         {
-            await _themes.Categories
-                .ToObservable()
-                .ForEachAsync(async x => await GetCategory(x));                         
+            await Task.WhenAll(_themes.Categories.Select(x => GetCategory(x)));                         
         }
 
         private async Task GetCategory(Theme theme)
