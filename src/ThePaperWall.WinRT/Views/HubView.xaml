@@ -103,7 +103,7 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
-                        <Button BorderBrush="Transparent" Padding="2" Command="{Binding OpenAppBar}" CommandParameter="{Binding WallpaperOfTheDay}">
+                        <Button BorderBrush="Transparent" Padding="2" Command="{Binding WallpaperOfTheDayCommand}" CommandParameter="{Binding WallpaperOfTheDay}">
                             <Image Source="{Binding WallpaperOfTheDay}" Stretch="Fill" Width="420" Height="280"/>
                         </Button>  
                                        

@@ -36,29 +36,41 @@ namespace ThePaperWall.WinRT.ViewModels
             _themeService = themeService;
             _rssReader = rssReader;
             _downloadManager = downloadManager;
-            _navigationService = navigationService; 
+            _navigationService = navigationService;
+
+            WallpaperOfTheDayCommand = new ReactiveCommand();
+            WallpaperOfTheDayCommand.Subscribe(NavigateToDetailsForWallpaperOfTheDay);
             CategoryCommand = new ReactiveCommand();
-            CategoryCommand.Subscribe(item =>             
-            {
-                try
-                {
-                    var categoryItem = item as CategoryItem;
-                    _navigationService.UriFor<CategoryListViewModel>()
-                        .WithParam(x => x.Category, categoryItem.Name)
-                        .Navigate();
-                }
-                catch (Exception  e)
-                {
-                }        
-            });
+            CategoryCommand.Subscribe(NavigateToCategoryList);
             //BlobCache.LocalMachine.Dispose();
-        }   
+        }
+
+        private void NavigateToDetailsForWallpaperOfTheDay(object obj)
+        {
+            _navigationService.UriFor<ImageDetailsViewModel>()
+                                   .WithParam(x => x.Category, _themes.WallPaperOfTheDay.Name)
+                                   .Navigate();
+        }
+  
+        private void NavigateToCategoryList(object item)
+        {
+            try
+            {
+                var categoryItem = item as CategoryItem;
+                _navigationService.UriFor<CategoryListViewModel>()
+                                  .WithParam(x => x.Category, categoryItem.Name)
+                                  .Navigate();
+            }
+            catch (Exception e)
+            {
+            }
+        }
 
         private CoreDispatcher _dispatcher;
         private Themes _themes;
         protected override async Task OnActivate()
         {
-            _dispatcher = Windows.UI.Core.CoreWindow.GetForCurrentThread().Dispatcher;
+            _dispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
             _themes = _themeService.GetThemes(WallpaperResource.Feeds);
             var t1 = GetWallpaperOfTheDay();
             var t2 = GetTop4WallPaperItems();       
@@ -137,6 +149,8 @@ namespace ThePaperWall.WinRT.ViewModels
         }
 
 
+        public ReactiveCommand WallpaperOfTheDayCommand { get; private set; }
+        public ReactiveCommand Top4Command { get; private set; }
         public ReactiveCommand CategoryCommand { get; private set; }
 
       

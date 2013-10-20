@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Caliburn.Micro;
 using ReactiveUI;
 using Splat;
 using ThePaperWall.Core.Downloads;
 using ThePaperWall.Core.Feeds;
+using ThePaperWall.Core.Models;
 using ThePaperWall.Core.Rss;
 using Windows.System.UserProfile;
 using Windows.UI.Xaml.Media;
@@ -20,8 +22,24 @@ namespace ThePaperWall.WinRT.ViewModels
         private readonly IRssReader _rssReader;
         private readonly IAsyncDownloadManager _downloadManager;
 
+       
+
         public string Category { get; set; }
-        public string Title { get; set; }
+
+        private string _title;
+        public string Title
+        {
+            get
+            {
+                return _title;
+            }
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _title, value);
+            }
+        }
+
+        public ReactiveCommand SetLockscreenCommand { get; private set; }
 
         public ImageDetailsViewModel(IThemeService themeService,
             IRssReader rssReader,
@@ -50,11 +68,21 @@ namespace ThePaperWall.WinRT.ViewModels
 
         private IBitmap _image;
 
-        protected override async System.Threading.Tasks.Task OnActivate()
+        protected override async Task OnActivate()
         {
-            var theme = _themeService.GetThemes().Categories.First(c => c.Name == Category);
+            var theme = _themeService.GetThemes().All.First(c => c.Name == Category);
             var feed = await _rssReader.GetFeed(theme.FeedUrl);
-            var imageMetaData = _rssReader.GetImageMetaData(feed).First(img => img.Category == Title);
+            List<ImageMetaData> imageDataFromFeed = _rssReader.GetImageMetaData(feed);
+            ImageMetaData imageMetaData = null;
+
+            if (!string.IsNullOrEmpty(Title))                    
+                imageMetaData = imageDataFromFeed.First(img => img.Category == Title);            
+            else
+            {
+                imageMetaData = imageDataFromFeed.First();
+                Title = imageMetaData.Category;
+            }
+            
 
             Task<IBitmap> lowResImageTask = _downloadManager.DownloadImage(imageMetaData.imageThumbnail, priority: 10);
             Task<IBitmap> imageTask = _downloadManager.DownloadImage(imageMetaData.imageUrl, priority: 10);
@@ -91,8 +119,6 @@ namespace ThePaperWall.WinRT.ViewModels
                 this.RaiseAndSetIfChanged(ref _progressBarIsVisible, value);
             }
         }
-
-        public ReactiveCommand SetLockscreenCommand { get; private set; }
 
         private bool _commandBarIsOpen;
         public bool CommandBarIsOpen
