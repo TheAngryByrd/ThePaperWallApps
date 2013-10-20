@@ -12,18 +12,22 @@ namespace ThePaperWall.WinRT.ViewModels
         public CategoryItem(string name, Func<Task<IBitmap>> lazyImageFactory)
         {
             Name = name;
-            LoadImage(lazyImageFactory);
+            _lazyImageFactory = lazyImageFactory;
+            //LoadImage(lazyImageFactory);
         }
 
-        private async void LoadImage(Func<Task<IBitmap>> lazyImageFactory)
+        public async Task LoadImage()
         {
-            var image = await lazyImageFactory();
-            Execute.BeginOnUIThread(() => ImagePath = image.ToNative());
+            var image = await _lazyImageFactory();
+            await Execute.OnUIThreadAsync(() => ImagePath = image.ToNative());
         }
 
         public string Name { get; set; }
  
+        private readonly Func<Task<IBitmap>> _lazyImageFactory;
+
         public ImageSource _imagePath;
+
         public ImageSource ImagePath
         {
             get

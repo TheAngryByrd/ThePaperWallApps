@@ -87,12 +87,10 @@ namespace ThePaperWall.WinRT.ViewModels
             var taskList = new List<Task>();
             foreach (var imd in imageMetaData)
             {
-                Func<Task<IBitmap>> lazyImageFactory = () => {
-                    var task =_downloadManager.DownloadImage(imd.imageThumbnail);
-                    taskList.Add(task);
-                    return task;
-                };
-                Top4Items.Add(new CategoryItem(imd.Category, lazyImageFactory));
+                Func<Task<IBitmap>> lazyImageFactory = () => _downloadManager.DownloadImage(imd.imageThumbnail);
+                var categoryItem = new CategoryItem(imd.Category, lazyImageFactory);
+                Top4Items.Add(categoryItem);
+                taskList.Add(categoryItem.LoadImage());
             }
             await Task.WhenAll(taskList);
         }  
@@ -109,16 +107,16 @@ namespace ThePaperWall.WinRT.ViewModels
             var feed = await _rssReader.GetFeed(theme.FeedUrl);
             var firstImageFromFeed = _rssReader.GetImageMetaData(feed).First();
             firstImageFromFeed.Category = theme.Name;
-            var taskList = new List<Task>();
-            Func<Task<IBitmap>> lazyImageFactory = () => { 
-                var task =_downloadManager.DownloadImage(firstImageFromFeed.imageThumbnail);
-                taskList.Add(task);
-                return task;
-            };
+            Task taskList = null;
+            Func<Task<IBitmap>> lazyImageFactory = () => _downloadManager.DownloadImage(firstImageFromFeed.imageThumbnail);
 
-            Execute.BeginOnUIThread((() => CategoryItems.Add(new CategoryItem(firstImageFromFeed.Category, lazyImageFactory))));
+            await Execute.OnUIThreadAsync(async () =>
+            {
+                var categoryItem = new CategoryItem(firstImageFromFeed.Category, lazyImageFactory);
+                CategoryItems.Add(categoryItem);
+                await categoryItem.LoadImage();
+            });
 
-            await Task.WhenAll(taskList);
         }
 
         private ImageSource _wallpaperOfTheDay;

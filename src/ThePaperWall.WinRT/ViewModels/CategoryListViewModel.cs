@@ -10,6 +10,7 @@ using ThePaperWall.Core.Rss;
 using Splat;
 using ThePaperWall.Core.Models;
 using System.Collections.ObjectModel;
+using System.Collections.Generic;
 
 namespace ThePaperWall.WinRT.ViewModels
 {
@@ -49,20 +50,39 @@ namespace ThePaperWall.WinRT.ViewModels
         }
         protected override async Task OnActivate()
         {
+            await GetImages();
+        }
+  
+        private async Task GetImages()
+        {
             var theme = themeService.GetThemes().Categories.First(c => c.Name == Category);
             var feed = await rssReader.GetFeed(theme.FeedUrl);
-            var images = rssReader.GetImageMetaData(feed).ToObservable();
-            images.Subscribe(CreateCategoryItem);
+            var images = rssReader.GetImageMetaData(feed);
+            await Task.WhenAll(images.Select(x => CreateCategoryItem(x)));
+            ProgressBarIsVisible = false;
         }
 
-        private void CreateCategoryItem(ImageMetaData imageMetaData)
+        private async Task CreateCategoryItem(ImageMetaData imageMetaData)
         {
             Func<Task<IBitmap>> lazyImageFactory = () => downloadManager.DownloadImage(imageMetaData.imageThumbnail);
-            Execute.BeginOnUIThread((() => CategoryItems.Add(new CategoryItem(imageMetaData.Category, lazyImageFactory))));
+            var category = new CategoryItem(imageMetaData.Category, lazyImageFactory);
+            CategoryItems.Add(category);
+            await category.LoadImage();
         }
 
         public ReactiveCommand CategoryItemCommand { get; private set; }
-
+        private bool _progressBarIsVisible = true;
+        public bool ProgressBarIsVisible
+        {
+            get
+            {
+                return _progressBarIsVisible;
+            }
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _progressBarIsVisible, value);
+            }
+        }
         
         
     }
