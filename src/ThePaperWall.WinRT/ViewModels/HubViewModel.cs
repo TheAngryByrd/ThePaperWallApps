@@ -15,6 +15,7 @@ using Windows.UI.Core;
 using Windows.UI.Xaml.Media;
 using ThePaperWall.Core.Framework;
 using Akavache;
+using System.Collections.Generic;
 
 namespace ThePaperWall.WinRT.ViewModels
 {
@@ -83,12 +84,17 @@ namespace ThePaperWall.WinRT.ViewModels
         {
             var rssForFeed = await _rssReader.GetFeed(_themes.Top4.FeedUrl);
             var imageMetaData = _rssReader.GetImageMetaData(rssForFeed);
-
+            var taskList = new List<Task>();
             foreach (var imd in imageMetaData)
             {
-                Func<Task<IBitmap>> lazyImageFactory = () => _downloadManager.DownloadImage(imd.imageThumbnail);
+                Func<Task<IBitmap>> lazyImageFactory = () => {
+                    var task =_downloadManager.DownloadImage(imd.imageThumbnail);
+                    taskList.Add(task);
+                    return task;
+                };
                 Top4Items.Add(new CategoryItem(imd.Category, lazyImageFactory));
             }
+            await Task.WhenAll(taskList);
         }  
 
         private async Task GetCategoryItems()
@@ -103,9 +109,16 @@ namespace ThePaperWall.WinRT.ViewModels
             var feed = await _rssReader.GetFeed(theme.FeedUrl);
             var firstImageFromFeed = _rssReader.GetImageMetaData(feed).First();
             firstImageFromFeed.Category = theme.Name;
-            Func<Task<IBitmap>> lazyImageFactory = () => _downloadManager.DownloadImage(firstImageFromFeed.imageThumbnail);
+            var taskList = new List<Task>();
+            Func<Task<IBitmap>> lazyImageFactory = () => { 
+                var task =_downloadManager.DownloadImage(firstImageFromFeed.imageThumbnail);
+                taskList.Add(task);
+                return task;
+            };
 
-            Execute.OnUIThreadAsync((() => CategoryItems.Add(new CategoryItem(firstImageFromFeed.Category, lazyImageFactory))));
+            Execute.BeginOnUIThread((() => CategoryItems.Add(new CategoryItem(firstImageFromFeed.Category, lazyImageFactory))));
+
+            await Task.WhenAll(taskList);
         }
 
         private ImageSource _wallpaperOfTheDay;
