@@ -16,21 +16,13 @@ namespace ThePaperWall.WinRT.Views
         public HubView()
         {
             this.InitializeComponent();
-            this.Loaded += loadingThis;
         }
 
         private void loadingThis(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            this.WhenAnyValue(_ => _.ViewModel.CommandBarIsOpen).Subscribe(_ => CommandBar.IsOpen = _);
-        }
-        
-        public HubViewModel ViewModel { get { return DataContext as HubViewModel; } }
-
-        private void CommandBar_Closed(object sender, object e)
-        {
-            var vm = DataContext as HubViewModel;
-            vm.CommandBarIsOpen = false;
            
         }
+        
+
     }
 }

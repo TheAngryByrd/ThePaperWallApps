@@ -12,7 +12,14 @@
     <Page.Resources>
         <common:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </Page.Resources>
-
+    <Page.BottomAppBar>
+        <CommandBar Closed="CommandBar_Closed"  
+                    x:Name="CommandBar">
+            <AppBarButton Label="Set as Lockscreen" 
+                          Icon="BrowsePhotos" 
+                          Command="{Binding SetLockscreenCommand}"></AppBarButton>
+        </CommandBar>
+    </Page.BottomAppBar>
     <!--
         This grid acts as a root panel for the page that defines two rows:
         * Row 0 contains the back button and page title

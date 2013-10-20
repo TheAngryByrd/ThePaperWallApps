@@ -6,9 +6,11 @@ using Splat;
 using ThePaperWall.Core.Downloads;
 using ThePaperWall.Core.Feeds;
 using ThePaperWall.Core.Rss;
+using Windows.System.UserProfile;
 using Windows.UI.Xaml.Media;
 using System.Threading.Tasks;
 using Windows.UI.Core;
+using System.IO;
 
 namespace ThePaperWall.WinRT.ViewModels
 {
@@ -17,24 +19,36 @@ namespace ThePaperWall.WinRT.ViewModels
         private readonly IThemeService _themeService;
         private readonly IRssReader _rssReader;
         private readonly IAsyncDownloadManager _downloadManager;
-        private readonly INavigationService _navigationService;
-
-        
 
         public string Category { get; set; }
-
         public string Title { get; set; }
 
         public ImageDetailsViewModel(IThemeService themeService,
             IRssReader rssReader,
-            IAsyncDownloadManager downloadManager,
-            INavigationService navigationService)
+            IAsyncDownloadManager downloadManager)
         {
             _themeService = themeService;
             _rssReader = rssReader;
             _downloadManager = downloadManager;
-            _navigationService = navigationService;
+
+            SetLockscreenCommand = new ReactiveCommand();
+            SetLockscreenCommand.Subscribe(_ => SetLockscreen());
         }
+  
+        private async void SetLockscreen()
+        {
+            try
+            {
+                var memoryStream = new MemoryStream();            
+                await _image.Save(CompressedBitmapFormat.Jpeg, 1, memoryStream);            
+                await LockScreen.SetImageStreamAsync(WindowsRuntimeStreamExtensions.AsRandomAccessStream(memoryStream));
+            }
+            catch (Exception e)
+            {
+            }
+        }
+
+        private IBitmap _image;
 
         protected override async System.Threading.Tasks.Task OnActivate()
         {
@@ -42,18 +56,16 @@ namespace ThePaperWall.WinRT.ViewModels
             var feed = await _rssReader.GetFeed(theme.FeedUrl);
             var imageMetaData = _rssReader.GetImageMetaData(feed).First(img => img.Category == Title);
 
-            
-
             Task<IBitmap> lowResImageTask = _downloadManager.DownloadImage(imageMetaData.imageThumbnail, priority: 10);
             Task<IBitmap> imageTask = _downloadManager.DownloadImage(imageMetaData.imageUrl, priority: 10);
-
+            
             var lowResImage = await lowResImageTask;
             await Execute.OnUIThreadAsync(() => ImageSource = (lowResImage).ToNative());
-            var image = await imageTask;
-            await Execute.OnUIThreadAsync(() => ImageSource = (image).ToNative());
+            _image = await imageTask;
+            await Execute.OnUIThreadAsync(() => ImageSource = (_image).ToNative());
             ProgressBarIsVisible = false;
-
         }
+
         private ImageSource imageSource;
         public ImageSource ImageSource
         {
@@ -77,6 +89,21 @@ namespace ThePaperWall.WinRT.ViewModels
             set
             {
                 this.RaiseAndSetIfChanged(ref _progressBarIsVisible, value);
+            }
+        }
+
+        public ReactiveCommand SetLockscreenCommand { get; private set; }
+
+        private bool _commandBarIsOpen;
+        public bool CommandBarIsOpen
+        {
+            get
+            {
+                return this._commandBarIsOpen;
+            }
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _commandBarIsOpen, value);
             }
         }
     }

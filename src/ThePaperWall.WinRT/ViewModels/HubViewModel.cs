@@ -36,9 +36,7 @@ namespace ThePaperWall.WinRT.ViewModels
             _themeService = themeService;
             _rssReader = rssReader;
             _downloadManager = downloadManager;
-            _navigationService = navigationService;
-            OpenAppBar = new ReactiveCommand();
-            OpenAppBar.Subscribe(_ => CommandBarIsOpen = true);    
+            _navigationService = navigationService; 
             CategoryCommand = new ReactiveCommand();
             CategoryCommand.Subscribe(item =>             
             {
@@ -138,21 +136,10 @@ namespace ThePaperWall.WinRT.ViewModels
             get { return _categoryItems; }
         }
 
-        public ReactiveCommand OpenAppBar {get; private set;}
+
         public ReactiveCommand CategoryCommand { get; private set; }
 
-        private bool _commandBarIsOpen;
-        public bool CommandBarIsOpen
-        {
-            get
-            {
-                return this._commandBarIsOpen;
-            }
-            set
-            {
-                this.RaiseAndSetIfChanged(ref _commandBarIsOpen, value);
-            }
-        }
+      
 
         private bool _progressBarIsVisible = true;
         public bool ProgressBarIsVisible

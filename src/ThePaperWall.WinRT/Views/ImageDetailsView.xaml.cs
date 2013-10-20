@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using ReactiveUI;
 using ThePaperWall.WinRT.Common;
+using ThePaperWall.WinRT.ViewModels;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -24,6 +26,18 @@ namespace ThePaperWall.WinRT.Views
     /// </summary>
     public sealed partial class ImageDetailsView : Page
     {
-      
+        public ImageDetailsView()
+        {
+            this.WhenAnyValue(_ => _.ViewModel.CommandBarIsOpen).Subscribe(_ => CommandBar.IsOpen = _);
+        }
+        public ImageDetailsViewModel ViewModel { get { return DataContext as ImageDetailsViewModel; } }
+
+        private void CommandBar_Closed(object sender, object e)
+        {
+            var vm = DataContext as ImageDetailsViewModel;
+            vm.CommandBarIsOpen = false;
+        }
     }
+
+ 
 }
