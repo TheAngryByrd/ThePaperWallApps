@@ -56,7 +56,7 @@ namespace ThePaperWall.WinRT.ViewModels
                 var categoryItem = item as CategoryItem;
                 _navigationService.UriFor<ImageDetailsViewModel>()
                                   .WithParam(x => x.Category, _themes.Top4.Name)
-                                  .WithParam(x => x.Title, categoryItem.Name)
+                                  .WithParam(x => x.Id, categoryItem.Id)
                                   .Navigate();
             }
             catch (Exception e)
@@ -126,7 +126,7 @@ namespace ThePaperWall.WinRT.ViewModels
             foreach (var imd in imageMetaData)
             {
                 Func<Task<IBitmap>> lazyImageFactory = () => _downloadManager.DownloadImage(imd.imageThumbnail);
-                var categoryItem = new CategoryItem(imd.Category, lazyImageFactory);
+                var categoryItem = new CategoryItem(imd.imageUrl ,imd.Category, lazyImageFactory);
                 Top4Items.Add(categoryItem);
                 taskList.Add(categoryItem.LoadImage());
             }
@@ -148,7 +148,7 @@ namespace ThePaperWall.WinRT.ViewModels
 
             await Execute.OnUIThreadAsync(async () =>
             {
-                var categoryItem = new CategoryItem(firstImageFromFeed.Category, lazyImageFactory);
+                var categoryItem = new CategoryItem(firstImageFromFeed.imageUrl,firstImageFromFeed.Category, lazyImageFactory);
                 CategoryItems.Add(categoryItem);
                 await categoryItem.LoadImage();
             });

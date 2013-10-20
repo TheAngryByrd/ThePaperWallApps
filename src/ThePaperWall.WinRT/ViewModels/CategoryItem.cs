@@ -9,8 +9,9 @@ namespace ThePaperWall.WinRT.ViewModels
 {
     public class CategoryItem : ReactiveObject, IComparable<CategoryItem>
     {
-        public CategoryItem(string name, Func<Task<IBitmap>> lazyImageFactory)
+        public CategoryItem(string id, string name, Func<Task<IBitmap>> lazyImageFactory)
         {
+            Id = id;
             Name = name;
             _lazyImageFactory = lazyImageFactory;
             //LoadImage(lazyImageFactory);
@@ -21,6 +22,8 @@ namespace ThePaperWall.WinRT.ViewModels
             var image = await _lazyImageFactory();
             await Execute.OnUIThreadAsync(() => ImagePath = image.ToNative());
         }
+
+        public string Id { get; private set; }
 
         public string Name { get; set; }
  

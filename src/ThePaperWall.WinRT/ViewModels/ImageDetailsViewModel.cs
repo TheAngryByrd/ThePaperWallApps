@@ -38,6 +38,11 @@ namespace ThePaperWall.WinRT.ViewModels
                 this.RaiseAndSetIfChanged(ref _title, value);
             }
         }
+        /// <summary>
+        /// This should be the URL because there's no other way to Id
+        /// this in the feed
+        /// </summary>
+        public string Id { get; set; }
 
         public ReactiveCommand SetLockscreenCommand { get; private set; }
 
@@ -75,14 +80,13 @@ namespace ThePaperWall.WinRT.ViewModels
             List<ImageMetaData> imageDataFromFeed = _rssReader.GetImageMetaData(feed);
             ImageMetaData imageMetaData = null;
 
-            if (!string.IsNullOrEmpty(Title))                    
-                imageMetaData = imageDataFromFeed.First(img => img.Category == Title);            
-            else
-            {
-                imageMetaData = imageDataFromFeed.First();
-                Title = imageMetaData.Category;
-            }
+            if (!string.IsNullOrEmpty(Id))
+                imageMetaData = imageDataFromFeed.First(img => img.imageUrl == Id);            
+            else            
+                imageMetaData = imageDataFromFeed.First();                
             
+
+            Title = imageMetaData.Category;
 
             Task<IBitmap> lowResImageTask = _downloadManager.DownloadImage(imageMetaData.imageThumbnail, priority: 10);
             Task<IBitmap> imageTask = _downloadManager.DownloadImage(imageMetaData.imageUrl, priority: 10);
