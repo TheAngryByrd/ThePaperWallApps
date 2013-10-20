@@ -26,7 +26,9 @@ namespace ThePaperWall.WinRT.ViewModels
         private readonly IAsyncDownloadManager _downloadManager;
         private readonly INavigationService _navigationService;
 
-       
+        public ReactiveCommand WallpaperOfTheDayCommand { get; private set; }
+        public ReactiveCommand Top4Command { get; private set; }
+        public ReactiveCommand CategoryCommand { get; private set; }
 
         public HubViewModel(IThemeService themeService,
             IRssReader rssReader,
@@ -40,16 +42,40 @@ namespace ThePaperWall.WinRT.ViewModels
 
             WallpaperOfTheDayCommand = new ReactiveCommand();
             WallpaperOfTheDayCommand.Subscribe(NavigateToDetailsForWallpaperOfTheDay);
+            Top4Command = new ReactiveCommand();
+            Top4Command.Subscribe(NavigateToDetailsForTop4Item);
             CategoryCommand = new ReactiveCommand();
             CategoryCommand.Subscribe(NavigateToCategoryList);
             //BlobCache.LocalMachine.Dispose();
         }
 
+        private void NavigateToDetailsForTop4Item(object item)
+        {
+            try
+            {
+                var categoryItem = item as CategoryItem;
+                _navigationService.UriFor<ImageDetailsViewModel>()
+                                  .WithParam(x => x.Category, _themes.Top4.Name)
+                                  .WithParam(x => x.Title, categoryItem.Name)
+                                  .Navigate();
+            }
+            catch (Exception e)
+            {
+            }
+        }
+
         private void NavigateToDetailsForWallpaperOfTheDay(object obj)
         {
-            _navigationService.UriFor<ImageDetailsViewModel>()
-                                   .WithParam(x => x.Category, _themes.WallPaperOfTheDay.Name)
-                                   .Navigate();
+            try
+            {
+                _navigationService.UriFor<ImageDetailsViewModel>()
+                                  .WithParam(x => x.Category, _themes.WallPaperOfTheDay.Name)
+                                  .Navigate();
+                
+            }
+            catch (Exception e)
+            {
+            }
         }
   
         private void NavigateToCategoryList(object item)
@@ -147,13 +173,6 @@ namespace ThePaperWall.WinRT.ViewModels
         {
             get { return _categoryItems; }
         }
-
-
-        public ReactiveCommand WallpaperOfTheDayCommand { get; private set; }
-        public ReactiveCommand Top4Command { get; private set; }
-        public ReactiveCommand CategoryCommand { get; private set; }
-
-      
 
         private bool _progressBarIsVisible = true;
         public bool ProgressBarIsVisible

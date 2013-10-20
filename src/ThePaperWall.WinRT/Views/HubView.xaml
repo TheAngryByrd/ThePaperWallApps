@@ -124,6 +124,7 @@
                         ItemTemplate="{StaticResource Standard420x130ItemTemplate}"
                         IsSwipeEnabled="False"
                         IsItemClickEnabled="True"
+                        fixin:ListViewItemCommand.Command="{Binding Top4Command}"
                         ScrollViewer.VerticalScrollBarVisibility="Hidden"
                         SelectionMode="None">
                         <ListView.ItemsPanel>
