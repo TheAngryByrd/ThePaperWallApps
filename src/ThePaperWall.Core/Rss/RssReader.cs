@@ -20,26 +20,40 @@ namespace ThePaperWall.Core.Rss
         {
             XmlSerializer serializer = new XmlSerializer(typeof(rss));
             rss feed = null;
-
-            //var rssFeed = await BlobCache.LocalMachine.GetOrFetchObject(url, () => FetchRssFeedQueued(url), DateTimeOffset.Now.AddMinutes(30));
-            var rssFeed = await FetchRssFeedQueued(url);
+           // BlobCache.LocalMachine.Dispose();
+            var rssFeed = await BlobCache.LocalMachine.GetOrFetchObject(url, () => FetchRssFeed(url), DateTimeOffset.Now.AddSeconds(10));
+         
             var reader = XmlReader.Create(new MemoryStream(rssFeed));
 
             using (reader)
             {
-                feed = (rss)serializer.Deserialize(reader);
+                try
+                {
+                    feed = (rss)serializer.Deserialize(reader);
+                    
+                }
+                catch (Exception e)
+                {
+                }
             }
             return feed;
         }
-        public Task<byte[]> FetchRssFeedQueued(string url)
+        private Task<byte[]> FetchRssFeedQueued(string url)
         {
             return opQueue.Enqueue(1, () => FetchRssFeed(url));
         }
-        public async Task<byte[]> FetchRssFeed(string url)
+        private async Task<byte[]> FetchRssFeed(string url)
         {
             using (var client = new HttpClient())
             {
-                return await client.GetByteArrayAsync(url);
+                try
+                {
+                    return await client.GetByteArrayAsync(url);
+                }
+                catch (Exception e)
+                {
+                    throw e;
+                }
             }
         }
 

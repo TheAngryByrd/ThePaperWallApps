@@ -16,6 +16,7 @@ namespace ThePaperWall.WP8.Views
         public MainPageView()
         {
             InitializeComponent();
+            
         }
     }
 }

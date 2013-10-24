@@ -37,7 +37,7 @@
          -->
 
          <!--Panorama control-->
-        <phone:Panorama Title="my application">
+        <phone:Panorama x:Name="Panorama" Title="my application">
             <phone:Panorama.Background>
                 <ImageBrush ImageSource="{Binding WallpaperOfTheDay}"/>
             </phone:Panorama.Background>

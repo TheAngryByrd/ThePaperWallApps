@@ -11,6 +11,7 @@ using ThePaperWall.Core.Downloads;
 using ThePaperWall.Core.Feeds;
 using ThePaperWall.Core.Models;
 using ThePaperWall.Core.Rss;
+using ThePaperWall.WinRT.Fixins;
 using Windows.UI.Core;
 using Windows.UI.Xaml.Media;
 using ThePaperWall.Core.Framework;
@@ -54,7 +55,7 @@ namespace ThePaperWall.WinRT.ViewModels
             try
             {
                 var categoryItem = item as CategoryItem;
-                _navigationService.UriFor<ImageDetailsViewModel>()
+                _navigationService.GetUriForVM<ImageDetailsViewModel>()
                                   .WithParam(x => x.Category, _themes.Top4.Name)
                                   .WithParam(x => x.Id, categoryItem.Id)
                                   .Navigate();
