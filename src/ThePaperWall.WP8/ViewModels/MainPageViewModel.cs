@@ -16,6 +16,8 @@ using System.IO;
 using System.Windows.Media.Imaging;
 using System.Net;
 using System.Net.Http;
+using Akavache;
+using System.Reactive.Linq;
 
 namespace ThePaperWall.WP8.ViewModels
 {
@@ -84,12 +86,26 @@ namespace ThePaperWall.WP8.ViewModels
             //_wallpaper = await imageTask;
 
             //await Execute.OnUIThreadAsync(async () => WallpaperOfTheDay = (_wallpaper).ToNative());
-   
-            using (var client = new HttpClient())
+            byte[] imageBytes = null;
+            bool shouldGet = false;
+            try{
+                imageBytes = await BlobCache.LocalMachine.GetAsync(imageMetaData.imageUrl);
+            }catch(Exception e)
             {
-                var temp = await client.GetByteArrayAsync(imageMetaData.imageUrl);
-                _image = new MemoryStream(temp);
+                shouldGet = true;
+             
             }
+            if (shouldGet)
+            {
+                using (var client = new HttpClient())
+                {
+                    imageBytes = await client.GetByteArrayAsync(imageMetaData.imageUrl);
+                    await BlobCache.LocalMachine.Insert(imageMetaData.imageUrl, imageBytes);
+                }
+            }
+            _image = new MemoryStream(imageBytes);
+         
+           
         }
 
         private IBitmap _wallpaper;
