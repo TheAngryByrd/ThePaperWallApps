@@ -18,6 +18,7 @@ using System.Net;
 using System.Net.Http;
 using Akavache;
 using System.Reactive.Linq;
+using ThePaperWall.Core.Framework;
 
 namespace ThePaperWall.WP8.ViewModels
 {
@@ -39,28 +40,39 @@ namespace ThePaperWall.WP8.ViewModels
         private Themes _themes;
         protected override async Task OnActivate()
         {
+            _themes = _themeService.GetThemes(WallpaperResource.Feeds);
+            var t1=  GetWallpaperOfTheDay();
 
-            await GetWallpaperOfTheDay();
-
-
-           
-            BitmapImage image = new BitmapImage();
-            image.SetSource(_image);
-
-            
-            ImageBrush brush = new ImageBrush
-            {
-
-                Stretch = Stretch.Fill,
-                ImageSource = image
-
-            };
-            Execute.BeginOnUIThread(() => {
-                _view2.Panorama.Background = brush;
-            });
            
             //GetTop4WallPaperItems();
-            //GetCategoryItems();
+            var t2= GetCategoryItems();
+
+            await Task.WhenAll(t1, t2);
+        }
+
+        public SortableObservableCollection<CategoryItem> _categoryItems = new SortableObservableCollection<CategoryItem>();
+        public SortableObservableCollection<CategoryItem> CategoryItems
+        {
+            get { return _categoryItems; }
+        }   
+
+        private async Task GetCategoryItems()
+        {
+            await Task.WhenAll(_themes.All.Select(x => GetCategory(x)));
+        }
+
+        private async Task GetCategory(Theme theme)
+        {
+            var feed = await _rssReader.GetFeed(theme.FeedUrl);
+            var firstImageFromFeed = _rssReader.GetImageMetaData(feed).First();
+            firstImageFromFeed.Category = theme.Name;
+
+            await Execute.OnUIThreadAsync(async () =>
+            {
+                var categoryItem = new CategoryItem(firstImageFromFeed.imageUrl, firstImageFromFeed.Category);
+                CategoryItems.Add(categoryItem);
+            });
+
         }
 
         private MainPageView _view2;
@@ -74,18 +86,10 @@ namespace ThePaperWall.WP8.ViewModels
 
         private async Task GetWallpaperOfTheDay()
         {
-            _themes = _themeService.GetThemes(WallpaperResource.Feeds);
+          
             var rssForFeed = await _rssReader.GetFeed(_themes.WallPaperOfTheDay.FeedUrl);
             var imageMetaData = _rssReader.GetImageMetaData(rssForFeed).First();
 
-            //Task<IBitmap> lowResImageTask = _downloadManager.DownloadImage(imageMetaData.imageThumbnail, priority: 10);
-            //Task<IBitmap> imageTask = _downloadManager.DownloadImage(imageMetaData.imageUrl, priority: 10);
-
-            //var lowResImage = await lowResImageTask;
-            //await Execute.OnUIThreadAsync(async () => WallpaperOfTheDay = (lowResImage).ToNative());
-            //_wallpaper = await imageTask;
-
-            //await Execute.OnUIThreadAsync(async () => WallpaperOfTheDay = (_wallpaper).ToNative());
             byte[] imageBytes = null;
             bool shouldGet = false;
             try{
@@ -104,7 +108,21 @@ namespace ThePaperWall.WP8.ViewModels
                 }
             }
             _image = new MemoryStream(imageBytes);
-         
+
+
+            //BECAUSE WP8 SAID SO
+            BitmapImage image = new BitmapImage();
+            image.SetSource(_image);
+            ImageBrush brush = new ImageBrush
+            {
+                Opacity= 0.4,
+                Stretch = Stretch.Fill,
+                ImageSource = image
+            };
+            Execute.BeginOnUIThread(() =>
+            {
+                _view2.Panorama.Background = brush;
+            });
            
         }
 

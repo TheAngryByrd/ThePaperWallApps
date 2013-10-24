@@ -108,6 +108,7 @@
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="Fixins\BackgroundImageDownloader.cs" />
     <Compile Include="LocalizedStrings.cs" />
+    <Compile Include="ViewModels\CategoryItem.cs" />
     <Compile Include="ViewModels\MainPage.cs" />
     <Compile Include="Views\MainPageView.xaml.cs">
       <DependentUpon>MainPageView.xaml</DependentUpon>
