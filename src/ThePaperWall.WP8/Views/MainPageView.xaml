@@ -6,6 +6,8 @@
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     mc:Ignorable="d"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
@@ -51,7 +53,7 @@
                     <phone:LongListSelector.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Margin="0,-6,0,12">
-                                <TextBlock Text="{Binding Name}" TextWrapping="Wrap" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeExtraLarge}"/>
+                                <TextBlock toolkit:TiltEffect.IsTiltEnabled="True" Text="{Binding Name}" TextWrapping="Wrap" Style="{StaticResource PhoneTextExtraLargeStyle}" FontSize="{StaticResource PhoneFontSizeExtraLarge}"/>
                             </StackPanel>
                         </DataTemplate>
                     </phone:LongListSelector.ItemTemplate>
@@ -70,7 +72,7 @@
                         <ListBox SelectionChanged="ListBox_SelectionChanged" ItemsSource="{Binding Top2Items}">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
-                                <Image Source="{Binding ImagePath}" Stretch="UniformToFill" Height="173" Width="173" Margin="12,0,0,0" ></Image>
+                                    <Image toolkit:TiltEffect.IsTiltEnabled="True" Source="{Binding ImagePath}" Stretch="UniformToFill" Height="173" Width="173" Margin="12,0,0,0" ></Image>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                             <ListBox.ItemsPanel>
@@ -82,7 +84,7 @@
                         <ListBox SelectionChanged="ListBox_SelectionChanged" ItemsSource="{Binding Bottom2Items}">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
-                                    <Image Source="{Binding ImagePath}" Stretch="UniformToFill" Height="173" Width="173" Margin="12,0,0,0" ></Image>
+                                    <Image toolkit:TiltEffect.IsTiltEnabled="True" Source="{Binding ImagePath}" Stretch="UniformToFill" Height="173" Width="173" Margin="12,0,0,0" ></Image>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                             <ListBox.ItemsPanel>
