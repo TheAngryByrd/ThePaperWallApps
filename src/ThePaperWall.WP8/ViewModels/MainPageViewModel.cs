@@ -10,6 +10,7 @@ using ThePaperWall.Core.Models;
 using ThePaperWall.Core.Rss;
 using Splat;
 using System.Windows.Media;
+using ThePaperWall.WP8.Helpers;
 using Windows.UI.Core;
 using ThePaperWall.WP8.Views;
 using System.IO;
@@ -22,6 +23,9 @@ using ThePaperWall.Core.Framework;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Windows.Phone.System.UserProfile;
+using System.IO.IsolatedStorage;
+using System.Windows;
+using System.Windows.Resources;
 
 namespace ThePaperWall.WP8.ViewModels
 {
@@ -34,15 +38,23 @@ namespace ThePaperWall.WP8.ViewModels
 
         private readonly INavigationService _navigationService;
 
+        private readonly IDownloadHelper _downloadHelper;
+
+        private readonly ILockscreenHelper _lockscreenHelper;
+
         public MainPageViewModel(IThemeService themeService,
             IRssReader rssReader,
             IAsyncDownloadManager downloadManager,
-            INavigationService navigationService)
+            INavigationService navigationService,
+            IDownloadHelper downloadHelper,
+            ILockscreenHelper lockscreenHelper)
         {
             _themeService = themeService;
             _rssReader = rssReader;
             _downloadManager = downloadManager;
             _navigationService = navigationService;
+            _downloadHelper = downloadHelper;
+            _lockscreenHelper = lockscreenHelper;
         }
 
         private Themes _themes;
@@ -57,22 +69,19 @@ namespace ThePaperWall.WP8.ViewModels
 
             await Task.WhenAll(t1,  t2, t3);
 
-            this.ObservableForProperty(vm => vm.SelectedCategory).Select(_ => _.GetValue()).Subscribe(_ => {}
-                );
+            this.ObservableForProperty(vm => vm.SelectedCategory).Select(_ => _.GetValue()).Subscribe(v => _lockscreenHelper.SetLockscreen(v.Id));
 
-            if (!LockScreenManager.IsProvidedByCurrentApplication)
-            {
-                // If you're not the provider, this call will prompt the user for permission.
-                // Calling RequestAccessAsync from a background agent is not allowed.
-                await LockScreenManager.RequestAccessAsync();
-            }
-
-            // Only do further work if the access is granted.
-            if (LockScreenManager.IsProvidedByCurrentApplication)
-            {
-                // change the background here. 
-            }
+    
         }
+
+        protected override async Task OnDeactivate(bool close)
+        {
+            Top2Items.Clear();
+            Bottom2Items.Clear();
+            CategoryItems.Clear();
+        }
+
+    
         
 
         public ObservableCollection<CategoryItem> _top2Items = new ObservableCollection<CategoryItem>();
@@ -107,7 +116,7 @@ namespace ThePaperWall.WP8.ViewModels
             var taskList = new List<Task>();
             foreach (var imd in imageMetaData.Skip(0).Take(2))
             {
-                Func<Task<BitmapImage>> lazyImageFactory = () => GetImage(imd,true);
+                Func<Task<BitmapImage>> lazyImageFactory = () => _downloadHelper.GetImage(imd,true);
                 var categoryItem = new CategoryItem(imd.imageUrl, imd.Category, lazyImageFactory);                
                 Top2Items.Add(categoryItem);
                 taskList.Add(categoryItem.LoadImage());                
@@ -115,7 +124,7 @@ namespace ThePaperWall.WP8.ViewModels
 
             foreach (var imd in imageMetaData.Skip(2).Take(2))
             {
-                Func<Task<BitmapImage>> lazyImageFactory = () => GetImage(imd,true);
+                Func<Task<BitmapImage>> lazyImageFactory = () => _downloadHelper.GetImage(imd, true);
                 var categoryItem = new CategoryItem(imd.imageUrl, imd.Category, lazyImageFactory);
                 Bottom2Items.Add(categoryItem);
                 taskList.Add(categoryItem.LoadImage());
@@ -161,7 +170,7 @@ namespace ThePaperWall.WP8.ViewModels
             var rssForFeed = await _rssReader.GetFeed(_themes.WallPaperOfTheDay.FeedUrl);
             var imageMetaData = _rssReader.GetImageMetaData(rssForFeed).First();
 
-            var image = await GetImage(imageMetaData);
+            var image = await _downloadHelper.GetImage(imageMetaData);
             ImageBrush brush = new ImageBrush
             {
                 Opacity = 0.4,
@@ -174,41 +183,6 @@ namespace ThePaperWall.WP8.ViewModels
             });
         }
   
-        private async Task< BitmapImage> GetImage(ImageMetaData imageMetaData, bool go = false)
-        {
-            byte[] imageBytes = null;
-            bool shouldGet = false;
-            string url = go ? imageMetaData.imageThumbnail : imageMetaData.imageUrl;
-            try
-            {
-            
-                imageBytes = await BlobCache.LocalMachine.GetAsync(url);
-            }
-            catch (Exception e)
-            {
-                shouldGet = true;
-            }
-            if (shouldGet)
-            {
-                using (var client = new HttpClient())
-                {
-                    try
-                    {
-                        imageBytes = await client.GetByteArrayAsync(url);
-                        await BlobCache.LocalMachine.Insert(url, imageBytes);
-                    }
-                    catch (Exception e)
-                    {
-                    }
-                }
-            }
-            var imageStream = new MemoryStream(imageBytes);
-
-            //BECAUSE WP8 SAID SO
-            BitmapImage image = new BitmapImage();
-            image.SetSource(imageStream);
-            return image;
-        }
 
         private IBitmap _wallpaper;
         private ImageSource _wallpaperOfTheDay;

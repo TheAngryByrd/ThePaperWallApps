@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using ThePaperWall.Core.Downloads;
 using ThePaperWall.Core.Feeds;
 using ThePaperWall.Core.Rss;
+using ThePaperWall.WP8.Helpers;
 using ThePaperWall.WP8.ViewModels;
 
 namespace ThePaperWall.WP8
@@ -33,6 +34,8 @@ namespace ThePaperWall.WP8
             _container.PerRequest<IThemeService, ThemeService>();
             _container.PerRequest<IAsyncDownloadManager, AsyncDownloadManager>();
             _container.PerRequest<IRssReader, RssReader>();
+            _container.PerRequest<ILockscreenHelper, LockscreenHelper>();
+            _container.PerRequest<IDownloadHelper, DownloadHelper>();
 
         }
 

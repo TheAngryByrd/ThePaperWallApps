@@ -107,6 +107,10 @@
     </Compile>
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="Fixins\BackgroundImageDownloader.cs" />
+    <Compile Include="Helpers\DownloadHelper.cs" />
+    <Compile Include="Helpers\IDownloadHelper.cs" />
+    <Compile Include="Helpers\ILockscreenHelper.cs" />
+    <Compile Include="Helpers\LockscreenHelper.cs" />
     <Compile Include="LocalizedStrings.cs" />
     <Compile Include="ViewModels\CategoryItem.cs" />
     <Compile Include="ViewModels\MainPage.cs" />

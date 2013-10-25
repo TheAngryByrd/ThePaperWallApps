@@ -34,6 +34,20 @@ namespace ThePaperWall.WP8.ViewModels
             _lazyImageFactory2 = lazyImageFactory;
         }
 
+        private BitmapImage _image;
+
+        public BitmapImage Image
+        {
+            get
+            {
+                return _image;
+            }
+            set
+            {
+                _image = value;
+            }
+        }
+
         public async Task LoadImage()
         {
             if (_lazyImageFactory != null)
@@ -43,8 +57,8 @@ namespace ThePaperWall.WP8.ViewModels
             }
             if (_lazyImageFactory2 != null)
             {
-                var image = await _lazyImageFactory2();
-                await Execute.OnUIThreadAsync(() => ImagePath = image);
+                _image = await _lazyImageFactory2();
+                await Execute.OnUIThreadAsync(() => ImagePath = _image);
             }
         }
 

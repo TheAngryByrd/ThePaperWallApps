@@ -7,7 +7,10 @@ namespace ThePaperWall.Core.Models
     {
         public ImageMetaData(string thumbnailUrl)
         {
-            imageThumbnail = thumbnailUrl.Substring(0, thumbnailUrl.IndexOf("?"));
+            if (thumbnailUrl.IndexOf("?") >= 0)
+                imageThumbnail = thumbnailUrl.Substring(0, thumbnailUrl.IndexOf("?"));
+            else
+                imageThumbnail = thumbnailUrl;
         }
         public string imageThumbnail { get; private set; }
 
