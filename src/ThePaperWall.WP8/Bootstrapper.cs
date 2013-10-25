@@ -36,6 +36,7 @@ namespace ThePaperWall.WP8
             _container.PerRequest<IRssReader, RssReader>();
             _container.PerRequest<ILockscreenHelper, LockscreenHelper>();
             _container.PerRequest<IDownloadHelper, DownloadHelper>();
+            _container.PerRequest<IDialogService, DialogService>();
 
         }
 

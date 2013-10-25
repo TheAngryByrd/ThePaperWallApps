@@ -16,14 +16,26 @@ namespace ThePaperWall.WP8.Helpers
     {
         private readonly IDownloadHelper _downloadHelper;
 
-        public LockscreenHelper(IDownloadHelper downloadHelper)
+        private readonly IDialogService _dialogService;
+
+        public LockscreenHelper(IDownloadHelper downloadHelper,
+            IDialogService dialogService)
         {
-            _downloadHelper = downloadHelper ?? new DownloadHelper();
+            _downloadHelper = downloadHelper;
+            _dialogService = dialogService;
         }
 
         public async Task SetLockscreen(string url)
         {
+            _dialogService.ShowDialogBox("", "Do you want to set your locksreen?", "Yes", "No",
+                () => SetLockscreenInternal(url) ,
+                () => { });
+            
 
+           
+        }
+        private async Task SetLockscreenInternal(string url)
+        {
             var isProvider = Windows.Phone.System.UserProfile.LockScreenManager.IsProvidedByCurrentApplication;
             if (!isProvider)
             {
@@ -87,7 +99,7 @@ namespace ThePaperWall.WP8.Helpers
             LockHelper(lockImage, false);
         }
 
-        private async void LockHelper(string filePathOfTheImage, bool isAppResource)
+        private async Task LockHelper(string filePathOfTheImage, bool isAppResource)
         {
             try
             {

@@ -31,7 +31,13 @@ namespace ThePaperWall.WP8.Views
 
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            ViewModel.SelectedCategory = e.AddedItems[0] as CategoryItem;
+            if (e.AddedItems.Count > 0)
+            {
+                ViewModel.SelectedTop4 = e.AddedItems[0] as CategoryItem;
+                var listbox = sender as ListBox;
+                listbox.SelectedItem = null;
+            }
+           
         }
     }
 }

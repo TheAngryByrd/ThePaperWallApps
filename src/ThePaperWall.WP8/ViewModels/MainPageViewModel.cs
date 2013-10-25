@@ -62,16 +62,20 @@ namespace ThePaperWall.WP8.ViewModels
         {
             _themes = _themeService.GetThemes(WallpaperResource.Feeds);
             var t1=  GetWallpaperOfTheDay();
-
            
             var t2 = GetTop4WallPaperItems();
             var t3= GetCategoryItems();
 
             await Task.WhenAll(t1,  t2, t3);
 
-            this.ObservableForProperty(vm => vm.SelectedCategory).Select(_ => _.GetValue()).Subscribe(v => _lockscreenHelper.SetLockscreen(v.Id));
-
-    
+            //this.ObservableForProperty(vm => vm.SelectedCategory).Select(_ => _.GetValue()).Subscribe(v => _navigationService.);
+            this.ObservableForProperty(vm => vm.SelectedTop4).Select(_ => _.GetValue()).Where(v => v != null).Subscribe(Top4Selected);
+        }
+  
+        private void Top4Selected(CategoryItem item)
+        {
+            _lockscreenHelper.SetLockscreen(item.Id);
+            SelectedTop4 = null;
         }
 
         protected override async Task OnDeactivate(bool close)
@@ -106,6 +110,18 @@ namespace ThePaperWall.WP8.ViewModels
             set
             {
                 this.RaiseAndSetIfChanged(ref _selectedCategory, value);
+            }
+        }
+        private CategoryItem _selectedTop4;
+        public CategoryItem SelectedTop4
+        {
+            get
+            {
+                return _selectedTop4;
+            }
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _selectedTop4, value);
             }
         }
 
