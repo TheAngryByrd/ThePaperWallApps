@@ -15,9 +15,6 @@
     mc:Ignorable="d" d:DesignHeight="728" d:DesignWidth="480"
     shell:SystemTray.IsVisible="False">
 
-    <UserControl.DataContext>
-        <viewModels:MainDataViewModel />
-    </UserControl.DataContext>
     <UserControl.Resources>
         <DataTemplate x:Key="ListBoxItemTemplate">
             <Grid Margin="6,0,0,25">
@@ -25,10 +22,9 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <Image Height="74" Width="74" Source="{Binding ImageSource}" Stretch="UniformToFill" />
+                <Image Height="74" Width="74" Source="{Binding ImagePath}" Stretch="UniformToFill" />
                 <StackPanel Grid.Column="1" Margin="12,0">
-                    <TextBlock Margin="0,-10,0,0" Text="{Binding Title}" TextWrapping="Wrap" FontSize="{StaticResource PhoneFontSizeLarge}" FontFamily="Segoe WP SemiLight" Foreground="{StaticResource PhoneForegroundBrush}"/>
-                    <TextBlock Text="{Binding Information}" TextWrapping="Wrap" FontSize="{StaticResource PhoneFontSizeSmall}" FontFamily="Segoe WP" Foreground="{StaticResource PhoneForegroundBrush}"/>
+                    <TextBlock Margin="0,-10,0,0" Text="{Binding Name}" TextWrapping="Wrap" FontSize="{StaticResource PhoneFontSizeLarge}" FontFamily="Segoe WP SemiLight" Foreground="{StaticResource PhoneForegroundBrush}"/>
                 </StackPanel>
             </Grid>
         </DataTemplate>
@@ -41,8 +37,8 @@
         </Grid.RowDefinitions>
 
         <StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,17,0,28">
-            <TextBlock x:Name="ApplicationTitle" Text="APP TITLE" Style="{StaticResource PhoneTextNormalStyle}"/>
-            <TextBlock x:Name="PageTitle" Text="page title" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+            <TextBlock x:Name="ApplicationTitle" Text="The Paper Wall" Style="{StaticResource PhoneTextNormalStyle}"/>
+            <TextBlock x:Name="PageTitle" Text="{Binding Category}" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
         </StackPanel>
 
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
@@ -54,7 +50,7 @@
                 <telerikPrimitives:RadSlideView.ItemTemplate>
                     <DataTemplate>
                         <Grid>
-                            <Image Height="185" Source="{Binding ImageSource}" Margin="24,6" Stretch="UniformToFill"/>
+                            <Image Height="185" Source="{Binding ImagePath}" Margin="24,6" Stretch="UniformToFill"/>
                         </Grid>
                     </DataTemplate>
                 </telerikPrimitives:RadSlideView.ItemTemplate>

@@ -8,12 +8,14 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using Punchclock;
 using ThePaperWall.Core.Models;
 
 namespace ThePaperWall.WP8.Helpers
 {
     public class DownloadHelper : IDownloadHelper
     {
+        private static OperationQueue queue = new OperationQueue(2);
         public async Task<BitmapImage> GetImage(ImageMetaData imageMetaData, bool go = false)
         {
             byte[] imageBytes = null;
@@ -30,17 +32,23 @@ namespace ThePaperWall.WP8.Helpers
             }
             if (shouldGet)
             {
-                using (var client = new HttpClient())
-                {
-                    try
+                imageBytes = await queue.Enqueue(1,async () => 
                     {
-                        imageBytes = await client.GetByteArrayAsync(url);
-                        await BlobCache.LocalMachine.Insert(url, imageBytes);
-                    }
-                    catch (Exception e)
-                    {
-                    }
-                }
+
+                        using (var client = new HttpClient())
+                        {
+                            byte[] tempimageBytes = null;
+                            try
+                            {
+                                tempimageBytes = await client.GetByteArrayAsync(url);
+                                await BlobCache.LocalMachine.Insert(url, tempimageBytes);
+                            }
+                            catch (Exception e)
+                            {
+                            }
+                            return tempimageBytes;
+                        }
+                    });
             }
             var imageStream = new MemoryStream(imageBytes);
 
