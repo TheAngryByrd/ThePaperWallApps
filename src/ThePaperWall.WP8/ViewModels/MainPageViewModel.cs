@@ -218,13 +218,13 @@ namespace ThePaperWall.WP8.ViewModels
         {
             try
             {
-                var feed = await _rssReader.GetFeed(theme.FeedUrl);
-                var firstImageFromFeed = _rssReader.GetImageMetaData(feed).First();
-                firstImageFromFeed.Category = theme.Name;
+                //var feed = await _rssReader.GetFeed();
+                //var firstImageFromFeed = _rssReader.GetImageMetaData(feed).First();
+               // firstImageFromFeed.Category = theme.Name;
 
                 await Execute.OnUIThreadAsync(async () =>
                 {
-                    var categoryItem = new CategoryItem(firstImageFromFeed.imageUrl, firstImageFromFeed.Category);
+                    var categoryItem = new CategoryItem(theme.FeedUrl, theme.Name);
                     CategoryItems.Add(categoryItem);
                 });
             }

@@ -50,15 +50,21 @@ namespace ThePaperWall.WP8.ViewModels
 
         public async Task LoadImage()
         {
-            if (_lazyImageFactory != null)
+            try
             {
-                var image = await _lazyImageFactory();
-                await Execute.OnUIThreadAsync(() => ImagePath = image.ToNative());
+                if (_lazyImageFactory != null)
+                {
+                    var image = await _lazyImageFactory();
+                    await Execute.OnUIThreadAsync(() => ImagePath = image.ToNative());
+                }
+                if (_lazyImageFactory2 != null)
+                {
+                    _image = await _lazyImageFactory2();
+                    await Execute.OnUIThreadAsync(() => ImagePath = _image);
+                }
             }
-            if (_lazyImageFactory2 != null)
+            catch (Exception e)
             {
-                _image = await _lazyImageFactory2();
-                await Execute.OnUIThreadAsync(() => ImagePath = _image);
             }
         }
 

@@ -16,7 +16,7 @@ namespace ThePaperWall.WP8.Helpers
 {
     public class DownloadHelper : IDownloadHelper
     {
-        private static OperationQueue queue = new OperationQueue(2);
+        private OperationQueue queue = new OperationQueue(2);
         public async Task<BitmapImage> GetImage(ImageMetaData imageMetaData, bool go = false)
         {
             byte[] imageBytes = null;

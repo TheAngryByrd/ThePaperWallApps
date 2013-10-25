@@ -73,11 +73,16 @@ namespace ThePaperWall.WP8.ViewModels
 
         private async Task GetImages()
         {
-            var theme = _themeService.GetThemes().Categories.First(c => c.Name == Category);
-            var feed = await _rssReader.GetFeed(theme.FeedUrl);
-            var images = _rssReader.GetImageMetaData(feed).Take(10);
-            await Task.WhenAll(images.Select(x => CreateCategoryItem(x)));
-           // ProgressBarIsVisible = false;
+            try
+            {
+                var theme = _themeService.GetThemes().Categories.First(c => c.Name == Category);
+                var feed = await _rssReader.GetFeed(theme.FeedUrl);
+                var images = _rssReader.GetImageMetaData(feed).Take(10);
+                await Task.WhenAll(images.Select(x => CreateCategoryItem(x)));
+            }
+            catch (Exception e)
+            {
+            }          
         }
         private async Task CreateCategoryItem(ImageMetaData imageMetaData)
         {
