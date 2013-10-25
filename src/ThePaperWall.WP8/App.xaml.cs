@@ -50,10 +50,16 @@ namespace ThePaperWall.WP8
                 // and consume battery power when the user is not using the phone.
                 PhoneApplicationService.Current.UserIdleDetectionMode = IdleDetectionMode.Disabled;
             }
-
+            this.UnhandledException += App_UnhandledException;
             BlobCache.ApplicationName = "ThePaperWall";
             BlobCache.LocalMachine.InsertObject("Why", "why why");
         }
+
+        void App_UnhandledException(object sender, ApplicationUnhandledExceptionEventArgs e)
+        {
+           
+        }
+       
 
     }
 }

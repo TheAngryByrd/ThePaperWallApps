@@ -116,7 +116,6 @@
     <Compile Include="LocalizedStrings.cs" />
     <Compile Include="ViewModels\CategoryItem.cs" />
     <Compile Include="ViewModels\CategoryListViewModel.cs" />
-    <Compile Include="ViewModels\MainPage.cs" />
     <Compile Include="Views\CategoryListView.xaml.cs">
       <DependentUpon>CategoryListView.xaml</DependentUpon>
     </Compile>
@@ -134,8 +133,6 @@
     </Compile>
     <Compile Include="ViewModels\ItemViewModel.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />
-    <Compile Include="Views\ViewModels\DataItemViewModel.cs" />
-    <Compile Include="Views\ViewModels\MainDataViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">

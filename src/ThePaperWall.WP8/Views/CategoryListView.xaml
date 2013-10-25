@@ -18,7 +18,7 @@
 
     <UserControl.Resources>
         <DataTemplate x:Key="ListBoxItemTemplate">
-            <Grid Margin="6,0,0,25" toolkit:TiltEffect.IsTiltEnabled="true">
+            <Grid Margin="6,0,0,25" >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
@@ -42,7 +42,7 @@
             <TextBlock x:Name="PageTitle" Text="{Binding Category}" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
         </StackPanel>
 
-        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
+        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0" toolkit:TiltEffect.IsTiltEnabled="true">
             <Grid.RowDefinitions>
                 <RowDefinition Height="222"/>
                 <RowDefinition/>
@@ -56,13 +56,13 @@
                 <telerikPrimitives:RadSlideView.ItemTemplate>
                     <DataTemplate>
                         <Grid>
-                            <Image Height="185" toolkit:TiltEffect.IsTiltEnabled="true" Source="{Binding ImagePath}" Margin="24,6" Stretch="UniformToFill"/>
+                            <Image Height="185"  Source="{Binding ImagePath}" Margin="24,6" Stretch="UniformToFill"/>
                         </Grid>
                     </DataTemplate>
                 </telerikPrimitives:RadSlideView.ItemTemplate>
             </telerikPrimitives:RadSlideView>
             <telerikPrimitives:RadPaginationControl PageProvider="{Binding ElementName=slideView}" DisplayMode="IndexLabel" Margin="24,36" />
-            <telerikPrimitives:RadDataBoundListBox toolkit:TiltEffect.IsTiltEnabled="true" SelectionChanged="listBox_SelectionChanged"  Grid.Row="1" x:Name="listBox" Margin="6,6,6,0" ItemsSource="{Binding Items}" ItemTemplate="{StaticResource ListBoxItemTemplate}"/>
+            <telerikPrimitives:RadDataBoundListBox SelectionChanged="listBox_SelectionChanged"  Grid.Row="1" x:Name="listBox" Margin="6,6,6,0" ItemsSource="{Binding Items}" ItemTemplate="{StaticResource ListBoxItemTemplate}"/>
          
         </Grid>
         <ProgressBar x:Name="ProgressBar" IsIndeterminate="True" VerticalAlignment="Top" Height="10"></ProgressBar>
