@@ -56,8 +56,9 @@
                 </telerikPrimitives:RadSlideView.ItemTemplate>
             </telerikPrimitives:RadSlideView>
             <telerikPrimitives:RadPaginationControl PageProvider="{Binding ElementName=slideView}" DisplayMode="IndexLabel" Margin="24,36" />
-            <telerikPrimitives:RadDataBoundListBox Grid.Row="1" x:Name="listBox" Margin="6,6,6,0" ItemsSource="{Binding Items}" ItemTemplate="{StaticResource ListBoxItemTemplate}"/>
+            <telerikPrimitives:RadDataBoundListBox SelectionChanged="listBox_SelectionChanged" Grid.Row="1" x:Name="listBox" Margin="6,6,6,0" ItemsSource="{Binding Items}" ItemTemplate="{StaticResource ListBoxItemTemplate}"/>
         </Grid>
+        <ProgressBar x:Name="ProgressBar" IsIndeterminate="True" VerticalAlignment="Top" Height="10"></ProgressBar>
     </Grid>
 
 </phone:PhoneApplicationPage>

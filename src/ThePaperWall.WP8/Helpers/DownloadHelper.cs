@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using Punchclock;
 using ThePaperWall.Core.Models;
+using System.Windows;
 
 namespace ThePaperWall.WP8.Helpers
 {
@@ -45,6 +46,7 @@ namespace ThePaperWall.WP8.Helpers
                             }
                             catch (Exception e)
                             {
+                                MessageBox.Show("Please check your network connection");
                             }
                             return tempimageBytes;
                         }

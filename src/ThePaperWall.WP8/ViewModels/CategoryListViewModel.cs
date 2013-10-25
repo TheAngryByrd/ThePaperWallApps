@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using ReactiveUI;
 using ThePaperWall.Core.Downloads;
 using ThePaperWall.Core.Feeds;
 using ThePaperWall.Core.Models;
@@ -26,23 +27,48 @@ namespace ThePaperWall.WP8.ViewModels
 
         private readonly IDownloadHelper _downloadHelper;
 
+        private readonly ILockscreenHelper _lockscreen;
+
         public CategoryListViewModel(IThemeService themeService,
             IRssReader rssReader,
             IAsyncDownloadManager downloadManager,
             INavigationService navigationService,
-            IDownloadHelper downloadHelper)
+            IDownloadHelper downloadHelper,
+            ILockscreenHelper lockscreen)
         {
             this._themeService = themeService;
             this._rssReader = rssReader;
             this._downloadManager = downloadManager;
             this._navigationService = navigationService;
             _downloadHelper = downloadHelper;
+            _lockscreen = lockscreen;
         
         }
+
+
+        private bool _progressBarIsVisible = true;
+        public bool ProgressBarIsVisible
+        {
+            get
+            {
+                return _progressBarIsVisible;
+            }
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _progressBarIsVisible, value);
+            }
+        }
+
 
         protected override async Task OnActivate()
         {
             await GetImages();
+            ProgressBarIsVisible = false;
+        }
+
+        protected override async Task OnDeactivate(bool close)
+        {
+            Items.Clear();
         }
 
         private async Task GetImages()
@@ -65,7 +91,12 @@ namespace ThePaperWall.WP8.ViewModels
         public ObservableCollection<CategoryItem> Items
         {
             get { return _categoryItems; }
-        }   
+        }
+
+        public async void SetLockscreen(CategoryItem item)
+        {
+            await _lockscreen.SetLockscreen(item.Id);
+        }
 
     }
 }

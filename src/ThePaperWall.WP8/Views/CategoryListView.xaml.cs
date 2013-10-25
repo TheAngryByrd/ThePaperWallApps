@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using Microsoft.Phone.Controls;
+using ThePaperWall.WP8.ViewModels;
 
 namespace ThePaperWall.WP8.Views
 {
@@ -20,10 +21,21 @@ namespace ThePaperWall.WP8.Views
         {
             InitializeComponent();
         }
+        public CategoryListViewModel ViewModel
+        {
+            get
+            { return DataContext as CategoryListViewModel; }
+        }
 
         private void slideView_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
+            ViewModel.SetLockscreen(this.slideView.SelectedItem as CategoryItem);
            // this.NavigationService.Navigate(new Uri("/Views/FullScreenImage.xaml?item=" + this.slideView.SelectedItem.ToString(), UriKind.RelativeOrAbsolute));
+        }
+
+        private void listBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
         }
     }
 }

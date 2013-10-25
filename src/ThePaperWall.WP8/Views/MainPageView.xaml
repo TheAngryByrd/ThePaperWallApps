@@ -37,6 +37,10 @@
             CurrentUICulture of the app at run time.
          -->
 
+        <ProgressBar x:Name="ProgressBar" 
+                     IsIndeterminate="True" 
+                     VerticalAlignment="Top"
+                     Height="10"></ProgressBar>
          <!--Panorama control-->
         <phone:Panorama x:Name="Panorama" Title="The Paper Wall">
             <phone:Panorama.Background>

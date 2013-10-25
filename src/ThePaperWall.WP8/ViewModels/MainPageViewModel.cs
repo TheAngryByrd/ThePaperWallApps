@@ -26,6 +26,7 @@ using Windows.Phone.System.UserProfile;
 using System.IO.IsolatedStorage;
 using System.Windows;
 using System.Windows.Resources;
+using Microsoft.Phone.Net.NetworkInformation;
 
 namespace ThePaperWall.WP8.ViewModels
 {
@@ -42,6 +43,8 @@ namespace ThePaperWall.WP8.ViewModels
 
         private readonly ILockscreenHelper _lockscreenHelper;
 
+
+
         public MainPageViewModel(IThemeService themeService,
             IRssReader rssReader,
             IAsyncDownloadManager downloadManager,
@@ -55,21 +58,35 @@ namespace ThePaperWall.WP8.ViewModels
             _navigationService = navigationService;
             _downloadHelper = downloadHelper;
             _lockscreenHelper = lockscreenHelper;
+
+
+
+            this.ObservableForProperty(vm => vm.SelectedCategory).Select(_ => _.GetValue()).Subscribe(NavigateToCategoryList);
+            this.ObservableForProperty(vm => vm.SelectedTop4).Select(_ => _.GetValue()).Where(v => v != null).Subscribe(Top4Selected);
         }
 
         private Themes _themes;
         protected override async Task OnActivate()
         {
+
+            await Task.Delay(1000);
+
+            var isNetworkAvailable = NetworkInterface.GetIsNetworkAvailable();
+
+            if (!isNetworkAvailable)
+            {
+                MessageBox.Show("Please check your network connection");
+                return;
+            }
+
             _themes = _themeService.GetThemes(WallpaperResource.Feeds);
             var t1=  GetWallpaperOfTheDay();
-           
+
             var t2 = GetTop4WallPaperItems();
-            var t3= GetCategoryItems();
+            var t3 = GetCategoryItems();
 
-            await Task.WhenAll(t1,  t2, t3);
-
-            this.ObservableForProperty(vm => vm.SelectedCategory).Select(_ => _.GetValue()).Subscribe(NavigateToCategoryList);
-            this.ObservableForProperty(vm => vm.SelectedTop4).Select(_ => _.GetValue()).Where(v => v != null).Subscribe(Top4Selected);
+            await Task.WhenAll(t1,t2,t3);
+            ProgressBarIsVisible = false;
         }
   
         private void Top4Selected(CategoryItem item)
@@ -141,26 +158,50 @@ namespace ThePaperWall.WP8.ViewModels
 
         private async Task GetTop4WallPaperItems()
         {
-            var rssForFeed = await _rssReader.GetFeed(_themes.Top4.FeedUrl);
-            var imageMetaData = _rssReader.GetImageMetaData(rssForFeed);
-            var taskList = new List<Task>();
-            foreach (var imd in imageMetaData.Skip(0).Take(2))
+            rss rssForFeed = null;
+            try
             {
-                Func<Task<BitmapImage>> lazyImageFactory = () => _downloadHelper.GetImage(imd,true);
-                var categoryItem = new CategoryItem(imd.imageUrl, imd.Category, lazyImageFactory);                
-                Top2Items.Add(categoryItem);
-                taskList.Add(categoryItem.LoadImage());                
-            }
+                rssForFeed = await _rssReader.GetFeed(_themes.Top4.FeedUrl);
+                var imageMetaData = _rssReader.GetImageMetaData(rssForFeed);
+                var taskList = new List<Task>();
+                foreach (var imd in imageMetaData.Skip(0).Take(2))
+                {
+                    Func<Task<BitmapImage>> lazyImageFactory = () => _downloadHelper.GetImage(imd, true);
+                    var categoryItem = new CategoryItem(imd.imageUrl, imd.Category, lazyImageFactory);
+                    Top2Items.Add(categoryItem);
+                    taskList.Add(categoryItem.LoadImage());
+                }
 
-            foreach (var imd in imageMetaData.Skip(2).Take(2))
-            {
-                Func<Task<BitmapImage>> lazyImageFactory = () => _downloadHelper.GetImage(imd, true);
-                var categoryItem = new CategoryItem(imd.imageUrl, imd.Category, lazyImageFactory);
-                Bottom2Items.Add(categoryItem);
-                taskList.Add(categoryItem.LoadImage());
+                foreach (var imd in imageMetaData.Skip(2).Take(2))
+                {
+                    Func<Task<BitmapImage>> lazyImageFactory = () => _downloadHelper.GetImage(imd, true);
+                    var categoryItem = new CategoryItem(imd.imageUrl, imd.Category, lazyImageFactory);
+                    Bottom2Items.Add(categoryItem);
+                    taskList.Add(categoryItem.LoadImage());
+                }
+                await Task.WhenAll(taskList);
             }
-            await Task.WhenAll(taskList);
-        }  
+            catch (Exception )
+            {
+
+                //MessageBox.Show("Please check your network connection");
+            }
+         
+          
+        }
+
+        private bool _progressBarIsVisible = true;
+        public bool ProgressBarIsVisible
+        {
+            get
+            {
+                return _progressBarIsVisible;
+            }
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _progressBarIsVisible, value);
+            }
+        }
 
         public SortableObservableCollection<CategoryItem> _categoryItems = new SortableObservableCollection<CategoryItem>();
         public SortableObservableCollection<CategoryItem> CategoryItems
@@ -175,18 +216,30 @@ namespace ThePaperWall.WP8.ViewModels
 
         private async Task GetCategory(Theme theme)
         {
-            var feed = await _rssReader.GetFeed(theme.FeedUrl);
-            var firstImageFromFeed = _rssReader.GetImageMetaData(feed).First();
-            firstImageFromFeed.Category = theme.Name;
-
-            await Execute.OnUIThreadAsync(async () =>
+            try
             {
-                var categoryItem = new CategoryItem(firstImageFromFeed.imageUrl, firstImageFromFeed.Category);
-                CategoryItems.Add(categoryItem);
-            });
+                var feed = await _rssReader.GetFeed(theme.FeedUrl);
+                var firstImageFromFeed = _rssReader.GetImageMetaData(feed).First();
+                firstImageFromFeed.Category = theme.Name;
+
+                await Execute.OnUIThreadAsync(async () =>
+                {
+                    var categoryItem = new CategoryItem(firstImageFromFeed.imageUrl, firstImageFromFeed.Category);
+                    CategoryItems.Add(categoryItem);
+                });
+            }
+            catch (Exception e)
+            {
+                if (!shown)
+                {
+                    shown = true;
+                    //MessageBox.Show("Please check your network connection");
+                }
+                
+            }
 
         }
-
+        bool shown = false;
         private MainPageView _view2;
 
         protected internal override async Task OnViewAttached(object view, object context)
@@ -199,20 +252,26 @@ namespace ThePaperWall.WP8.ViewModels
         {
             var rssForFeed = await _rssReader.GetFeed(_themes.WallPaperOfTheDay.FeedUrl);
             var imageMetaData = _rssReader.GetImageMetaData(rssForFeed).First();
-
-            var image = await _downloadHelper.GetImage(imageMetaData);
-            ImageBrush brush = new ImageBrush
-            {
-                Opacity = 0.4,
-                Stretch = Stretch.Fill,
-                ImageSource = image
-            };
             
-            Execute.BeginOnUIThread(() => {
-                _view2.Panorama.Background = brush;
-            });
+            try
+            {
+                var image = await _downloadHelper.GetImage(imageMetaData);
+                ImageBrush brush = new ImageBrush
+                {
+                    Opacity = 0.4,
+                    Stretch = Stretch.Fill,
+                    ImageSource = image
+                };
+            
+                Execute.BeginOnUIThread(() =>
+                {
+                    _view2.Panorama.Background = brush;
+                });
+            }
+            catch (Exception e)
+            {
+            }
         }
-  
 
         private IBitmap _wallpaper;
         private ImageSource _wallpaperOfTheDay;
