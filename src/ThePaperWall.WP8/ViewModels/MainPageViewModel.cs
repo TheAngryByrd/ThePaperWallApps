@@ -73,7 +73,7 @@ namespace ThePaperWall.WP8.ViewModels
                 // change the background here. 
             }
         }
-
+        
 
         public ObservableCollection<CategoryItem> _top2Items = new ObservableCollection<CategoryItem>();
         public ObservableCollection<CategoryItem> Top2Items

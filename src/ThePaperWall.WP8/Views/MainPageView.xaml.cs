@@ -28,5 +28,10 @@ namespace ThePaperWall.WP8.Views
         {
             ViewModel.SelectedCategory = e.AddedItems[0] as CategoryItem;
         }
+
+        private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ViewModel.SelectedCategory = e.AddedItems[0] as CategoryItem;
+        }
     }
 }

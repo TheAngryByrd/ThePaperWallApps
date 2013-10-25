@@ -65,32 +65,32 @@
                 <Grid>
                     <StackPanel Margin="0,4,16,0" Orientation="Vertical" VerticalAlignment="Top">
 
-                     
-                            
-                        <ItemsControl ItemsSource="{Binding Top2Items}">
-                            <ItemsControl.ItemTemplate>
+
+
+                        <ListBox SelectionChanged="ListBox_SelectionChanged" ItemsSource="{Binding Top2Items}">
+                            <ListBox.ItemTemplate>
                                 <DataTemplate>
                                 <Image Source="{Binding ImagePath}" Stretch="UniformToFill" Height="173" Width="173" Margin="12,0,0,0" ></Image>
                                 </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                            <ItemsControl.ItemsPanel>
+                            </ListBox.ItemTemplate>
+                            <ListBox.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <StackPanel HorizontalAlignment="Left" Orientation="Horizontal"></StackPanel>
                                 </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                        </ItemsControl>
-                        <ItemsControl ItemsSource="{Binding Bottom2Items}">
-                            <ItemsControl.ItemTemplate>
+                            </ListBox.ItemsPanel>
+                        </ListBox>
+                        <ListBox SelectionChanged="ListBox_SelectionChanged" ItemsSource="{Binding Bottom2Items}">
+                            <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <Image Source="{Binding ImagePath}" Stretch="UniformToFill" Height="173" Width="173" Margin="12,0,0,0" ></Image>
                                 </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                            <ItemsControl.ItemsPanel>
+                            </ListBox.ItemTemplate>
+                            <ListBox.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <StackPanel HorizontalAlignment="Left" Orientation="Horizontal"></StackPanel>
                                 </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                        </ItemsControl>
+                            </ListBox.ItemsPanel>
+                        </ListBox>
                     </StackPanel>
                 </Grid>
             </phone:PanoramaItem>
