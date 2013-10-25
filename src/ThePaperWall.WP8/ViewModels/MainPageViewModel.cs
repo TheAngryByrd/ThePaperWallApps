@@ -68,7 +68,7 @@ namespace ThePaperWall.WP8.ViewModels
 
             await Task.WhenAll(t1,  t2, t3);
 
-            //this.ObservableForProperty(vm => vm.SelectedCategory).Select(_ => _.GetValue()).Subscribe(v => _navigationService.);
+            this.ObservableForProperty(vm => vm.SelectedCategory).Select(_ => _.GetValue()).Subscribe(NavigateToCategoryList);
             this.ObservableForProperty(vm => vm.SelectedTop4).Select(_ => _.GetValue()).Where(v => v != null).Subscribe(Top4Selected);
         }
   
@@ -76,6 +76,20 @@ namespace ThePaperWall.WP8.ViewModels
         {
             _lockscreenHelper.SetLockscreen(item.Id);
             SelectedTop4 = null;
+        }
+
+        private void NavigateToCategoryList(CategoryItem item)
+        {
+            try
+            {
+                var categoryItem = item as CategoryItem;
+                _navigationService.UriFor<CategoryListViewModel>()
+                                  .WithParam(x => x.Category, categoryItem.Name)
+                                  .Navigate();
+            }
+            catch (Exception e)
+            {
+            }
         }
 
         protected override async Task OnDeactivate(bool close)

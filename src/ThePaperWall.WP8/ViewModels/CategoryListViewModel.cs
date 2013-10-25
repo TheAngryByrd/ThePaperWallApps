@@ -9,5 +9,6 @@ namespace ThePaperWall.WP8.ViewModels
 {
     public class CategoryListViewModel : ReactiveScreen
     {
+        public string Category { get; set; }
     }
 }

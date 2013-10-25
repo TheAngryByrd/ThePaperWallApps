@@ -21,7 +21,7 @@ namespace ThePaperWall.WP8.Views
             InitializeComponent();
         }
 
-        private void slideView_Tap(object sender, Microsoft.Phone.Controls.GestureEventArgs e)
+        private void slideView_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
            // this.NavigationService.Navigate(new Uri("/Views/FullScreenImage.xaml?item=" + this.slideView.SelectedItem.ToString(), UriKind.RelativeOrAbsolute));
         }
