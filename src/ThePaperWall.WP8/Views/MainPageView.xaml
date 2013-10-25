@@ -44,7 +44,10 @@
             <!--Panorama item one-->
             <phone:PanoramaItem Header="categories">
                 <!--Single line list with text wrapping-->
-                <phone:LongListSelector Margin="0,0,-22,0" ItemsSource="{Binding CategoryItems}">
+                <phone:LongListSelector 
+                    Margin="0,0,-22,0" 
+                    ItemsSource="{Binding CategoryItems}"
+                    SelectionChanged="LongListSelector_SelectionChanged">
                     <phone:LongListSelector.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Margin="0,-6,0,12">

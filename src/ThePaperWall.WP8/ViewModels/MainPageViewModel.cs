@@ -21,6 +21,7 @@ using System.Reactive.Linq;
 using ThePaperWall.Core.Framework;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Windows.Phone.System.UserProfile;
 
 namespace ThePaperWall.WP8.ViewModels
 {
@@ -30,14 +31,18 @@ namespace ThePaperWall.WP8.ViewModels
         private readonly IRssReader _rssReader;
         private readonly IAsyncDownloadManager _downloadManager;
 
+
+        private readonly INavigationService _navigationService;
+
         public MainPageViewModel(IThemeService themeService,
             IRssReader rssReader,
-            IAsyncDownloadManager downloadManager)
+            IAsyncDownloadManager downloadManager,
+            INavigationService navigationService)
         {
             _themeService = themeService;
             _rssReader = rssReader;
             _downloadManager = downloadManager;
-            //BlobCache.LocalMachine.Dispose();
+            _navigationService = navigationService;
         }
 
         private Themes _themes;
@@ -51,6 +56,22 @@ namespace ThePaperWall.WP8.ViewModels
             var t3= GetCategoryItems();
 
             await Task.WhenAll(t1,  t2, t3);
+
+            this.ObservableForProperty(vm => vm.SelectedCategory).Select(_ => _.GetValue()).Subscribe(_ => {}
+                );
+
+            if (!LockScreenManager.IsProvidedByCurrentApplication)
+            {
+                // If you're not the provider, this call will prompt the user for permission.
+                // Calling RequestAccessAsync from a background agent is not allowed.
+                await LockScreenManager.RequestAccessAsync();
+            }
+
+            // Only do further work if the access is granted.
+            if (LockScreenManager.IsProvidedByCurrentApplication)
+            {
+                // change the background here. 
+            }
         }
 
 
@@ -66,6 +87,18 @@ namespace ThePaperWall.WP8.ViewModels
             get { return _botton2Items; }
         }
 
+        private CategoryItem _selectedCategory;
+        public CategoryItem SelectedCategory
+        {
+            get
+            {
+                return _selectedCategory;
+            }
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _selectedCategory, value);
+            }
+        }
 
         private async Task GetTop4WallPaperItems()
         {
@@ -75,12 +108,9 @@ namespace ThePaperWall.WP8.ViewModels
             foreach (var imd in imageMetaData.Skip(0).Take(2))
             {
                 Func<Task<BitmapImage>> lazyImageFactory = () => GetImage(imd,true);
-                var categoryItem = new CategoryItem(imd.imageUrl, imd.Category, lazyImageFactory);
-                Execute.BeginOnUIThread(() =>
-                {
-                    Top2Items.Add(categoryItem);
-                    taskList.Add(categoryItem.LoadImage());
-                });
+                var categoryItem = new CategoryItem(imd.imageUrl, imd.Category, lazyImageFactory);                
+                Top2Items.Add(categoryItem);
+                taskList.Add(categoryItem.LoadImage());                
             }
 
             foreach (var imd in imageMetaData.Skip(2).Take(2))

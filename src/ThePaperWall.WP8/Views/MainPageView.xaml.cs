@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
+using ThePaperWall.WP8.ViewModels;
 
 namespace ThePaperWall.WP8.Views
 {
@@ -17,6 +19,14 @@ namespace ThePaperWall.WP8.Views
         {
             InitializeComponent();
             
+        }
+        public MainPageViewModel ViewModel
+        {
+            get { return (MainPageViewModel)DataContext; }
+        }
+        private void LongListSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ViewModel.SelectedCategory = e.AddedItems[0] as CategoryItem;
         }
     }
 }
