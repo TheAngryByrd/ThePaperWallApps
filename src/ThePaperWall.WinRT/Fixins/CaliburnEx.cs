@@ -18,16 +18,16 @@ namespace ThePaperWall.WinRT.Fixins
    
     }
 
-    public static class CaliburnEx<TViewModel>
-    {
-        private static Func<IUriBuilder<TViewModel>> fac1Tory;
+    //public static class CaliburnEx<TViewModel>
+    //{
+    //    private static Func<IUriBuilder<TViewModel>> fac1Tory;
 
-        public static IUriBuilder<TViewModel> GetUriForVM<TViewModel>(this INavigationService This, Func<IUriBuilder<TViewModel>> factory = null)
-        {
-            fac1Tory = factory;
-            return (new UriBuilderAdapter<TViewModel>()).AttachTo(This);
-        }
-    }
+    //    public static IUriBuilder<TViewModel> GetUriForVM<TViewModel>(this INavigationService This, Func<IUriBuilder<TViewModel>> factory = null)
+    //    {
+    //        fac1Tory = factory;
+    //        return (new UriBuilderAdapter<TViewModel>()).AttachTo(This);
+    //    }
+    //}
 
     public interface IUriBuilder<TViewModel>
     {

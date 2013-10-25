@@ -52,7 +52,7 @@ namespace ThePaperWall.WP8
             }
 
             BlobCache.ApplicationName = "ThePaperWall";
-            BlobCache.LocalMachine.InsertObject("Why", "why why ");
+            BlobCache.LocalMachine.InsertObject("Why", "why why");
         }
 
     }

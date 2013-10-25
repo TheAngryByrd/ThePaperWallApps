@@ -19,6 +19,8 @@ using System.Net.Http;
 using Akavache;
 using System.Reactive.Linq;
 using ThePaperWall.Core.Framework;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace ThePaperWall.WP8.ViewModels
 {
@@ -35,6 +37,7 @@ namespace ThePaperWall.WP8.ViewModels
             _themeService = themeService;
             _rssReader = rssReader;
             _downloadManager = downloadManager;
+            //BlobCache.LocalMachine.Dispose();
         }
 
         private Themes _themes;
@@ -44,11 +47,51 @@ namespace ThePaperWall.WP8.ViewModels
             var t1=  GetWallpaperOfTheDay();
 
            
-            //GetTop4WallPaperItems();
-            var t2= GetCategoryItems();
+            var t2 = GetTop4WallPaperItems();
+            var t3= GetCategoryItems();
 
-            await Task.WhenAll(t1, t2);
+            await Task.WhenAll(t1,  t2, t3);
         }
+
+
+        public ObservableCollection<CategoryItem> _top2Items = new ObservableCollection<CategoryItem>();
+        public ObservableCollection<CategoryItem> Top2Items
+        {
+            get { return _top2Items; }
+        }
+
+        public ObservableCollection<CategoryItem> _botton2Items = new ObservableCollection<CategoryItem>();
+        public ObservableCollection<CategoryItem> Bottom2Items
+        {
+            get { return _botton2Items; }
+        }
+
+
+        private async Task GetTop4WallPaperItems()
+        {
+            var rssForFeed = await _rssReader.GetFeed(_themes.Top4.FeedUrl);
+            var imageMetaData = _rssReader.GetImageMetaData(rssForFeed);
+            var taskList = new List<Task>();
+            foreach (var imd in imageMetaData.Skip(0).Take(2))
+            {
+                Func<Task<BitmapImage>> lazyImageFactory = () => GetImage(imd,true);
+                var categoryItem = new CategoryItem(imd.imageUrl, imd.Category, lazyImageFactory);
+                Execute.BeginOnUIThread(() =>
+                {
+                    Top2Items.Add(categoryItem);
+                    taskList.Add(categoryItem.LoadImage());
+                });
+            }
+
+            foreach (var imd in imageMetaData.Skip(2).Take(2))
+            {
+                Func<Task<BitmapImage>> lazyImageFactory = () => GetImage(imd,true);
+                var categoryItem = new CategoryItem(imd.imageUrl, imd.Category, lazyImageFactory);
+                Bottom2Items.Add(categoryItem);
+                taskList.Add(categoryItem.LoadImage());
+            }
+            await Task.WhenAll(taskList);
+        }  
 
         public SortableObservableCollection<CategoryItem> _categoryItems = new SortableObservableCollection<CategoryItem>();
         public SortableObservableCollection<CategoryItem> CategoryItems
@@ -82,48 +125,59 @@ namespace ThePaperWall.WP8.ViewModels
             _view2 = view as MainPageView;
         }
 
-        private Stream _image;
 
         private async Task GetWallpaperOfTheDay()
         {
-          
             var rssForFeed = await _rssReader.GetFeed(_themes.WallPaperOfTheDay.FeedUrl);
             var imageMetaData = _rssReader.GetImageMetaData(rssForFeed).First();
 
+            var image = await GetImage(imageMetaData);
+            ImageBrush brush = new ImageBrush
+            {
+                Opacity = 0.4,
+                Stretch = Stretch.Fill,
+                ImageSource = image
+            };
+            
+            Execute.BeginOnUIThread(() => {
+                _view2.Panorama.Background = brush;
+            });
+        }
+  
+        private async Task< BitmapImage> GetImage(ImageMetaData imageMetaData, bool go = false)
+        {
             byte[] imageBytes = null;
             bool shouldGet = false;
-            try{
-                imageBytes = await BlobCache.LocalMachine.GetAsync(imageMetaData.imageUrl);
-            }catch(Exception e)
+            string url = go ? imageMetaData.imageThumbnail : imageMetaData.imageUrl;
+            try
+            {
+            
+                imageBytes = await BlobCache.LocalMachine.GetAsync(url);
+            }
+            catch (Exception e)
             {
                 shouldGet = true;
-             
             }
             if (shouldGet)
             {
                 using (var client = new HttpClient())
                 {
-                    imageBytes = await client.GetByteArrayAsync(imageMetaData.imageUrl);
-                    await BlobCache.LocalMachine.Insert(imageMetaData.imageUrl, imageBytes);
+                    try
+                    {
+                        imageBytes = await client.GetByteArrayAsync(url);
+                        await BlobCache.LocalMachine.Insert(url, imageBytes);
+                    }
+                    catch (Exception e)
+                    {
+                    }
                 }
             }
-            _image = new MemoryStream(imageBytes);
-
+            var imageStream = new MemoryStream(imageBytes);
 
             //BECAUSE WP8 SAID SO
             BitmapImage image = new BitmapImage();
-            image.SetSource(_image);
-            ImageBrush brush = new ImageBrush
-            {
-                Opacity= 0.4,
-                Stretch = Stretch.Fill,
-                ImageSource = image
-            };
-            Execute.BeginOnUIThread(() =>
-            {
-                _view2.Panorama.Background = brush;
-            });
-           
+            image.SetSource(imageStream);
+            return image;
         }
 
         private IBitmap _wallpaper;
