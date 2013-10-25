@@ -13,11 +13,12 @@
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="Portrait" Orientation="Portrait"
     mc:Ignorable="d" d:DesignHeight="728" d:DesignWidth="480"
+     xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     shell:SystemTray.IsVisible="False">
 
     <UserControl.Resources>
         <DataTemplate x:Key="ListBoxItemTemplate">
-            <Grid Margin="6,0,0,25">
+            <Grid Margin="6,0,0,25" toolkit:TiltEffect.IsTiltEnabled="true">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
@@ -46,17 +47,23 @@
                 <RowDefinition Height="222"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <telerikPrimitives:RadSlideView x:Name="slideView" Margin="-12,-2,-12,24" ItemsSource="{Binding Items}" Tap="slideView_Tap">
+            <telerikPrimitives:RadSlideView 
+                x:Name="slideView" 
+                Margin="-12,-2,-12,24" 
+                ItemsSource="{Binding Items}" 
+                Tap="slideView_Tap"
+                toolkit:TiltEffect.IsTiltEnabled="true">
                 <telerikPrimitives:RadSlideView.ItemTemplate>
                     <DataTemplate>
                         <Grid>
-                            <Image Height="185" Source="{Binding ImagePath}" Margin="24,6" Stretch="UniformToFill"/>
+                            <Image Height="185" toolkit:TiltEffect.IsTiltEnabled="true" Source="{Binding ImagePath}" Margin="24,6" Stretch="UniformToFill"/>
                         </Grid>
                     </DataTemplate>
                 </telerikPrimitives:RadSlideView.ItemTemplate>
             </telerikPrimitives:RadSlideView>
             <telerikPrimitives:RadPaginationControl PageProvider="{Binding ElementName=slideView}" DisplayMode="IndexLabel" Margin="24,36" />
-            <telerikPrimitives:RadDataBoundListBox SelectionChanged="listBox_SelectionChanged" Grid.Row="1" x:Name="listBox" Margin="6,6,6,0" ItemsSource="{Binding Items}" ItemTemplate="{StaticResource ListBoxItemTemplate}"/>
+            <telerikPrimitives:RadDataBoundListBox toolkit:TiltEffect.IsTiltEnabled="true" SelectionChanged="listBox_SelectionChanged"  Grid.Row="1" x:Name="listBox" Margin="6,6,6,0" ItemsSource="{Binding Items}" ItemTemplate="{StaticResource ListBoxItemTemplate}"/>
+         
         </Grid>
         <ProgressBar x:Name="ProgressBar" IsIndeterminate="True" VerticalAlignment="Top" Height="10"></ProgressBar>
     </Grid>

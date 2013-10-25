@@ -46,7 +46,7 @@ namespace ThePaperWall.WP8.Helpers
                             }
                             catch (Exception e)
                             {
-                                MessageBox.Show("Please check your network connection");
+                                //MessageBox.Show("Please check your network connection");
                             }
                             return tempimageBytes;
                         }

@@ -27,9 +27,9 @@ namespace ThePaperWall.WP8.Helpers
 
         public async Task SetLockscreen(string url)
         {
-            _dialogService.ShowDialogBox("", "Do you want to set your locksreen?", "Yes", "No",
-                () => SetLockscreenInternal(url) ,
-                () => { });
+            await _dialogService.ShowDialogBox("", "Do you want to set your locksreen?", "Yes", "No",
+                async () => await SetLockscreenInternal(url) ,
+                async () => { });
             
 
            

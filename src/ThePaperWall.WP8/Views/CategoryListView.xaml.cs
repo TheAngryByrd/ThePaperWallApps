@@ -35,7 +35,7 @@ namespace ThePaperWall.WP8.Views
 
         private void listBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            this.slideView.SelectedItem = e.AddedItems[0];
         }
     }
 }

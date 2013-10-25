@@ -25,6 +25,8 @@ namespace ThePaperWall.WP8.Helpers
                 RightButtonContent = rightButtonContent
             };
 
+            var tcs = new TaskCompletionSource<object>();
+
             messagebox.Dismissed += (s, e) =>
             {
                 switch (e.Result)
@@ -41,6 +43,41 @@ namespace ThePaperWall.WP8.Helpers
             };
 
             messagebox.Show();
+        }
+        public Task<bool> ShowDialogBox(string caption, string message, string leftbuttonContent, string rightButtonContent, Func<Task> leftButtonAction, Func<Task> rightButtonAction)
+        {
+            var messagebox = new CustomMessageBox()
+            {
+                Caption = caption,
+                Message = message,
+                LeftButtonContent = leftbuttonContent,
+                RightButtonContent = rightButtonContent
+            };
+
+            var tcs = new TaskCompletionSource<bool>();
+            messagebox.Dismissed += async (s, e) =>
+            {
+                switch (e.Result)
+                {
+                    case CustomMessageBoxResult.LeftButton:
+                         await leftButtonAction();
+                        tcs.SetResult(true);
+                        break;
+                    case CustomMessageBoxResult.RightButton:
+                        rightButtonAction();
+
+                        tcs.SetResult(true);
+                        break;
+                    case CustomMessageBoxResult.None:
+
+                        tcs.SetResult(false);
+                        break;
+                };
+            };
+
+            messagebox.Show();
+
+            return tcs.Task;
         }
     }
 }

@@ -62,8 +62,10 @@ namespace ThePaperWall.WP8.ViewModels
 
         protected override async Task OnActivate()
         {
+            ProgressBarIsVisible = true;
             await GetImages();
             ProgressBarIsVisible = false;
+
         }
 
         protected override async Task OnDeactivate(bool close)
@@ -100,7 +102,9 @@ namespace ThePaperWall.WP8.ViewModels
 
         public async void SetLockscreen(CategoryItem item)
         {
+            ProgressBarIsVisible = true;
             await _lockscreen.SetLockscreen(item.Id);
+            ProgressBarIsVisible = false;
         }
 
     }
