@@ -175,7 +175,6 @@ namespace ThePaperWall.WP8.ViewModels
             catch (Exception )
             {
 
-                //MessageBox.Show("Please check your network connection");
             }
          
           
@@ -246,12 +245,14 @@ namespace ThePaperWall.WP8.ViewModels
             
             try
             {
-                var image = await _downloadHelper.GetImage(imageMetaData);
+                var image = await BlobCache.LocalMachine.LoadImageFromUrl(imageMetaData.imageUrl, absoluteExpiration: DateTimeOffset.Now.AddSeconds(30));
+
+                //var image = await _downloadHelper.GetImage(imageMetaData);
                 ImageBrush brush = new ImageBrush
                 {
                     Opacity = 0.4,
                     Stretch = Stretch.Fill,
-                    ImageSource = image
+                    ImageSource = image.ToNative()
                 };
             
                 Execute.BeginOnUIThread(() =>

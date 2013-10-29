@@ -18,6 +18,8 @@ namespace ThePaperWall.WP8.Views
         public MainPageView()
         {
             InitializeComponent();
+
+            (App.Current as App).reminder.Notify();
             
         }
         public MainPageViewModel ViewModel

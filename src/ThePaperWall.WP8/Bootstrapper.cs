@@ -3,14 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
+using Telerik.Windows.Controls;
 using ThePaperWall.Core.Downloads;
 using ThePaperWall.Core.Feeds;
 using ThePaperWall.Core.Rss;
 using ThePaperWall.WP8.Helpers;
-using ThePaperWall.WP8.ViewModels;
 
 namespace ThePaperWall.WP8
 {
@@ -25,6 +23,20 @@ namespace ThePaperWall.WP8
             _container.RegisterPhoneServices(RootFrame);
 
             AddCustomConventions();
+        }
+
+        protected override void OnLaunch(object sender, Microsoft.Phone.Shell.LaunchingEventArgs e)
+        {
+            ApplicationUsageHelper.Init("1.0");
+        }
+
+        protected override void OnActivate(object sender, Microsoft.Phone.Shell.ActivatedEventArgs e)
+        {
+            if (!e.IsApplicationInstancePreserved)
+            {
+                //This will ensure that the ApplicationUsageHelper is initialized again if the application has been in Tombstoned state.
+                ApplicationUsageHelper.OnApplicationActivated();
+            } 
         }
 
         void BindVisiblityProperties(IEnumerable<FrameworkElement> frameWorkElements, Type viewModel)

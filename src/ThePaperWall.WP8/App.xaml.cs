@@ -24,7 +24,7 @@ namespace ThePaperWall.WP8
     /// <returns>The root frame of the Phone Application.</returns>
     public static PhoneApplicationFrame RootFrame { get; private set; }
  
-        private RadRateApplicationReminder reminder;
+        public RadRateApplicationReminder reminder;
 
         /// <summary>
         /// Constructor for the Application object.
@@ -82,6 +82,8 @@ namespace ThePaperWall.WP8
         {
            
         }
+
+       
        
 
     }
