@@ -55,7 +55,7 @@ namespace ThePaperWall.WinRT.ViewModels
             try
             {
                 var categoryItem = item as CategoryItem;
-                _navigationService.GetUriForVM<ImageDetailsViewModel>()
+                _navigationService.UriFor<ImageDetailsViewModel>()
                                   .WithParam(x => x.Category, _themes.Top4.Name)
                                   .WithParam(x => x.Id, categoryItem.Id)
                                   .Navigate();
