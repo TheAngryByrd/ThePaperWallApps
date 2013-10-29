@@ -13,6 +13,7 @@ using ThePaperWall.Core.Feeds;
 using ThePaperWall.Core.Models;
 using ThePaperWall.Core.Rss;
 using ThePaperWall.WP8.Helpers;
+using Splat;
 
 namespace ThePaperWall.WP8.ViewModels
 {
@@ -25,7 +26,6 @@ namespace ThePaperWall.WP8.ViewModels
         private readonly IAsyncDownloadManager _downloadManager;
         private readonly INavigationService _navigationService;
 
-        private readonly IDownloadHelper _downloadHelper;
 
         private readonly ILockscreenHelper _lockscreen;
 
@@ -33,14 +33,12 @@ namespace ThePaperWall.WP8.ViewModels
             IRssReader rssReader,
             IAsyncDownloadManager downloadManager,
             INavigationService navigationService,
-            IDownloadHelper downloadHelper,
             ILockscreenHelper lockscreen)
         {
             this._themeService = themeService;
             this._rssReader = rssReader;
             this._downloadManager = downloadManager;
             this._navigationService = navigationService;
-            _downloadHelper = downloadHelper;
             _lockscreen = lockscreen;
         
         }
@@ -70,7 +68,13 @@ namespace ThePaperWall.WP8.ViewModels
 
         protected override async Task OnDeactivate(bool close)
         {
-            Items.Clear();
+            try
+            {
+                Items.Clear();
+            }
+            catch (Exception e)
+            {
+            }
         }
 
         private async Task GetImages()
@@ -88,7 +92,8 @@ namespace ThePaperWall.WP8.ViewModels
         }
         private async Task CreateCategoryItem(ImageMetaData imageMetaData)
         {
-            Func<Task<BitmapImage>> lazyImageFactory = () => _downloadHelper.GetImage(imageMetaData,true);
+
+            Func<Task<IBitmap>> lazyImageFactory = () => _downloadManager.DownloadImage(imageMetaData.imageThumbnail);
             var category = new CategoryItem(imageMetaData.imageUrl, imageMetaData.Category, lazyImageFactory);
             Items.Add(category);
             await category.LoadImage();

@@ -36,23 +36,19 @@ namespace ThePaperWall.WP8.ViewModels
         private readonly IRssReader _rssReader;
         private readonly IAsyncDownloadManager _downloadManager;
         private readonly INavigationService _navigationService;
-        private readonly IDownloadHelper _downloadHelper;
         private readonly ILockscreenHelper _lockscreenHelper;
 
         public MainPageViewModel(IThemeService themeService,
             IRssReader rssReader,
             IAsyncDownloadManager downloadManager,
             INavigationService navigationService,
-            IDownloadHelper downloadHelper,
             ILockscreenHelper lockscreenHelper)
         {
             _themeService = themeService;
             _rssReader = rssReader;
             _downloadManager = downloadManager;
             _navigationService = navigationService;
-            _downloadHelper = downloadHelper;
             _lockscreenHelper = lockscreenHelper;
-
 
 
             this.ObservableForProperty(vm => vm.SelectedCategory).Select(_ => _.GetValue()).Subscribe(NavigateToCategoryList);
@@ -157,7 +153,7 @@ namespace ThePaperWall.WP8.ViewModels
                 var taskList = new List<Task>();
                 foreach (var imd in imageMetaData.Skip(0).Take(2))
                 {
-                    Func<Task<BitmapImage>> lazyImageFactory = () => _downloadHelper.GetImage(imd, true);
+                    Func<Task<IBitmap>> lazyImageFactory = () => _downloadManager.DownloadImage(imd.imageThumbnail);
                     var categoryItem = new CategoryItem(imd.imageUrl, imd.Category, lazyImageFactory);
                     Top2Items.Add(categoryItem);
                     taskList.Add(categoryItem.LoadImage());
@@ -165,7 +161,7 @@ namespace ThePaperWall.WP8.ViewModels
 
                 foreach (var imd in imageMetaData.Skip(2).Take(2))
                 {
-                    Func<Task<BitmapImage>> lazyImageFactory = () => _downloadHelper.GetImage(imd, true);
+                    Func<Task<IBitmap>> lazyImageFactory = () => _downloadManager.DownloadImage(imd.imageThumbnail);
                     var categoryItem = new CategoryItem(imd.imageUrl, imd.Category, lazyImageFactory);
                     Bottom2Items.Add(categoryItem);
                     taskList.Add(categoryItem.LoadImage());
