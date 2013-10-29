@@ -8,6 +8,7 @@ using System.Windows.Markup;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
+using Telerik.Windows.Controls;
 using ThePaperWall.WP8.Resources;
 using ThePaperWall.WP8.ViewModels;
 using Akavache;
@@ -23,8 +24,10 @@ namespace ThePaperWall.WP8
     /// <returns>The root frame of the Phone Application.</returns>
     public static PhoneApplicationFrame RootFrame { get; private set; }
  
-    /// <summary>
-    /// Constructor for the Application object.
+        private RadRateApplicationReminder reminder;
+
+        /// <summary>
+        /// Constructor for the Application object.
     /// </summary>
         public App()
         {
@@ -50,9 +53,29 @@ namespace ThePaperWall.WP8
                 // and consume battery power when the user is not using the phone.
                 PhoneApplicationService.Current.UserIdleDetectionMode = IdleDetectionMode.Disabled;
             }
-            this.UnhandledException += App_UnhandledException;
+      
             BlobCache.ApplicationName = "ThePaperWall";
             BlobCache.LocalMachine.InsertObject("Why", "why why");
+
+
+            this.reminder = new RadRateApplicationReminder();
+            reminder.RecurrencePerUsageCount = 3;
+
+
+            PhoneApplicationService.Current.Closing += App_Exit;
+            this.UnhandledException += App_UnhandledException;
+            this.Exit += App_Exit;
+        }
+
+        void App_Exit(object sender, EventArgs e)
+        {
+            Shutdown();
+        }
+  
+        private void Shutdown()
+        {
+            //BlobCache.LocalMachine.Dispose();
+            BlobCache.Shutdown().Wait();
         }
 
         void App_UnhandledException(object sender, ApplicationUnhandledExceptionEventArgs e)

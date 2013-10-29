@@ -23,19 +23,20 @@ namespace ThePaperWall.Core.Rss
            // BlobCache.LocalMachine.Dispose();
             bool shouldGet = false;
             byte[] rssFeed = null;
-            try
-            {
-                rssFeed = await BlobCache.LocalMachine.GetAsync(url);
-            }
-            catch(Exception e)
-            {
-                shouldGet = true;
-            }
-            if (shouldGet)
-            {
-                rssFeed = await FetchRssFeedQueued(url);
-                await BlobCache.LocalMachine.Insert(url, rssFeed);
-            }
+            rssFeed = await BlobCache.LocalMachine.GetOrFetchObject(url, () => FetchRssFeedQueued(url), DateTimeOffset.Now.AddSeconds(30));
+            //try
+            //{
+            //    rssFeed = await BlobCache.LocalMachine.GetAsync(url);
+            //}
+            //catch(Exception e)
+            //{
+            //    shouldGet = true;
+            //}
+            //if (shouldGet)
+            //{
+            //    rssFeed = await FetchRssFeedQueued(url);
+            //    await BlobCache.LocalMachine.Insert(url, rssFeed);
+            //}
          
             var reader = XmlReader.Create(new MemoryStream(rssFeed));
 

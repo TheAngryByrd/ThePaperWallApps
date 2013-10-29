@@ -35,15 +35,9 @@ namespace ThePaperWall.WP8.ViewModels
         private readonly IThemeService _themeService;
         private readonly IRssReader _rssReader;
         private readonly IAsyncDownloadManager _downloadManager;
-
-
         private readonly INavigationService _navigationService;
-
         private readonly IDownloadHelper _downloadHelper;
-
         private readonly ILockscreenHelper _lockscreenHelper;
-
-
 
         public MainPageViewModel(IThemeService themeService,
             IRssReader rssReader,
@@ -68,11 +62,8 @@ namespace ThePaperWall.WP8.ViewModels
         private Themes _themes;
         protected override async Task OnActivate()
         {
-
-            await Task.Delay(1000);
-
+            
             var isNetworkAvailable = NetworkInterface.GetIsNetworkAvailable();
-
             if (!isNetworkAvailable)
             {
                 MessageBox.Show("Please check your network connection");
