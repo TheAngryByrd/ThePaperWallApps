@@ -51,6 +51,7 @@
                 x:Name="slideView" 
                 Margin="-12,-2,-12,24" 
                 ItemsSource="{Binding Items}" 
+                
                 Tap="slideView_Tap"
                 toolkit:TiltEffect.IsTiltEnabled="true">
                 <telerikPrimitives:RadSlideView.ItemTemplate>
@@ -61,7 +62,10 @@
                     </DataTemplate>
                 </telerikPrimitives:RadSlideView.ItemTemplate>
             </telerikPrimitives:RadSlideView>
-            <telerikPrimitives:RadPaginationControl PageProvider="{Binding ElementName=slideView}" DisplayMode="IndexLabel" Margin="24,36" />
+            <telerikPrimitives:RadPaginationControl PageProvider="{Binding ElementName=slideView}" 
+                                                    x:Name="Pagination"                                                  
+                                                    DisplayMode="IndexLabel" 
+                                                    Margin="24,36" />
             <telerikPrimitives:RadDataBoundListBox x:Name="listBox" 
                                                    SelectionChanged="listBox_SelectionChanged"  
                                                    Grid.Row="1"  

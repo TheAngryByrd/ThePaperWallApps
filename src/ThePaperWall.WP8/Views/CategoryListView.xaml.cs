@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq;
 using System.Net;
 using System.Windows;
 using System.Windows.Controls;
@@ -14,6 +15,7 @@ using Microsoft.Phone.Controls;
 using ThePaperWall.WP8.ViewModels;
 using Telerik.Windows.Controls;
 using Telerik.Windows.Controls.SlideView;
+using System.Threading.Tasks;
 
 namespace ThePaperWall.WP8.Views
 {
@@ -26,7 +28,18 @@ namespace ThePaperWall.WP8.Views
             this.slideView.SetValue(InteractionEffectManager.IsInteractionEnabledProperty, true);
             InteractionEffectManager.AllowedTypes.Add(typeof(RadDataBoundListBoxItem));
             InteractionEffectManager.AllowedTypes.Add(typeof(SlideViewItem));
-            this.listBox.RealizedItemsBufferScale = 1;
+            this.listBox.RealizedItemsBufferScale = 1.5;
+
+            slideView.SlideAnimationCompleted += slideView_SlideAnimationCompleted;
+            
+        }
+
+        async void slideView_SlideAnimationCompleted(object sender, EventArgs e)
+        {
+            if(slideView.NextItem == slideView.ItemsSource.ElementAt(0))
+            {
+                await RequestMoreData();      
+            }
         }
         public CategoryListViewModel ViewModel
         {
@@ -42,12 +55,18 @@ namespace ThePaperWall.WP8.Views
         private void listBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             this.slideView.SelectedItem = e.AddedItems[0];
+           
         }
 
         private async void listBox_DataRequested(object sender, EventArgs e)
         {
-            await ViewModel.AddMorePictures(3);      
-            
+            await RequestMoreData();      
         }
+  
+        private async Task RequestMoreData()
+        {
+            await ViewModel.AddMorePictures(3);
+        }
+
     }
 }
