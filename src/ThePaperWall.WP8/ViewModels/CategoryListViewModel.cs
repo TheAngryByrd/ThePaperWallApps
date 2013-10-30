@@ -1,4 +1,5 @@
-﻿using Caliburn.Micro;
+﻿using System.Threading;
+using Caliburn.Micro;
 using ReactiveCaliburn;
 using System;
 using System.Collections.Generic;
@@ -73,15 +74,24 @@ namespace ThePaperWall.WP8.ViewModels
         private IEnumerable<ImageMetaData> allImages;
 
         private int imageCount = 0;
-        private int refcount = 0;
+        private int refCount = 0;
+        private SemaphoreSlim semaphore = new SemaphoreSlim(1);
+
         public async Task AddMorePictures(int skip)
-        {           
-            await Task.Delay(500);
-            ProgressBarIsVisible = true;    
-            refcount++;
+        {
+            if (refCount == 2)
+            {
+                return;
+            }
+            refCount++;
+            ProgressBarIsVisible = true; 
+            await Task.Delay(500);  
+            await semaphore.WaitAsync();
             await GetImages(skip);
-            refcount--;
-            if(refcount == 0)
+            semaphore.Release();
+            refCount--;
+
+            if (refCount == 0)
                 ProgressBarIsVisible = false;
         }
 
