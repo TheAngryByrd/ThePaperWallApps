@@ -76,7 +76,7 @@ namespace ThePaperWall.WP8.ViewModels
         private int refcount = 0;
         public async Task AddMorePictures(int skip)
         {           
-       
+            await Task.Delay(500);
             ProgressBarIsVisible = true;    
             refcount++;
             await GetImages(skip);
@@ -105,11 +105,11 @@ namespace ThePaperWall.WP8.ViewModels
         }
         private async Task CreateCategoryItem(ImageMetaData imageMetaData)
         {
-
             Func<Task<IBitmap>> lazyImageFactory = () => _downloadManager.DownloadImage(imageMetaData.imageThumbnail);
             var category = new CategoryItem(imageMetaData.imageUrl, imageMetaData.Category, lazyImageFactory);
-            Items.Add(category);
+          
             await category.LoadImage();
+            Items.Add(category);
         }
 
         public ObservableCollection<CategoryItem> _categoryItems = new ObservableCollection<CategoryItem>();

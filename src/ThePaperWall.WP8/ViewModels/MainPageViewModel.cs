@@ -65,7 +65,7 @@ namespace ThePaperWall.WP8.ViewModels
                 MessageBox.Show("Please check your network connection");
                 return;
             }
-
+            await Task.Delay(500);
             _themes = _themeService.GetThemes(WallpaperResource.Feeds);
             var t1=  GetWallpaperOfTheDay();
 

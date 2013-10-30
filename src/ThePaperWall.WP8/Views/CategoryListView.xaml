@@ -32,9 +32,9 @@
         </DataTemplate>
     </UserControl.Resources>
 
-    <telerikPrimitives:RadTransitionControl.Transition>
-        <telerikPrimitives:RadFlipItemsTransition/>
-    </telerikPrimitives:RadTransitionControl.Transition>
+    <!--<telerikPrimitives:RadTransitionControl.Transition>
+        <telerikPrimitives:RadSlideTransition/>
+    </telerikPrimitives:RadTransitionControl.Transition>-->
 
     <Grid x:Name="LayoutRoot" Background="Transparent">
         <Grid.RowDefinitions>

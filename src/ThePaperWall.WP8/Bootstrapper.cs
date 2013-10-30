@@ -129,8 +129,13 @@ namespace ThePaperWall.WP8
 
         protected override PhoneApplicationFrame CreatePhoneApplicationFrame()
         {
-            return new RadPhoneApplicationFrame()
-                        {Transition = new RadFlipItemsTransition()};
+            var objTransition = new RadTurnstileTransition();
+            
+            //objTransition.BackwardOutAnimation = objTransition.BackwardInAnimation;
+            //objTransition.ForwardInAnimation = objTransition.ForwardOutAnimation;
+            //objTransition.PlayMode = TransitionPlayMode.Consecutively;
+
+            return new RadPhoneApplicationFrame() { Transition = objTransition };
         }
     }
 }
