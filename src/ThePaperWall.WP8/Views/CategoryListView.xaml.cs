@@ -26,6 +26,7 @@ namespace ThePaperWall.WP8.Views
             this.slideView.SetValue(InteractionEffectManager.IsInteractionEnabledProperty, true);
             InteractionEffectManager.AllowedTypes.Add(typeof(RadDataBoundListBoxItem));
             InteractionEffectManager.AllowedTypes.Add(typeof(SlideViewItem));
+            this.listBox.RealizedItemsBufferScale = 1;
         }
         public CategoryListViewModel ViewModel
         {
@@ -41,6 +42,12 @@ namespace ThePaperWall.WP8.Views
         private void listBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             this.slideView.SelectedItem = e.AddedItems[0];
+        }
+
+        private async void listBox_DataRequested(object sender, EventArgs e)
+        {
+            await ViewModel.AddMorePictures(3);      
+            
         }
     }
 }

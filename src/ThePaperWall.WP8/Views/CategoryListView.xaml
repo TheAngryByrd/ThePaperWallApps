@@ -62,8 +62,23 @@
                 </telerikPrimitives:RadSlideView.ItemTemplate>
             </telerikPrimitives:RadSlideView>
             <telerikPrimitives:RadPaginationControl PageProvider="{Binding ElementName=slideView}" DisplayMode="IndexLabel" Margin="24,36" />
-            <telerikPrimitives:RadDataBoundListBox SelectionChanged="listBox_SelectionChanged"  Grid.Row="1" x:Name="listBox" Margin="6,6,6,0" ItemsSource="{Binding Items}" ItemTemplate="{StaticResource ListBoxItemTemplate}"/>
-         
+            <telerikPrimitives:RadDataBoundListBox x:Name="listBox" 
+                                                   SelectionChanged="listBox_SelectionChanged"  
+                                                   Grid.Row="1"  
+                                                   Margin="6,6,6,0" 
+                                                  EmptyContent="Loading..."
+                                                   ItemsSource="{Binding Items}" 
+                                                   ItemTemplate="{StaticResource ListBoxItemTemplate}"
+                                                   DataRequested="listBox_DataRequested"
+                                                   DataVirtualizationMode="OnDemandAutomatic">
+                <telerikPrimitives:RadDataBoundListBox.ItemLoadingContent>
+                    <DataTemplate></DataTemplate>
+                </telerikPrimitives:RadDataBoundListBox.ItemLoadingContent>                
+                <telerikPrimitives:RadDataBoundListBox.ItemLoadingTemplate>
+                    <DataTemplate></DataTemplate>
+                </telerikPrimitives:RadDataBoundListBox.ItemLoadingTemplate>
+   </telerikPrimitives:RadDataBoundListBox>
+
         </Grid>
         <ProgressBar x:Name="ProgressBar" IsIndeterminate="True" VerticalAlignment="Top" Height="10"></ProgressBar>
     </Grid>

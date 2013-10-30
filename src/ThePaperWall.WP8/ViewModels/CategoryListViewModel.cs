@@ -14,6 +14,7 @@ using ThePaperWall.Core.Models;
 using ThePaperWall.Core.Rss;
 using ThePaperWall.WP8.Helpers;
 using Splat;
+using System.Reactive.Linq;
 
 namespace ThePaperWall.WP8.ViewModels
 {
@@ -44,7 +45,8 @@ namespace ThePaperWall.WP8.ViewModels
         }
 
 
-        private bool _progressBarIsVisible = true;
+        private bool _progressBarIsVisible = false;
+
         public bool ProgressBarIsVisible
         {
             get
@@ -55,15 +57,6 @@ namespace ThePaperWall.WP8.ViewModels
             {
                 this.RaiseAndSetIfChanged(ref _progressBarIsVisible, value);
             }
-        }
-
-
-        protected override async Task OnActivate()
-        {
-            ProgressBarIsVisible = true;
-            await GetImages();
-            ProgressBarIsVisible = false;
-
         }
 
         protected override async Task OnDeactivate(bool close)
@@ -77,14 +70,33 @@ namespace ThePaperWall.WP8.ViewModels
             }
         }
 
-        private async Task GetImages()
+        private IEnumerable<ImageMetaData> allImages;
+
+        private int imageCount = 0;
+        private int refcount = 0;
+        public async Task AddMorePictures(int skip)
+        {           
+            ProgressBarIsVisible = true;    
+            refcount++;
+            await GetImages(skip);
+            refcount--;
+            if(refcount == 0)
+                ProgressBarIsVisible = false;
+        }
+
+        private async Task GetImages(int skip)
         {
             try
             {
                 var theme = _themeService.GetThemes().Categories.First(c => c.Name == Category);
                 var feed = await _rssReader.GetFeed(theme.FeedUrl);
-                var images = _rssReader.GetImageMetaData(feed).Take(10);
-                await Task.WhenAll(images.Select(x => CreateCategoryItem(x)));
+                allImages = allImages ??_rssReader.GetImageMetaData(feed);
+                if(imageCount <allImages.Count())
+                {
+                    var task = Task.WhenAll(allImages.Skip(imageCount).Take(skip).Select(x => CreateCategoryItem(x)));
+                    imageCount += skip;
+                    await task;
+                }
             }
             catch (Exception e)
             {
