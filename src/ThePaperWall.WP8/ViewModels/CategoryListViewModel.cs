@@ -63,7 +63,7 @@ namespace ThePaperWall.WP8.ViewModels
         {
             try
             {
-                Items.Clear();
+                //Items.Clear();
             }
             catch (Exception e)
             {
@@ -76,6 +76,7 @@ namespace ThePaperWall.WP8.ViewModels
         private int refcount = 0;
         public async Task AddMorePictures(int skip)
         {           
+       
             ProgressBarIsVisible = true;    
             refcount++;
             await GetImages(skip);

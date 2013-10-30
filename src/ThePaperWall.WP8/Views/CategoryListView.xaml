@@ -8,6 +8,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModels="clr-namespace:ThePaperWall.WP8.Views.ViewModels"
     xmlns:telerikPrimitives="clr-namespace:Telerik.Windows.Controls;assembly=Telerik.Windows.Controls.Primitives"
+      xmlns:telerikCore="clr-namespace:Telerik.Windows.Controls;assembly=Telerik.Windows.Core"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
@@ -31,13 +32,17 @@
         </DataTemplate>
     </UserControl.Resources>
 
+    <telerikPrimitives:RadTransitionControl.Transition>
+        <telerikPrimitives:RadFlipItemsTransition/>
+    </telerikPrimitives:RadTransitionControl.Transition>
+
     <Grid x:Name="LayoutRoot" Background="Transparent">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,17,0,28">
+       <StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,17,0,28">
             <TextBlock x:Name="ApplicationTitle" Text="The Paper Wall" Style="{StaticResource PhoneTextNormalStyle}"/>
             <TextBlock x:Name="PageTitle" Text="{Binding Category}" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
         </StackPanel>
@@ -81,7 +86,22 @@
                 <telerikPrimitives:RadDataBoundListBox.ItemLoadingTemplate>
                     <DataTemplate></DataTemplate>
                 </telerikPrimitives:RadDataBoundListBox.ItemLoadingTemplate>
-   </telerikPrimitives:RadDataBoundListBox>
+                <telerikPrimitives:RadDataBoundListBox.ItemAddedAnimation>
+                    <telerikCore:RadMoveAnimation StartPoint="500, 0" EndPoint="0, 0" Duration="0:0:1">
+                        <telerikCore:RadMoveAnimation.Easing>
+                            <CubicEase EasingMode="EaseOut"/>
+                        </telerikCore:RadMoveAnimation.Easing>
+                    </telerikCore:RadMoveAnimation>
+                </telerikPrimitives:RadDataBoundListBox.ItemAddedAnimation>
+                <telerikPrimitives:RadDataBoundListBox.ItemRemovedAnimation>
+                    <telerikCore:RadMoveAnimation StartPoint="0, 0" EndPoint="500, 0" Duration="0:0:10">
+                        <telerikCore:RadMoveAnimation.Easing>
+                            <CubicEase EasingMode="EaseIn"/>
+                        </telerikCore:RadMoveAnimation.Easing>
+                    </telerikCore:RadMoveAnimation>
+                </telerikPrimitives:RadDataBoundListBox.ItemRemovedAnimation>
+
+            </telerikPrimitives:RadDataBoundListBox>
 
         </Grid>
         <ProgressBar x:Name="ProgressBar" IsIndeterminate="True" VerticalAlignment="Top" Height="10"></ProgressBar>

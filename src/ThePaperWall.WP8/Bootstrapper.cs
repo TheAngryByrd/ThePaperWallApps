@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using Microsoft.Phone.Controls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -124,6 +125,12 @@ namespace ThePaperWall.WP8
         protected override void BuildUp(object instance)
         {
             _container.BuildUp(instance);
+        }
+
+        protected override PhoneApplicationFrame CreatePhoneApplicationFrame()
+        {
+            return new RadPhoneApplicationFrame()
+                        {Transition = new RadFlipItemsTransition()};
         }
     }
 }
