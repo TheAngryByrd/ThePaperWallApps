@@ -23,7 +23,7 @@ namespace ThePaperWall.Core.Rss
            // BlobCache.LocalMachine.Dispose();
             bool shouldGet = false;
             byte[] rssFeed = null;
-            rssFeed = await BlobCache.LocalMachine.GetOrFetchObject(url, () => FetchRssFeedQueued(url), DateTimeOffset.Now.AddSeconds(30));
+            rssFeed = await FetchRssFeedQueued(url);
             //try
             //{
             //    rssFeed = await BlobCache.LocalMachine.GetAsync(url);

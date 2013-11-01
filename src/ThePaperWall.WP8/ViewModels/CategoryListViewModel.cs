@@ -99,7 +99,7 @@ namespace ThePaperWall.WP8.ViewModels
         {
             try
             {
-                var theme = _themeService.GetThemes().Categories.First(c => c.Name == Category);
+                var theme = _themeService.GetThemes().All.First(c => c.Name == Category);
                 var feed = await _rssReader.GetFeed(theme.FeedUrl);
                 allImages = allImages ??_rssReader.GetImageMetaData(feed);
                 if(imageCount <allImages.Count())

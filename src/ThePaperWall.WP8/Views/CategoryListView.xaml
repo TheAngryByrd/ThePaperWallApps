@@ -62,7 +62,7 @@
                 <telerikPrimitives:RadSlideView.ItemTemplate>
                     <DataTemplate>
                         <Grid>
-                            <Image Height="185"  Source="{Binding ImagePath}" Margin="24,6" Stretch="UniformToFill"/>
+                            <Image Height="185"  Source="{Binding ImagePath}" Margin="24,6" Stretch="Fill"/>
                         </Grid>
                     </DataTemplate>
                 </telerikPrimitives:RadSlideView.ItemTemplate>
