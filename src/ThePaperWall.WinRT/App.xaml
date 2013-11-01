@@ -9,7 +9,7 @@
   <Application.Resources>
     <!-- Application-specific resources -->
 
-    <x:String x:Key="AppName">ThePaperWall.WinRT</x:String>
+    <x:String x:Key="AppName">Paper Wall Locker</x:String>
 
   </Application.Resources>
 </caliburn:CaliburnApplication>
