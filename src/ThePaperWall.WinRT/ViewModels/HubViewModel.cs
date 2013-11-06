@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Reactive.Linq;
 using Caliburn.Micro;
-using LinqToAwait;
 using ReactiveCaliburn;
 using ReactiveUI;
 using Splat;
