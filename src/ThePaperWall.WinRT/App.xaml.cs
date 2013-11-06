@@ -13,6 +13,7 @@ using ThePaperWall.Core.Rss;
 using Akavache;
 using ThePaperWall.WinRT.Views;
 using Windows.UI.Xaml;
+using Windows.UI.ApplicationSettings;
 
 // The Hub App template is documented at http://go.microsoft.com/fwlink/?LinkId=286574
 
@@ -33,6 +34,8 @@ namespace ThePaperWall.WinRT
             this.Suspending += OnSuspending;
         }
 
+        private const string PrivacyPolicyUrl = "http://theangrybyrd.azurewebsites.net/PaperWall-Locker-Privacy-Policy";    
+
         /// <summary>
         /// Invoked when the application is launched normally by the end user.  Other entry points
         /// will be used such as when the application is launched to open a specific file.
@@ -44,6 +47,23 @@ namespace ThePaperWall.WinRT
             //Because Paul Betts says so
             BlobCache.LocalMachine.InsertObject("dumb", "winrt is dumb");
             DisplayRootView<HubView>();
+        }
+
+        protected override void OnWindowCreated(Windows.UI.Xaml.WindowCreatedEventArgs args)
+        {
+            base.OnWindowCreated(args);
+            SettingsPane.GetForCurrentView().CommandsRequested += ConfigureSettings;
+        }
+            
+        private void ConfigureSettings(SettingsPane sender, SettingsPaneCommandsRequestedEventArgs args)
+        {
+            var privacyPolicyCommand = new SettingsCommand("privacyPolicy", "Privacy Policy", a => LaunchUrl(PrivacyPolicyUrl));
+            args.Request.ApplicationCommands.Add(privacyPolicyCommand);
+        }
+
+        private async void LaunchUrl(string url)
+        {
+            var result = await Windows.System.Launcher.LaunchUriAsync(new Uri(url));
         }
         /// <summary>
         /// Invoked when application execution is being suspended.  Application state is saved
