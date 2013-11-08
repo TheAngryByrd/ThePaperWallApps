@@ -25,7 +25,7 @@
 
         <!-- Grid-appropriate 310 by 260 pixel item template as seen in section 4 -->
         <DataTemplate x:Key="Standard310x260ItemTemplate">
-            <Grid Height="250" Width="310" Margin="10">
+            <Grid Height="200" Width="310" Margin="10">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
