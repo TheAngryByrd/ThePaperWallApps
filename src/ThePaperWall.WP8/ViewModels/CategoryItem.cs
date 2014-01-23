@@ -2,13 +2,10 @@
 using ReactiveUI;
 using Splat;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 #if WP8
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 #elif NETFX_CORE
 using Windows.UI.Xaml.Media;
 #endif
