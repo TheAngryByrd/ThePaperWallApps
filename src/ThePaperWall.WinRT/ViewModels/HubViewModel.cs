@@ -1,20 +1,16 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Reactive.Linq;
 using Caliburn.Micro;
-using ReactiveCaliburn;
 using ReactiveUI;
 using Splat;
 using ThePaperWall.Core.Downloads;
 using ThePaperWall.Core.Feeds;
 using ThePaperWall.Core.Models;
 using ThePaperWall.Core.Rss;
-using ThePaperWall.WinRT.Fixins;
 using Windows.UI.Core;
 using Windows.UI.Xaml.Media;
 using ThePaperWall.Core.Framework;
-using Akavache;
 using System.Collections.Generic;
 
 namespace ThePaperWall.WinRT.ViewModels

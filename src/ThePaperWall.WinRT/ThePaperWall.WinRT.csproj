@@ -223,13 +223,13 @@
     <Reference Include="ReactiveUI.Xaml">
       <HintPath>..\packages\reactiveui-platforms.5.2.0\lib\WinRT45\ReactiveUI.Xaml.dll</HintPath>
     </Reference>
-    <Reference Include="Splat, Version=0.3.3.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Splat, Version=0.3.4.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Splat.0.3.3\lib\NetCore45\Splat.dll</HintPath>
+      <HintPath>..\packages\Splat.0.3.4\lib\NetCore45\Splat.dll</HintPath>
     </Reference>
     <Reference Include="Splat.Portable, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Splat.0.3.3\lib\NetCore45\Splat.Portable.dll</HintPath>
+      <HintPath>..\packages\Splat.0.3.4\lib\NetCore45\Splat.Portable.dll</HintPath>
     </Reference>
     <Reference Include="System.Reactive.Core">
       <HintPath>..\packages\Rx-Core.2.1.30214.0\lib\NetCore45\System.Reactive.Core.dll</HintPath>
@@ -281,6 +281,7 @@
     <VisualStudioVersion>12.0</VisualStudioVersion>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
+  <Import Project="$(XamlSpyInstallPath)MSBuild\FirstFloor.XamlSpy.WinRT.targets" Condition="'$(XamlSpyInstallPath)' != '' and '$(Configuration)' == 'Debug'" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

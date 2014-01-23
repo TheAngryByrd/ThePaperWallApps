@@ -37,8 +37,10 @@
                                 Television,http://www.thepaperwall.com/rss.category.php?feed=television,
                                 Space,http://www.thepaperwall.com/rss.category.php?feed=space,
                                 Sports,http://www.thepaperwall.com/rss.category.php?feed=sports,
-                                Girls,http://www.thepaperwall.com/rss.category.php?feed=girls,
+                           
                                 Guns,http://www.thepaperwall.com/rss.category.php?feed=guns
                                 ";
     }
+
+         //Girls,http://www.thepaperwall.com/rss.category.php?feed=girls,
 }
