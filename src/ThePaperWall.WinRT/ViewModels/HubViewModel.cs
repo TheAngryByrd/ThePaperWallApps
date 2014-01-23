@@ -12,6 +12,7 @@ using Windows.UI.Core;
 using Windows.UI.Xaml.Media;
 using ThePaperWall.Core.Framework;
 using System.Collections.Generic;
+using ThePaperWall.ViewModels;
 
 namespace ThePaperWall.WinRT.ViewModels
 {
@@ -26,6 +27,8 @@ namespace ThePaperWall.WinRT.ViewModels
         public ReactiveCommand Top4Command { get; private set; }
         public ReactiveCommand CategoryCommand { get; private set; }
 
+        public ReactiveCommand OnActivateCommand {get; private set;}
+
         public HubViewModel(IThemeService themeService,
             IRssReader rssReader,
             IAsyncDownloadManager downloadManager,
@@ -35,6 +38,9 @@ namespace ThePaperWall.WinRT.ViewModels
             _rssReader = rssReader;
             _downloadManager = downloadManager;
             _navigationService = navigationService;
+
+            OnActivateCommand = new ReactiveCommand();
+            OnActivateCommand.RegisterAsyncTask(_ => OnActivateWork());
 
             WallpaperOfTheDayCommand = new ReactiveCommand();
             WallpaperOfTheDayCommand.Subscribe(NavigateToDetailsForWallpaperOfTheDay);
@@ -92,13 +98,17 @@ namespace ThePaperWall.WinRT.ViewModels
         private Themes _themes;
         protected override async Task OnActivate()
         {
+           OnActivateCommand.Execute(null);
+        }
+  
+        private Task OnActivateWork()
+        {
             _dispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
             _themes = _themeService.GetThemes(WallpaperResource.Feeds);
             var t1 = GetWallpaperOfTheDay();
             var t2 = GetTop4WallPaperItems();       
             var t3 = GetCategoryItems();
-            await Task.WhenAll(t1,t2,t3);
-            ProgressBarIsVisible = false;
+            return Task.WhenAll(t1, t2, t3);
         }
 
         private async Task GetWallpaperOfTheDay()
@@ -131,23 +141,28 @@ namespace ThePaperWall.WinRT.ViewModels
 
         private async Task GetCategoryItems()
         {
-            await Task.WhenAll(_themes.Categories.Select(x => GetCategory(x)));                         
+            await Task.WhenAll(_themes.Categories.OrderBy(x => x.Name).Select(x => GetCategory(x)));                         
         }
 
         private async Task GetCategory(Theme theme)
         {
-            var feed = await _rssReader.GetFeed(theme.FeedUrl);
-            var firstImageFromFeed = _rssReader.GetImageMetaData(feed).First();
-            firstImageFromFeed.Category = theme.Name;
-            Task taskList = null;
-            Func<Task<IBitmap>> lazyImageFactory = () => _downloadManager.DownloadImage(firstImageFromFeed.imageThumbnail);
-
             await Execute.OnUIThreadAsync(async () =>
             {
-                var categoryItem = new CategoryItem(firstImageFromFeed.imageUrl,firstImageFromFeed.Category, lazyImageFactory);
+                var categoryItem = new CategoryItem(theme.FeedUrl, theme.Name);
                 CategoryItems.Add(categoryItem);
-                await categoryItem.LoadImage();
             });
+            //var feed = await _rssReader.GetFeed(theme.FeedUrl);
+            //var firstImageFromFeed = _rssReader.GetImageMetaData(feed).First();
+            //firstImageFromFeed.Category = theme.Name;
+            //Task taskList = null;
+            //Func<Task<IBitmap>> lazyImageFactory = () => _downloadManager.DownloadImage(firstImageFromFeed.imageThumbnail);
+
+            //await Execute.OnUIThreadAsync(async () =>
+            //{
+            //    var categoryItem = new CategoryItem(firstImageFromFeed.imageUrl,firstImageFromFeed.Category, lazyImageFactory);
+            //    CategoryItems.Add(categoryItem);
+            //    //await categoryItem.LoadImage();
+            //});
 
         }
 

@@ -11,22 +11,15 @@ using ThePaperWall.Core.Rss;
 using Splat;
 using System.Windows.Media;
 using ThePaperWall.WP8.Helpers;
-using Windows.UI.Core;
 using ThePaperWall.WP8.Views;
-using System.IO;
-using System.Windows.Media.Imaging;
-using System.Net;
-using System.Net.Http;
 using Akavache;
 using System.Reactive.Linq;
 using ThePaperWall.Core.Framework;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Windows.Phone.System.UserProfile;
-using System.IO.IsolatedStorage;
 using System.Windows;
-using System.Windows.Resources;
 using Microsoft.Phone.Net.NetworkInformation;
+using ThePaperWall.ViewModels;
 
 namespace ThePaperWall.WP8.ViewModels
 {

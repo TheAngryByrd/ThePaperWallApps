@@ -105,6 +105,9 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\ThePaperWall.WP8\ViewModels\CategoryItem.cs">
+      <Link>ViewModels\CategoryItem.cs</Link>
+    </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
@@ -130,7 +133,6 @@
     <Compile Include="Common\ObservableDictionary.cs" />
     <Compile Include="Common\BooleanToVisibilityConverter.cs" />
     <Compile Include="ViewModels\BaseReactiveScreen.cs" />
-    <Compile Include="ViewModels\CategoryItem.cs" />
     <Compile Include="ViewModels\CategoryListViewModel.cs" />
     <Compile Include="ViewModels\HubViewModel.cs" />
     <Compile Include="ViewModels\ImageDetailsViewModel.cs" />
@@ -249,20 +251,24 @@
     <Reference Include="System.Reactive.WindowsRuntime">
       <HintPath>..\packages\Rx-WinRT.2.1.30214.0\lib\NetCore45\System.Reactive.WindowsRuntime.dll</HintPath>
     </Reference>
-    <Reference Include="Telerik.Core">
-      <HintPath>..\lib\W8X\2013.3.1015.45\Core\Telerik.Core.dll</HintPath>
+    <Reference Include="Telerik.Core, Version=2013.3.1105.45, Culture=neutral, PublicKeyToken=54096b0481e00341, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\W8X\2013.3.1105.45\Core\Telerik.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Telerik.UI.Xaml.Grid">
-      <HintPath>..\lib\W8X\2013.3.1015.45\Grid\Telerik.UI.Xaml.Grid.dll</HintPath>
+    <Reference Include="Telerik.UI.Xaml.Grid, Version=2013.3.1105.45, Culture=neutral, PublicKeyToken=54096b0481e00341, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\W8X\2013.3.1105.45\Grid\Telerik.UI.Xaml.Grid.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Telerik.UI.Xaml.Input">
-      <HintPath>..\lib\W8X\2013.3.1015.45\Input\Telerik.UI.Xaml.Input.dll</HintPath>
+    <Reference Include="Telerik.UI.Xaml.Input, Version=2013.3.1105.45, Culture=neutral, PublicKeyToken=54096b0481e00341, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\W8X\2013.3.1105.45\Input\Telerik.UI.Xaml.Input.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Telerik.UI.Xaml.Primitives">
-      <HintPath>..\lib\W8X\2013.3.1015.45\Primitives\Telerik.UI.Xaml.Primitives.dll</HintPath>
+    <Reference Include="Telerik.UI.Xaml.Primitives, Version=2013.3.1105.45, Culture=neutral, PublicKeyToken=54096b0481e00341, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\W8X\2013.3.1105.45\Primitives\Telerik.UI.Xaml.Primitives.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Windows.UI.Interactivity, Version=1.2.0.0, Culture=neutral, PublicKeyToken=2f4cf195f2e6765d, processorArchitecture=MSIL">

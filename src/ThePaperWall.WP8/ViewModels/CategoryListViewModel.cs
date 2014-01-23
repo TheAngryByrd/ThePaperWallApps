@@ -5,9 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Media.Imaging;
 using ReactiveUI;
 using ThePaperWall.Core.Downloads;
 using ThePaperWall.Core.Feeds;
@@ -15,7 +13,7 @@ using ThePaperWall.Core.Models;
 using ThePaperWall.Core.Rss;
 using ThePaperWall.WP8.Helpers;
 using Splat;
-using System.Reactive.Linq;
+using ThePaperWall.ViewModels;
 
 namespace ThePaperWall.WP8.ViewModels
 {

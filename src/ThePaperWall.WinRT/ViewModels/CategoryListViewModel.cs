@@ -11,6 +11,7 @@ using Splat;
 using ThePaperWall.Core.Models;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
+using ThePaperWall.ViewModels;
 
 namespace ThePaperWall.WinRT.ViewModels
 {

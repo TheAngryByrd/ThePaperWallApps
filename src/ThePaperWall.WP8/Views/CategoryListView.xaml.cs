@@ -16,6 +16,7 @@ using ThePaperWall.WP8.ViewModels;
 using Telerik.Windows.Controls;
 using Telerik.Windows.Controls.SlideView;
 using System.Threading.Tasks;
+using ThePaperWall.ViewModels;
 
 namespace ThePaperWall.WP8.Views
 {

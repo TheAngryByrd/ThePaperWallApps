@@ -9,6 +9,7 @@ using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using ThePaperWall.WP8.ViewModels;
+using ThePaperWall.ViewModels;
 
 namespace ThePaperWall.WP8.Views
 {

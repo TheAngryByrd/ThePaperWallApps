@@ -6,10 +6,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+#if WP8
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+#elif NETFX_CORE
+using Windows.UI.Xaml.Media;
+#endif
 
-namespace ThePaperWall.WP8.ViewModels
+namespace ThePaperWall.ViewModels
 {
     public class CategoryItem : ReactiveObject, IComparable<CategoryItem>
     {
@@ -26,14 +30,8 @@ namespace ThePaperWall.WP8.ViewModels
             Name = name;
             _lazyImageFactory = lazyImageFactory;
         }
-
-        public CategoryItem(string id, string name, Func<Task<BitmapImage>> lazyImageFactory = null)
-        {
-            Id = id;
-            Name = name;
-            _lazyImageFactory2 = lazyImageFactory;
-        }
-
+        
+#if WP8
         private BitmapImage _image;
 
         public BitmapImage Image
@@ -47,6 +45,7 @@ namespace ThePaperWall.WP8.ViewModels
                 _image = value;
             }
         }
+#endif
 
         public async Task LoadImage()
         {
@@ -56,11 +55,6 @@ namespace ThePaperWall.WP8.ViewModels
                 {
                     var image = await _lazyImageFactory();
                     await Execute.OnUIThreadAsync(() => ImagePath = image.ToNative());
-                }
-                if (_lazyImageFactory2 != null)
-                {
-                    _image = await _lazyImageFactory2();
-                    await Execute.OnUIThreadAsync(() => ImagePath = _image);
                 }
             }
             catch (Exception e)
@@ -73,7 +67,6 @@ namespace ThePaperWall.WP8.ViewModels
         public string Name { get; set; }
 
         private readonly Func<Task<IBitmap>> _lazyImageFactory;
-        private Func<Task<BitmapImage>> _lazyImageFactory2;
 
         public ImageSource _imagePath;
 
