@@ -151,6 +151,7 @@ namespace ThePaperWall.WinRT.ViewModels
                 var categoryItem = new CategoryItem(theme.FeedUrl, theme.Name);
                 CategoryItems.Add(categoryItem);
             });
+
             //var feed = await _rssReader.GetFeed(theme.FeedUrl);
             //var firstImageFromFeed = _rssReader.GetImageMetaData(feed).First();
             //firstImageFromFeed.Category = theme.Name;
@@ -183,19 +184,6 @@ namespace ThePaperWall.WinRT.ViewModels
         public SortableObservableCollection<CategoryItem> CategoryItems
         {
             get { return _categoryItems; }
-        }
-
-        private bool _progressBarIsVisible = true;
-        public bool ProgressBarIsVisible
-        {
-            get
-            {
-                return _progressBarIsVisible;
-            }
-            set
-            {
-               this.RaiseAndSetIfChanged(ref _progressBarIsVisible, value);
-            }
         }
     }
 }

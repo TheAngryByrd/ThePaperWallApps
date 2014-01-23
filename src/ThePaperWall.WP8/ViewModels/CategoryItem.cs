@@ -31,22 +31,6 @@ namespace ThePaperWall.ViewModels
             _lazyImageFactory = lazyImageFactory;
         }
         
-#if WP8
-        private BitmapImage _image;
-
-        public BitmapImage Image
-        {
-            get
-            {
-                return _image;
-            }
-            set
-            {
-                _image = value;
-            }
-        }
-#endif
-
         public async Task LoadImage()
         {
             try
