@@ -145,26 +145,27 @@ namespace ThePaperWall.WinRT.ViewModels
         }
 
         private async Task GetCategory(Theme theme)
-        {
+        {     
+            //Because LOLAsync
+            TaskCompletionSource<object> tcs = new TaskCompletionSource<object>();
+
+            Func<Task<IBitmap>> lazyImageFactory = async () => 
+            {
+                var feed = await _rssReader.GetFeed(theme.FeedUrl);
+                var firstImageFromFeed = _rssReader.GetImageMetaData(feed).First();
+                firstImageFromFeed.Category = theme.Name;
+                return await _downloadManager.DownloadImage(firstImageFromFeed.imageThumbnail);
+            };
+
             await Execute.OnUIThreadAsync(async () =>
             {
-                var categoryItem = new CategoryItem(theme.FeedUrl, theme.Name);
+                var categoryItem = new CategoryItem(theme.FeedUrl, theme.Name, lazyImageFactory);
                 CategoryItems.Add(categoryItem);
+                await categoryItem.LoadImage();
+                tcs.SetResult(null);
             });
 
-            //var feed = await _rssReader.GetFeed(theme.FeedUrl);
-            //var firstImageFromFeed = _rssReader.GetImageMetaData(feed).First();
-            //firstImageFromFeed.Category = theme.Name;
-            //Task taskList = null;
-            //Func<Task<IBitmap>> lazyImageFactory = () => _downloadManager.DownloadImage(firstImageFromFeed.imageThumbnail);
-
-            //await Execute.OnUIThreadAsync(async () =>
-            //{
-            //    var categoryItem = new CategoryItem(firstImageFromFeed.imageUrl,firstImageFromFeed.Category, lazyImageFactory);
-            //    CategoryItems.Add(categoryItem);
-            //    //await categoryItem.LoadImage();
-            //});
-
+            await tcs.Task;
         }
 
         private ImageSource _wallpaperOfTheDay;
