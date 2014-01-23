@@ -65,7 +65,13 @@ namespace ThePaperWall.WP8.ViewModels
             var t2 = GetTop4WallPaperItems();
             var t3 = GetCategoryItems();
 
-            await Task.WhenAll(t1,t2,t3);
+            try
+            {
+                await Task.WhenAll(t1, t2, t3);
+            }
+            catch (Exception e)
+            {
+            }
             ProgressBarIsVisible = false;
         }
   
