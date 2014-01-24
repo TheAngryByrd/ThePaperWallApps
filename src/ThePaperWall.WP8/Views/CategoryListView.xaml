@@ -57,7 +57,6 @@
                 Margin="-12,-2,-12,24" 
                 ItemsSource="{Binding Items}" 
                 
-                Tap="slideView_Tap"
                 toolkit:TiltEffect.IsTiltEnabled="true">
                 <telerikPrimitives:RadSlideView.ItemTemplate>
                     <DataTemplate>
@@ -71,14 +70,12 @@
                                                     x:Name="Pagination"                                                  
                                                     DisplayMode="IndexLabel" 
                                                     Margin="24,36" />
-            <telerikPrimitives:RadDataBoundListBox x:Name="listBox" 
-                                                   SelectionChanged="listBox_SelectionChanged"  
+            <telerikPrimitives:RadDataBoundListBox x:Name="listBox"                                                    
                                                    Grid.Row="1"  
                                                    Margin="6,6,6,0" 
                                                   EmptyContent="Loading..."
                                                    ItemsSource="{Binding Items}" 
                                                    ItemTemplate="{StaticResource ListBoxItemTemplate}"
-                                                   DataRequested="listBox_DataRequested"
                                                    DataVirtualizationMode="OnDemandAutomatic">
                 <telerikPrimitives:RadDataBoundListBox.ItemLoadingContent>
                     <DataTemplate></DataTemplate>

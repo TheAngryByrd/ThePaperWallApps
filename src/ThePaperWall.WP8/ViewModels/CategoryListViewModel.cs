@@ -25,8 +25,6 @@ namespace ThePaperWall.WP8.ViewModels
         private readonly IRssReader _rssReader;
         private readonly IAsyncDownloadManager _downloadManager;
         private readonly INavigationService _navigationService;
-
-
         private readonly ILockscreenHelper _lockscreen;
 
         public CategoryListViewModel(IThemeService themeService,
@@ -40,23 +38,16 @@ namespace ThePaperWall.WP8.ViewModels
             this._downloadManager = downloadManager;
             this._navigationService = navigationService;
             _lockscreen = lockscreen;
-        
+            
+            AddMorePicturesCommand = new ReactiveCommand();
+            AddMorePicturesCommand
+                .RegisterAsyncTask(value => AddMorePictures((int)value));
         }
 
-
-        private bool _progressBarIsVisible = false;
-
-        public bool ProgressBarIsVisible
-        {
-            get
-            {
-                return _progressBarIsVisible;
-            }
-            set
-            {
-                this.RaiseAndSetIfChanged(ref _progressBarIsVisible, value);
-            }
-        }
+        public ReactiveCommand AddMorePicturesCommand { get; set; }
+        public ReactiveCommand FullScreenCommand { get; set; } 
+        public ReactiveCommand SetLockScreenCommand { get; set; } 
+        public ReactiveCommand DownloadImageCommand { get; set; } 
 
         protected override async Task OnDeactivate(bool close)
         {
@@ -82,15 +73,11 @@ namespace ThePaperWall.WP8.ViewModels
                 return;
             }
             refCount++;
-            ProgressBarIsVisible = true; 
-            await Task.Delay(500);  
+            //await Task.Delay(500);  
             await semaphore.WaitAsync();
             await GetImages(skip);
             semaphore.Release();
-            refCount--;
-
-            if (refCount == 0)
-                ProgressBarIsVisible = false;
+            refCount--;      
         }
 
         private async Task GetImages(int skip)
@@ -127,10 +114,8 @@ namespace ThePaperWall.WP8.ViewModels
         }
 
         public async void SetLockscreen(CategoryItem item)
-        {
-            ProgressBarIsVisible = true;
+        {           
             await _lockscreen.SetLockscreen(item.Id);
-            ProgressBarIsVisible = false;
         }
 
     }
