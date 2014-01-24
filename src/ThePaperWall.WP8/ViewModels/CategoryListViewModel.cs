@@ -41,7 +41,7 @@ namespace ThePaperWall.WP8.ViewModels
             
             AddMorePicturesCommand = new ReactiveCommand();
             AddMorePicturesCommand
-                .RegisterAsyncTask(value => AddMorePictures((int)value));
+                .RegisterAsyncTask(value => GetImages((int)value));
         }
 
         public ReactiveCommand AddMorePicturesCommand { get; set; }
@@ -63,22 +63,7 @@ namespace ThePaperWall.WP8.ViewModels
         private IEnumerable<ImageMetaData> allImages;
 
         private int imageCount = 0;
-        private int refCount = 0;
-        private SemaphoreSlim semaphore = new SemaphoreSlim(1);
-
-        public async Task AddMorePictures(int skip)
-        {
-            if (refCount == 2)
-            {
-                return;
-            }
-            refCount++;
-            //await Task.Delay(500);  
-            await semaphore.WaitAsync();
-            await GetImages(skip);
-            semaphore.Release();
-            refCount--;      
-        }
+        
 
         private async Task GetImages(int skip)
         {
