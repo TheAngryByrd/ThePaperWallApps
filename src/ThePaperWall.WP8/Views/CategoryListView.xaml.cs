@@ -14,6 +14,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using Microsoft.Phone.Controls;
 using ReactiveUI;
+using ThePaperWall.Helpers;
 using ThePaperWall.WP8.ViewModels;
 using Telerik.Windows.Controls;
 using Telerik.Windows.Controls.SlideView;
@@ -26,7 +27,7 @@ namespace ThePaperWall.WP8.Views
 {
     public partial class CategoryListView : PhoneApplicationPage
     {
-        private const int NumberOfPictureToLoad = 3;
+        private const int NumberOfPictureToLoad = 5;
 
         public CategoryListView()
         {
@@ -37,8 +38,7 @@ namespace ThePaperWall.WP8.Views
             InteractionEffectManager.AllowedTypes.Add(typeof(SlideViewItem));
             this.listBox.RealizedItemsBufferScale = 1.5;  
         
-            WhenDataContextIsSet().Subscribe(_ => Loaded());         
-    
+            WhenViewModelExists().Subscribe(_ => Loaded());  
         }      
 
         public void Loaded()
@@ -62,9 +62,15 @@ namespace ThePaperWall.WP8.Views
                 .Select(e => e.EventArgs.AddedItems[0] as CategoryItem)
                 .Subscribe(item => {
                     slideView.SelectedItem = item;
-                });
+                });            
 
-            
+            AreAnyCommandsExecuting()
+                .Subscribe(x => ProgressBar.Visibility = x.ToVisiblity());
+        }
+  
+        private IObservable<bool> AreAnyCommandsExecuting()
+        {
+            return ViewModel.AddMorePicturesCommand.IsExecuting;
         }
   
         private bool SlideViewsNextItemIsTheLastItem
@@ -79,7 +85,7 @@ namespace ThePaperWall.WP8.Views
 
         //Using a region. Observables should just be the defacto event in .NET
         #region Coverting .NET events to Observables
-        private IObservable<IObservedChange<CategoryListView, object>> WhenDataContextIsSet()
+        private IObservable<IObservedChange<CategoryListView, object>> WhenViewModelExists()
         {
             return this.ObservableForProperty(x => x.DataContext);
         }
