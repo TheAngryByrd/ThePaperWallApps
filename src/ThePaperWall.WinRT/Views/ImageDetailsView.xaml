@@ -19,6 +19,9 @@
             <AppBarButton Label="Set as Lockscreen" 
                           Icon="BrowsePhotos" 
                           Command="{Binding SetLockscreenCommand}"></AppBarButton>
+            <AppBarButton Label="Download Photo" 
+                          Icon="Download" 
+                          Command="{Binding DownloadPhotoCommand}"></AppBarButton>
         </CommandBar>
     </Page.BottomAppBar>
     <!--

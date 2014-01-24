@@ -45,6 +45,7 @@ namespace ThePaperWall.WinRT.ViewModels
         public string Id { get; set; }
 
         public ReactiveCommand SetLockscreenCommand { get; private set; }
+        public ReactiveCommand DownloadPhotoCommand { get; private set; }
 
         public ImageDetailsViewModel(IThemeService themeService,
             IRssReader rssReader,
@@ -56,6 +57,14 @@ namespace ThePaperWall.WinRT.ViewModels
 
             SetLockscreenCommand = new ReactiveCommand();
             SetLockscreenCommand.Subscribe(_ => SetLockscreen());
+
+            DownloadPhotoCommand = new ReactiveCommand();
+            DownloadPhotoCommand.Subscribe(_ => DownloadPhoto());
+        }
+  
+        private void DownloadPhoto()
+        {
+            
         }
   
         private async void SetLockscreen()
@@ -70,6 +79,8 @@ namespace ThePaperWall.WinRT.ViewModels
             {
             }
         }
+
+
 
         private IBitmap _image;
 
