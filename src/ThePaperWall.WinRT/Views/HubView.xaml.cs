@@ -4,6 +4,7 @@ using ReactiveUI;
 using ThePaperWall.WinRT.ViewModels;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml;
+using ThePaperWall.Helpers;
 
 // The Hub Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=??????
 
@@ -40,13 +41,5 @@ namespace ThePaperWall.WinRT.Views
         }
         
 
-    }
-
-    public static class Ex 
-    {
-        public static Visibility ToVisiblity(this bool This)
-        {
-            return This ? Visibility.Visible : Visibility.Collapsed;
-        }
     }
 }

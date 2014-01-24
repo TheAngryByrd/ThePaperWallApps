@@ -148,6 +148,7 @@
     <Compile Include="Views\ImageDetailsView.xaml.cs">
       <DependentUpon>ImageDetailsView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Extentions\UIExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">

@@ -35,9 +35,10 @@ namespace ThePaperWall.WP8.Views
             this.slideView.SetValue(InteractionEffectManager.IsInteractionEnabledProperty, true);
             InteractionEffectManager.AllowedTypes.Add(typeof(RadDataBoundListBoxItem));
             InteractionEffectManager.AllowedTypes.Add(typeof(SlideViewItem));
-            this.listBox.RealizedItemsBufferScale = 1.5;          
-            WhenDataContextIsSet()
-                       .Subscribe(_ => Loaded());             
+            this.listBox.RealizedItemsBufferScale = 1.5;  
+        
+            WhenDataContextIsSet().Subscribe(_ => Loaded());         
+    
         }      
 
         public void Loaded()
@@ -62,6 +63,8 @@ namespace ThePaperWall.WP8.Views
                 .Subscribe(item => {
                     slideView.SelectedItem = item;
                 });
+
+            
         }
   
         private bool SlideViewsNextItemIsTheLastItem

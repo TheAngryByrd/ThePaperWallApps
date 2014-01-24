@@ -90,6 +90,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\ThePaperWall.WinRT\Extentions\UIExtensions.cs">
+      <Link>Extensions\UIExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\ThePaperWall.WinRT\ReactiveCaliburn\ReactivePropertyChangedBase.cs">
       <Link>ReactiveCaliburn\ReactivePropertyChangedBase.cs</Link>
       <SubType>Code</SubType>
