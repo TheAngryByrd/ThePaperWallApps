@@ -112,6 +112,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\AppBarHint.cs" />
+    <Compile Include="Extentions\BufferEx.cs" />
     <Compile Include="Extentions\ListEx.cs" />
     <Compile Include="Extentions\TaskEx.cs" />
     <Compile Include="Fixins\CaliburnEx.cs" />

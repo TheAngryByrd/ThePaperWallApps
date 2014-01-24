@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using Caliburn.Micro;
 using ReactiveUI;
 using Splat;
@@ -13,6 +14,8 @@ using Windows.UI.Xaml.Media;
 using System.Threading.Tasks;
 using Windows.UI.Core;
 using System.IO;
+using Windows.Storage.Pickers;
+using Windows.Storage;
 
 namespace ThePaperWall.WinRT.ViewModels
 {
@@ -62,25 +65,38 @@ namespace ThePaperWall.WinRT.ViewModels
             DownloadPhotoCommand.Subscribe(_ => DownloadPhoto());
         }
   
-        private void DownloadPhoto()
+        private async void DownloadPhoto()
         {
-            
+            FileSavePicker saver = new FileSavePicker();
+            saver.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
+            saver.SuggestedFileName = Title;
+            saver.FileTypeChoices.Add(".jpg", new List<string> { ".jpg" });
+            var storageFile = await saver.PickSaveFileAsync();
+
+            if(storageFile != null)
+            {
+               FileIO.WriteBufferAsync(storageFile,(await GetImageStream()).ToArray().AsBuffer());
+            }
         }
   
         private async void SetLockscreen()
         {
             try
             {
-                var memoryStream = new MemoryStream();            
-                await _image.Save(CompressedBitmapFormat.Jpeg, 1, memoryStream);            
+                var memoryStream = await GetImageStream();            
                 await LockScreen.SetImageStreamAsync(WindowsRuntimeStreamExtensions.AsRandomAccessStream(memoryStream));
             }
             catch (Exception e)
             {
             }
         }
-
-
+  
+        private async Task<MemoryStream> GetImageStream()
+        {
+            var memoryStream = new MemoryStream();            
+            await _image.Save(CompressedBitmapFormat.Jpeg, 1, memoryStream);
+            return memoryStream;
+        }
 
         private IBitmap _image;
 
