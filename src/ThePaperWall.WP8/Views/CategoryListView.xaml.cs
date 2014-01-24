@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using Microsoft.Phone.Controls;
+using ReactiveOperators;
 using ReactiveUI;
 using ThePaperWall.Helpers;
 using ThePaperWall.WP8.ViewModels;
@@ -44,7 +45,7 @@ namespace ThePaperWall.WP8.Views
         public void Loaded()
         {
             ListBoxDataRequested
-             .Throttle(TimeSpan.FromMilliseconds(700))
+             .Throttle(TimeSpan.FromMilliseconds(500))
              .Select(x => NumberOfPictureToLoad)             
              .InvokeCommand(ViewModel.AddMorePicturesCommand);
 
@@ -70,7 +71,10 @@ namespace ThePaperWall.WP8.Views
   
         private IObservable<bool> AreAnyCommandsExecuting()
         {
-            return ViewModel.AddMorePicturesCommand.IsExecuting;
+            return ViewModel.AddMorePicturesCommand.IsExecuting
+                .Or(ViewModel.DownloadImageCommand.IsExecuting)
+                .Or(ViewModel.FullScreenCommand.IsExecuting)
+                .Or(ViewModel.SetLockScreenCommand.IsExecuting);
         }
   
         private bool SlideViewsNextItemIsTheLastItem

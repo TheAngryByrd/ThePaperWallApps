@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Reactive.Linq;
+using System.Threading;
 using Caliburn.Micro;
 using ReactiveCaliburn;
 using System;
@@ -33,51 +34,46 @@ namespace ThePaperWall.WP8.ViewModels
             INavigationService navigationService,
             ILockscreenHelper lockscreen)
         {
-            this._themeService = themeService;
-            this._rssReader = rssReader;
-            this._downloadManager = downloadManager;
-            this._navigationService = navigationService;
+            _themeService = themeService;
+            _rssReader = rssReader;
+            _downloadManager = downloadManager;
+            _navigationService = navigationService;
             _lockscreen = lockscreen;
-            
-            AddMorePicturesCommand = new ReactiveCommand();
+
+
+            AddMorePicturesCommand = Items.CountChanged
+                                          .Select(_ =>  Items.Count < imageMetaData.Count())
+                                          .ToCommand();
+
             AddMorePicturesCommand
                 .RegisterAsyncTask(value => GetImages((int)value));
+
+            FullScreenCommand = new ReactiveCommand();
+            SetLockScreenCommand = new ReactiveCommand();
+            DownloadImageCommand = new ReactiveCommand();
+
         }
 
         public ReactiveCommand AddMorePicturesCommand { get; set; }
         public ReactiveCommand FullScreenCommand { get; set; } 
         public ReactiveCommand SetLockScreenCommand { get; set; } 
         public ReactiveCommand DownloadImageCommand { get; set; } 
-
-        protected override async Task OnDeactivate(bool close)
-        {
-            try
-            {
-                //Items.Clear();
-            }
-            catch (Exception e)
-            {
-            }
+        
+        protected override async Task OnInitialize()
+        {        
+            var theme = _themeService.GetThemes().All.First(c => c.Name == Category);
+            var feed = await _rssReader.GetFeed(theme.FeedUrl);
+            imageMetaData = _rssReader.GetImageMetaData(feed);  
         }
 
-        private IEnumerable<ImageMetaData> allImages;
-
-        private int imageCount = 0;
-        
+        private IEnumerable<ImageMetaData> imageMetaData;        
 
         private async Task GetImages(int skip)
         {
             try
-            {
-                var theme = _themeService.GetThemes().All.First(c => c.Name == Category);
-                var feed = await _rssReader.GetFeed(theme.FeedUrl);
-                allImages = allImages ??_rssReader.GetImageMetaData(feed);
-                if(imageCount <allImages.Count())
-                {
-                    var task = Task.WhenAll(allImages.Skip(imageCount).Take(skip).Select(x => CreateCategoryItem(x)));
-                    imageCount += skip;
-                    await task;
-                }
+            {             
+                var task = Task.WhenAll(imageMetaData.Skip(Items.Count).Take(skip).Select(x => CreateCategoryItem(x)));                
+                await task;                
             }
             catch (Exception e)
             {
@@ -92,8 +88,8 @@ namespace ThePaperWall.WP8.ViewModels
             Items.Add(category);
         }
 
-        public ObservableCollection<CategoryItem> _categoryItems = new ObservableCollection<CategoryItem>();
-        public ObservableCollection<CategoryItem> Items
+        public ReactiveList<CategoryItem> _categoryItems = new ReactiveList<CategoryItem>();
+        public ReactiveList<CategoryItem> Items
         {
             get { return _categoryItems; }
         }
