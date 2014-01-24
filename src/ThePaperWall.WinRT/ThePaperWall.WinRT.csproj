@@ -111,6 +111,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\AppBarHint.cs" />
     <Compile Include="Extentions\ListEx.cs" />
     <Compile Include="Extentions\TaskEx.cs" />
     <Compile Include="Fixins\CaliburnEx.cs" />
@@ -179,6 +180,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="ItemPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Theme\AppBarHint.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

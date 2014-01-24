@@ -9,7 +9,15 @@
   <Application.Resources>
     <!-- Application-specific resources -->
 
-    <x:String x:Key="AppName">Paper Wall Locker</x:String>
+    
 
+    <ResourceDictionary>        
+        <ResourceDictionary.MergedDictionaries>
+
+            <ResourceDictionary Source="Theme/AppBarHint.xaml"></ResourceDictionary>
+        </ResourceDictionary.MergedDictionaries>
+            <x:String x:Key="AppName">Paper Wall Locker</x:String>
+    </ResourceDictionary>
+      
   </Application.Resources>
 </caliburn:CaliburnApplication>
