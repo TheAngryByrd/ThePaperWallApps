@@ -49,7 +49,10 @@ namespace ThePaperWall.WP8.ViewModels
                 .RegisterAsyncTask(value => GetImages((int)value));
 
             FullScreenCommand = new ReactiveCommand();
+
             SetLockScreenCommand = new ReactiveCommand();
+            SetLockScreenCommand
+                .RegisterAsyncTask(value => SetLockscreen(value as CategoryItem));
             DownloadImageCommand = new ReactiveCommand();
 
         }
@@ -94,7 +97,7 @@ namespace ThePaperWall.WP8.ViewModels
             get { return _categoryItems; }
         }
 
-        public async void SetLockscreen(CategoryItem item)
+        public async Task SetLockscreen(CategoryItem item)
         {           
             await _lockscreen.SetLockscreen(item.Id);
         }

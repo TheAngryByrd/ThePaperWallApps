@@ -64,7 +64,7 @@ namespace ThePaperWall.WP8.Helpers
                         tcs.SetResult(true);
                         break;
                     case CustomMessageBoxResult.RightButton:
-                        rightButtonAction();
+                        await rightButtonAction();
 
                         tcs.SetResult(true);
                         break;

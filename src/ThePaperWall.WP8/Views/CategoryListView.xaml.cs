@@ -39,10 +39,11 @@ namespace ThePaperWall.WP8.Views
             InteractionEffectManager.AllowedTypes.Add(typeof(SlideViewItem));
             this.listBox.RealizedItemsBufferScale = 1.5;  
         
-            WhenViewModelExists().Subscribe(_ => Loaded());  
-        }      
+            WhenViewModelExists().Subscribe(_ => ViewModelLoaded());
+          
+        }
 
-        public void Loaded()
+        public void ViewModelLoaded()
         {
             ListBoxDataRequested
              .Throttle(TimeSpan.FromMilliseconds(500))
@@ -50,23 +51,24 @@ namespace ThePaperWall.WP8.Views
              .InvokeCommand(ViewModel.AddMorePicturesCommand);
 
             SlideAnimationCompleted
-               .Where(_ => SlideViewsNextItemIsTheFirstItem ||
-                           SlideViewsNextItemIsTheLastItem)
+               .Where(_ => IsOnTheLastThreeItems)
                .Select(x => NumberOfPictureToLoad)
                .InvokeCommand(ViewModel.AddMorePicturesCommand);
 
             SlideViewTapped
-                .Select(_ => this.slideView.SelectedItem as CategoryItem)
+                .Select(_ => this.slideView.SelectedItem)
                 .InvokeCommand(ViewModel.FullScreenCommand);
 
             ListBoxSelectionChanged
-                .Select(e => e.EventArgs.AddedItems[0] as CategoryItem)
+                .Select(e => e.EventArgs.AddedItems[0])
                 .Subscribe(item => {
                     slideView.SelectedItem = item;
                 });            
 
             AreAnyCommandsExecuting()
                 .Subscribe(x => ProgressBar.Visibility = x.ToVisiblity());
+
+         
         }
   
         private IObservable<bool> AreAnyCommandsExecuting()
@@ -76,7 +78,21 @@ namespace ThePaperWall.WP8.Views
                 .Or(ViewModel.FullScreenCommand.IsExecuting)
                 .Or(ViewModel.SetLockScreenCommand.IsExecuting);
         }
-  
+
+
+        private bool IsOnTheLastThreeItems 
+        {
+            get{
+                return SlideViewsNextItemIsTheFirstItem ||
+                           SlideViewsNextItemIsTheLastItem ||
+                           SlideViewsNextItemIsTheSecondToLastItem;
+            }
+        }
+        private bool SlideViewsNextItemIsTheSecondToLastItem
+        {
+            get { return slideView.NextItem == slideView.ItemsSource.ElementAt(slideView.ItemsSource.Count() - 2); }
+        }
+
         private bool SlideViewsNextItemIsTheLastItem
         {
             get {return slideView.NextItem == slideView.ItemsSource.ElementAt(slideView.ItemsSource.Count() - 1);}
@@ -127,13 +143,25 @@ namespace ThePaperWall.WP8.Views
                     ev => listBox.SelectionChanged -= ev);
             }
         }
+            
+   
         #endregion
 
 
         public CategoryListViewModel ViewModel
         {
-            get
-            { return DataContext as CategoryListViewModel; }
-        }  
+            get { return DataContext as CategoryListViewModel; }
+        }
+
+        //because LOLWP8 and null refs to appbar buttons
+        private void LockscreenButton_Click(object sender, EventArgs e)
+        {
+            ViewModel.SetLockScreenCommand.Execute(this.slideView.SelectedItem);
+        }
+
+        private void DownloadButton_Click(object sender, EventArgs e)
+        {
+            ViewModel.DownloadImageCommand.Execute(this.slideView.SelectedItem);
+        }
     }
 }
