@@ -15,6 +15,8 @@ using ThePaperWall.Core.Rss;
 using ThePaperWall.WP8.Helpers;
 using Splat;
 using ThePaperWall.ViewModels;
+using Microsoft.Xna.Framework.Media;
+using System.Windows;
 
 namespace ThePaperWall.WP8.ViewModels
 {
@@ -28,21 +30,24 @@ namespace ThePaperWall.WP8.ViewModels
         private readonly INavigationService _navigationService;
         private readonly ILockscreenHelper _lockscreen;
 
+        private readonly IDownloadHelper _downloadHelper;
+
         public CategoryListViewModel(IThemeService themeService,
             IRssReader rssReader,
             IAsyncDownloadManager downloadManager,
             INavigationService navigationService,
-            ILockscreenHelper lockscreen)
+            ILockscreenHelper lockscreen,
+            IDownloadHelper downloadHelper)
         {
             _themeService = themeService;
             _rssReader = rssReader;
             _downloadManager = downloadManager;
             _navigationService = navigationService;
             _lockscreen = lockscreen;
-
+            _downloadHelper = downloadHelper;
 
             AddMorePicturesCommand = Items.CountChanged
-                                          .Select(_ =>  Items.Count < imageMetaData.Count())
+                                          .Select(_ => Items.Count < imageMetaData.Count())
                                           .ToCommand();
 
             AddMorePicturesCommand
@@ -53,8 +58,10 @@ namespace ThePaperWall.WP8.ViewModels
             SetLockScreenCommand = new ReactiveCommand();
             SetLockScreenCommand
                 .RegisterAsyncTask(value => SetLockscreen(value as CategoryItem));
-            DownloadImageCommand = new ReactiveCommand();
 
+            DownloadImageCommand = new ReactiveCommand();
+            DownloadImageCommand
+                .RegisterAsyncTask(value => DownloadImage(value as CategoryItem));
         }
 
         public ReactiveCommand AddMorePicturesCommand { get; set; }
@@ -100,6 +107,22 @@ namespace ThePaperWall.WP8.ViewModels
         public async Task SetLockscreen(CategoryItem item)
         {           
             await _lockscreen.SetLockscreen(item.Id);
+        }
+
+        private async Task DownloadImage(CategoryItem categoryItem)
+        {
+            try
+            {
+                using (var library = new MediaLibrary())
+                {
+                    var imagestream = await _downloadHelper.GetImageStream(new ImageMetaData(categoryItem.Id));
+                    library.SavePicture(string.Join(".", categoryItem.Name, ".jpg"), imagestream);
+                }
+                MessageBox.Show("Image has been saved your pictures!");
+            }
+            catch (Exception e)
+            {
+            }
         }
 
     }

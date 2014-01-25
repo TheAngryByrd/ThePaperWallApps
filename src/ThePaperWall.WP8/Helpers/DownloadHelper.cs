@@ -16,15 +16,13 @@ namespace ThePaperWall.WP8.Helpers
 {
     public class DownloadHelper : IDownloadHelper
     {
-        private OperationQueue queue = new OperationQueue(2);
-        public async Task<BitmapImage> GetImage(ImageMetaData imageMetaData, bool go = false)
+        public async Task<Stream> GetImageStream(ImageMetaData imageMetaData, bool getThumbnail = false)
         {
             byte[] imageBytes = null;
             bool shouldGet = false;
-            string url = go ? imageMetaData.imageThumbnail : imageMetaData.imageUrl;
+            string url = getThumbnail ? imageMetaData.imageThumbnail : imageMetaData.imageUrl;
             try
             {
-
                 imageBytes = await BlobCache.LocalMachine.GetAsync(url);
             }
             catch (Exception e)
@@ -33,26 +31,34 @@ namespace ThePaperWall.WP8.Helpers
             }
             if (shouldGet)
             {
-                imageBytes = await queue.Enqueue(1,async () => 
+                imageBytes = await queue.Enqueue(1, async () =>
+                {
+                    using (var client = new HttpClient())
                     {
-
-                        using (var client = new HttpClient())
+                        byte[] tempimageBytes = null;
+                        try
                         {
-                            byte[] tempimageBytes = null;
-                            try
-                            {
-                                tempimageBytes = await client.GetByteArrayAsync(url);
-                                await BlobCache.LocalMachine.Insert(url, tempimageBytes);
-                            }
-                            catch (Exception e)
-                            {
-                                //MessageBox.Show("Please check your network connection");
-                            }
-                            return tempimageBytes;
+                            tempimageBytes = await client.GetByteArrayAsync(url);
+                            await BlobCache.LocalMachine.Insert(url, tempimageBytes);
                         }
-                    });
+                        catch (Exception e)
+                        {
+                            //MessageBox.Show("Please check your network connection");
+                        }
+                        return tempimageBytes;
+                    }
+                });
             }
             var imageStream = new MemoryStream(imageBytes);
+
+            return imageStream;
+        }
+
+        private OperationQueue queue = new OperationQueue(2);
+
+        public async Task<BitmapImage> GetImage(ImageMetaData imageMetaData, bool getThumbnail = false)
+        {
+            var imageStream = await GetImageStream(imageMetaData);
 
             //BECAUSE WP8 SAID SO
             BitmapImage image = new BitmapImage();
