@@ -17,8 +17,12 @@
         <CommandBar Closed="CommandBar_Closed"  
                     x:Name="CommandBar">
             <AppBarButton Label="Set as Lockscreen" 
-                          Icon="BrowsePhotos" 
-                          Command="{Binding SetLockscreenCommand}"></AppBarButton>
+                    
+                          Command="{Binding SetLockscreenCommand}">
+                <AppBarButton.Content>
+                    <Image Source="/Images/Lock.png"></Image>
+                </AppBarButton.Content>
+            </AppBarButton>
             <AppBarButton Label="Download Photo" 
                           Icon="Download" 
                           Command="{Binding DownloadPhotoCommand}"></AppBarButton>

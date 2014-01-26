@@ -154,6 +154,7 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <Content Include="Images\Lock.png" />
     <None Include="Package.StoreAssociation.xml" />
     <None Include="Common\ReadMe.txt" />
     <None Include="packages.config" />

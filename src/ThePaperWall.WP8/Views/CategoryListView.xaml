@@ -108,8 +108,8 @@
     
     <phone:PhoneApplicationPage.ApplicationBar>
         <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True">
-            <shell:ApplicationBarIconButton x:Name="LockscreenButton" Click="LockscreenButton_Click" IconUri="/Images/appbar_button1.png" Text="Lockscreen"/>
-            <shell:ApplicationBarIconButton x:Name="DownloadButton" Click="DownloadButton_Click" IconUri="/Images/appbar_button2.png" Text="download"/>  
+            <shell:ApplicationBarIconButton x:Name="LockscreenButton" Click="LockscreenButton_Click" IconUri="/Images/Lock.png" Text="Lockscreen"/>
+            <shell:ApplicationBarIconButton x:Name="DownloadButton" Click="DownloadButton_Click" IconUri="/Images/download.png" Text="download"/>  
         </shell:ApplicationBar>
     </phone:PhoneApplicationPage.ApplicationBar>
 </phone:PhoneApplicationPage>

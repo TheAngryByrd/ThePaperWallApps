@@ -161,6 +161,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Images\download.png" />
+    <Content Include="Images\Lock.png" />
     <Content Include="Readme.txt" />
     <Content Include="README_FIRST.txt" />
     <Content Include="Toolkit.Content\ApplicationBar.Add.png" />
