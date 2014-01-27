@@ -1,20 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
+using ReactiveOperators;
 using ReactiveUI;
-using ThePaperWall.WinRT.Common;
 using ThePaperWall.WinRT.ViewModels;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
+using ThePaperWall.Helpers;
 
 // The Item Detail Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234232
 
@@ -29,7 +19,22 @@ namespace ThePaperWall.WinRT.Views
         public ImageDetailsView()
         {
             this.WhenAnyValue(_ => _.ViewModel.CommandBarIsOpen).Subscribe(_ => CommandBar.IsOpen = _);
+
+            this.Loaded += ImageDetailsView_Loaded;
         }
+
+        void ImageDetailsView_Loaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            AreAnyCommandsExecuting().Subscribe(x => ProgressBar.Visibility = x.ToVisiblity());
+        }
+
+        private IObservable<bool> AreAnyCommandsExecuting()
+        {
+            return ViewModel.DownloadPhotoCommand.IsExecuting
+                .Or(ViewModel.SetLockscreenCommand.IsExecuting)
+                .Or(ViewModel.OnActivatedCommand.IsExecuting);
+        }
+
         public ImageDetailsViewModel ViewModel { get { return DataContext as ImageDetailsViewModel; } }
 
         private void CommandBar_Closed(object sender, object e)

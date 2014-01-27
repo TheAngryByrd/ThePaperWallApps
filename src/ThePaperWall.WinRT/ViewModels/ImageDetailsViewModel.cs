@@ -16,6 +16,7 @@ using Windows.UI.Core;
 using System.IO;
 using Windows.Storage.Pickers;
 using Windows.Storage;
+using Windows.UI.Popups;
 
 namespace ThePaperWall.WinRT.ViewModels
 {
@@ -47,6 +48,7 @@ namespace ThePaperWall.WinRT.ViewModels
         /// </summary>
         public string Id { get; set; }
 
+        public ReactiveCommand OnActivatedCommand { get; private set; }
         public ReactiveCommand SetLockscreenCommand { get; private set; }
         public ReactiveCommand DownloadPhotoCommand { get; private set; }
 
@@ -58,14 +60,17 @@ namespace ThePaperWall.WinRT.ViewModels
             _rssReader = rssReader;
             _downloadManager = downloadManager;
 
+            OnActivatedCommand = new ReactiveCommand();
+            OnActivatedCommand.RegisterAsyncTask(_ =>   OnActivated());
+
             SetLockscreenCommand = new ReactiveCommand();
-            SetLockscreenCommand.Subscribe(_ => SetLockscreen());
+            SetLockscreenCommand.RegisterAsyncTask(_ => SetLockscreen());
 
             DownloadPhotoCommand = new ReactiveCommand();
-            DownloadPhotoCommand.Subscribe(_ => DownloadPhoto());
+            DownloadPhotoCommand.RegisterAsyncTask(_ => DownloadPhoto());
         }
   
-        private async void DownloadPhoto()
+        private async Task DownloadPhoto()
         {
             FileSavePicker saver = new FileSavePicker();
             saver.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
@@ -77,14 +82,19 @@ namespace ThePaperWall.WinRT.ViewModels
             {
                FileIO.WriteBufferAsync(storageFile,(await GetImageStream()).ToArray().AsBuffer());
             }
+          
+           MessageDialog md = new MessageDialog("Image has been saved your pictures.");
+            await md.ShowAsync();
         }
   
-        private async void SetLockscreen()
+        private async Task SetLockscreen()
         {
             try
             {
                 var memoryStream = await GetImageStream();            
                 await LockScreen.SetImageStreamAsync(WindowsRuntimeStreamExtensions.AsRandomAccessStream(memoryStream));
+                MessageDialog md = new MessageDialog("Image has been set as your lockscreen.");
+                await md.ShowAsync();
             }
             catch (Exception e)
             {
@@ -102,6 +112,11 @@ namespace ThePaperWall.WinRT.ViewModels
 
         protected override async Task OnActivate()
         {
+            OnActivatedCommand.Execute(null);
+        }
+  
+        private async Task OnActivated()
+        {
             var theme = _themeService.GetThemes().All.First(c => c.Name == Category);
             var feed = await _rssReader.GetFeed(theme.FeedUrl);
             List<ImageMetaData> imageDataFromFeed = _rssReader.GetImageMetaData(feed);
@@ -109,20 +124,18 @@ namespace ThePaperWall.WinRT.ViewModels
 
             if (!string.IsNullOrEmpty(Id))
                 imageMetaData = imageDataFromFeed.First(img => img.imageUrl == Id);            
-            else            
+            else 
                 imageMetaData = imageDataFromFeed.First();                
-            
 
             Title = imageMetaData.Category;
 
             Task<IBitmap> lowResImageTask = _downloadManager.DownloadImage(imageMetaData.imageThumbnail, priority: 10);
             Task<IBitmap> imageTask = _downloadManager.DownloadImage(imageMetaData.imageUrl, priority: 10);
-            
+              
             var lowResImage = await lowResImageTask;
             await Execute.OnUIThreadAsync(() => ImageSource = (lowResImage).ToNative());
             _image = await imageTask;
             await Execute.OnUIThreadAsync(() => ImageSource = (_image).ToNative());
-            ProgressBarIsVisible = false;
         }
 
         private ImageSource imageSource;
@@ -136,20 +149,7 @@ namespace ThePaperWall.WinRT.ViewModels
             {
                 this.RaiseAndSetIfChanged(ref imageSource,value);
             }
-        }
-
-        private bool _progressBarIsVisible = true;
-        public bool ProgressBarIsVisible
-        {
-            get
-            {
-                return _progressBarIsVisible;
-            }
-            set
-            {
-                this.RaiseAndSetIfChanged(ref _progressBarIsVisible, value);
-            }
-        }
+        }     
 
         private bool _commandBarIsOpen;
         public bool CommandBarIsOpen
