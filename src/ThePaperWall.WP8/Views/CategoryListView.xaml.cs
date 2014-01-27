@@ -66,7 +66,7 @@ namespace ThePaperWall.WP8.Views
                 });            
 
             AreAnyCommandsExecuting()
-                .Subscribe(x => ProgressBar.Visibility = x.ToVisiblity());
+                .Subscribe(x => ProgressBar.Visibility = x.ToVisibility());
 
          
         }

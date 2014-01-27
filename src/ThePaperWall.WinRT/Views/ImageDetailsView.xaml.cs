@@ -23,7 +23,7 @@ namespace ThePaperWall.WinRT.Views
 
         void ImageDetailsView_Loaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            AreAnyCommandsExecuting().Subscribe(x => ProgressBar.Visibility = x.ToVisiblity());
+            AreAnyCommandsExecuting().ToVisibility().Subscribe(x => ProgressBar.Visibility = x);
         }
 
         private IObservable<bool> AreAnyCommandsExecuting()

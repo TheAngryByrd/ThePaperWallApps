@@ -32,7 +32,7 @@ namespace ThePaperWall.WinRT.Views
         void HubView_Loaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
            this.ProgressBar.Visibility = Windows.UI.Xaml.Visibility.Visible;
-           ViewModel.OnActivateCommand.IsExecuting.Subscribe(isExecuting =>  ProgressBar.Visibility = isExecuting.ToVisiblity());
+           ViewModel.OnActivateCommand.IsExecuting.ToVisibility().Subscribe(isExecuting => ProgressBar.Visibility = isExecuting);
         }
 
         private void loadingThis(object sender, Windows.UI.Xaml.RoutedEventArgs e)
