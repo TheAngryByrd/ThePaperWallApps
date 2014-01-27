@@ -17,9 +17,7 @@ namespace ThePaperWall.WinRT.Views
     public sealed partial class ImageDetailsView : Page
     {
         public ImageDetailsView()
-        {
-            this.WhenAnyValue(_ => _.ViewModel.CommandBarIsOpen).Subscribe(_ => CommandBar.IsOpen = _);
-
+        {       
             this.Loaded += ImageDetailsView_Loaded;
         }
 
@@ -36,12 +34,6 @@ namespace ThePaperWall.WinRT.Views
         }
 
         public ImageDetailsViewModel ViewModel { get { return DataContext as ImageDetailsViewModel; } }
-
-        private void CommandBar_Closed(object sender, object e)
-        {
-            var vm = DataContext as ImageDetailsViewModel;
-            vm.CommandBarIsOpen = false;
-        }
     }
 
  

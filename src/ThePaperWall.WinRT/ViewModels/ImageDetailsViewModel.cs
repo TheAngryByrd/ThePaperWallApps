@@ -150,18 +150,5 @@ namespace ThePaperWall.WinRT.ViewModels
                 this.RaiseAndSetIfChanged(ref imageSource,value);
             }
         }     
-
-        private bool _commandBarIsOpen;
-        public bool CommandBarIsOpen
-        {
-            get
-            {
-                return this._commandBarIsOpen;
-            }
-            set
-            {
-                this.RaiseAndSetIfChanged(ref _commandBarIsOpen, value);
-            }
-        }
     }
 }

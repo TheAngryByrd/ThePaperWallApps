@@ -14,8 +14,7 @@
         <common:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </Page.Resources>
     <Page.BottomAppBar>
-        <CommandBar Closed="CommandBar_Closed"  
-                    x:Name="CommandBar">
+        <CommandBar x:Name="CommandBar">
             <AppBarButton Label="Set as Lockscreen" 
                     
                           Command="{Binding SetLockscreenCommand}">
