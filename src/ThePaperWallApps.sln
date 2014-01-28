@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.20623.1 VSUPREVIEW
+VisualStudioVersion = 12.0.30110.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThePaperWall.WinRT", "ThePaperWall.WinRT\ThePaperWall.WinRT.csproj", "{B149B672-7AAC-4AEE-97DC-32DF6EE0C3DD}"
 EndProject
@@ -10,6 +10,13 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThePaperWall.Core", "ThePaperWall.Core\ThePaperWall.Core.csproj", "{4C9DE318-B02B-4BF6-9C83-42AAEFEBC0CE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThePaperWall.Core.Tests", "ThePaperWall.Core.Tests\ThePaperWall.Core.Tests.csproj", "{D33B1BA0-B31D-4D3D-9442-04B4EC7254C5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{C14E7DE6-316E-4083-923A-3095AC6BD2E1}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
