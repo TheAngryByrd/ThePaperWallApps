@@ -229,8 +229,9 @@
     <Reference Include="Punchclock">
       <HintPath>..\packages\Punchclock.1.0.0\lib\Portable-Net45+WinRT45+WP8\Punchclock.dll</HintPath>
     </Reference>
-    <Reference Include="ReactiveOperators">
-      <HintPath>..\packages\ReactiveOperators.1.0.1.0\lib\portable-net45+wp80+win\ReactiveOperators.dll</HintPath>
+    <Reference Include="ReactiveOperators, Version=1.0.2.1, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\ReactiveOperators.1.0.2.1\lib\portable-net45+wp80+win\ReactiveOperators.dll</HintPath>
     </Reference>
     <Reference Include="ReactiveUI">
       <HintPath>..\packages\reactiveui-core.5.2.0\lib\Portable-Net45+WinRT45+WP8\ReactiveUI.dll</HintPath>
