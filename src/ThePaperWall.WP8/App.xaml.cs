@@ -60,7 +60,7 @@ namespace ThePaperWall.WP8
 
             this.reminder = new RadRateApplicationReminder();
             reminder.RecurrencePerUsageCount = 3;
-
+            reminder.AllowUsersToSkipFurtherReminders = true;
 
             PhoneApplicationService.Current.Closing += App_Exit;
             this.UnhandledException += App_UnhandledException;
