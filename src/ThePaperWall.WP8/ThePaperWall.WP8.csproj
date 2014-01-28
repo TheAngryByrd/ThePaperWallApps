@@ -240,9 +240,9 @@
     <Reference Include="ReactiveUI.Xaml">
       <HintPath>..\packages\reactiveui-platforms.5.2.0\lib\WP8\ReactiveUI.Xaml.dll</HintPath>
     </Reference>
-    <Reference Include="Splat, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Splat, Version=1.1.1.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Splat.1.0.0\lib\wp8\Splat.dll</HintPath>
+      <HintPath>..\packages\Splat.1.1.1\lib\wp8\Splat.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http, Version=1.5.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
