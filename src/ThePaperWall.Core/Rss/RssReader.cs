@@ -15,7 +15,7 @@ namespace ThePaperWall.Core.Rss
 {
     public class RssReader : IRssReader
     {
-        static OperationQueue opQueue = new OperationQueue(10);
+        static OperationQueue opQueue = new OperationQueue(20);
         public async Task<rss> GetFeed(string url)
         {
             XmlSerializer serializer = new XmlSerializer(typeof(rss));
@@ -24,20 +24,7 @@ namespace ThePaperWall.Core.Rss
             bool shouldGet = false;
             byte[] rssFeed = null;
             rssFeed = await FetchRssFeedQueued(url);
-            //try
-            //{
-            //    rssFeed = await BlobCache.LocalMachine.GetAsync(url);
-            //}
-            //catch(Exception e)
-            //{
-            //    shouldGet = true;
-            //}
-            //if (shouldGet)
-            //{
-            //    rssFeed = await FetchRssFeedQueued(url);
-            //    await BlobCache.LocalMachine.Insert(url, rssFeed);
-            //}
-         
+
             var reader = XmlReader.Create(new MemoryStream(rssFeed));
 
             using (reader)
@@ -72,16 +59,28 @@ namespace ThePaperWall.Core.Rss
             }
         }
 
+        public ImageMetaData GetFirstImageMetaData(rss feed)
+        {
+            return CreateImageMetaData(feed.channel.item.ToObservable().First());
+        }
+
         public List<ImageMetaData> GetImageMetaData(rss feed)
         {
             var images = new List<ImageMetaData>();
             foreach (var rssChannelItem in feed.channel.item)
             {
-                var html = rssChannelItem.description;
-                var imageUrl = GetImageUrl(html);
-                images.Add(new ImageMetaData(imageUrl){ Category = rssChannelItem.title });
+                var imageMetaData = CreateImageMetaData(rssChannelItem);
+                images.Add(imageMetaData);
             }
             return images;
+        }
+  
+        private ImageMetaData CreateImageMetaData(rssChannelItem rssChannelItem)
+        {
+            var html = rssChannelItem.description;
+            var imageUrl = GetImageUrl(html);
+            var imageMetaData = new ImageMetaData(imageUrl) { Category = rssChannelItem.title };
+            return imageMetaData;
         }
 
         private string GetImageUrl(string html)

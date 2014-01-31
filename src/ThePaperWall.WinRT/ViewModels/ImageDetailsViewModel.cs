@@ -72,19 +72,24 @@ namespace ThePaperWall.WinRT.ViewModels
   
         private async Task DownloadPhoto()
         {
-            FileSavePicker saver = new FileSavePicker();
-            saver.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
-            saver.SuggestedFileName = Title;
-            saver.FileTypeChoices.Add(".jpg", new List<string> { ".jpg" });
-            var storageFile = await saver.PickSaveFileAsync();
-
-            if(storageFile != null)
+            try
             {
-               FileIO.WriteBufferAsync(storageFile,(await GetImageStream()).ToArray().AsBuffer());
+                FileSavePicker saver = new FileSavePicker();
+                saver.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
+                saver.SuggestedFileName = Title;
+                saver.FileTypeChoices.Add(".jpg", new List<string> { ".jpg" });
+                var storageFile = await saver.PickSaveFileAsync();
+
+                if (storageFile != null)
+                {
+                    FileIO.WriteBufferAsync(storageFile, (await GetImageStream()).ToArray().AsBuffer());
+                    MessageDialog md = new MessageDialog("Image has been saved your pictures.");
+                    await md.ShowAsync();
+                }
             }
-          
-           MessageDialog md = new MessageDialog("Image has been saved your pictures.");
-            await md.ShowAsync();
+            catch (Exception e)
+            {
+            }
         }
   
         private async Task SetLockscreen()

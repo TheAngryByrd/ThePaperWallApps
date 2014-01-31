@@ -146,26 +146,20 @@ namespace ThePaperWall.WinRT.ViewModels
 
         private async Task GetCategory(Theme theme)
         {     
-            //Because LOLAsync
-            TaskCompletionSource<object> tcs = new TaskCompletionSource<object>();
-
+       
             Func<Task<IBitmap>> lazyImageFactory = async () => 
             {
                 var feed = await _rssReader.GetFeed(theme.FeedUrl);
-                var firstImageFromFeed = _rssReader.GetImageMetaData(feed).First();
+                var firstImageFromFeed = _rssReader.GetFirstImageMetaData(feed);
                 firstImageFromFeed.Category = theme.Name;
                 return await _downloadManager.DownloadImage(firstImageFromFeed.imageThumbnail);
             };
 
-            await Execute.OnUIThreadAsync(async () =>
-            {
-                var categoryItem = new CategoryItem(theme.FeedUrl, theme.Name, lazyImageFactory);
-                CategoryItems.Add(categoryItem);
-                await categoryItem.LoadImage();
-                tcs.SetResult(null);
-            });
-
-            await tcs.Task;
+            
+            var categoryItem = new CategoryItem(theme.FeedUrl, theme.Name, lazyImageFactory);
+            CategoryItems.Add(categoryItem);
+            await categoryItem.LoadImage();
+        
         }
 
         private ImageSource _wallpaperOfTheDay;

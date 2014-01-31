@@ -22,6 +22,8 @@ namespace ThePaperWall.WinRT.ViewModels
         private readonly IAsyncDownloadManager downloadManager;
         private readonly INavigationService navigationService;
 
+        public ReactiveCommand OnActivateCommand { get; private set; }
+
         public CategoryListViewModel(IThemeService themeService,
             IRssReader rssReader,
             IAsyncDownloadManager downloadManager,
@@ -31,6 +33,9 @@ namespace ThePaperWall.WinRT.ViewModels
             this.rssReader = rssReader;
             this.downloadManager = downloadManager;
             this.navigationService = navigationService;
+
+            OnActivateCommand = new ReactiveCommand();
+            OnActivateCommand.RegisterAsyncTask(_ => GetImages());
             CategoryItemCommand = new ReactiveCommand();
             CategoryItemCommand.Subscribe(item => 
                 {
@@ -51,7 +56,7 @@ namespace ThePaperWall.WinRT.ViewModels
         }
         protected override async Task OnActivate()
         {
-            await GetImages();
+            OnActivateCommand.Execute(null);
         }
   
         private async Task GetImages()
@@ -59,8 +64,7 @@ namespace ThePaperWall.WinRT.ViewModels
             var theme = themeService.GetThemes().Categories.First(c => c.Name == Category);
             var feed = await rssReader.GetFeed(theme.FeedUrl);
             var images = rssReader.GetImageMetaData(feed);
-            await Task.WhenAll(images.Select(x => CreateCategoryItem(x)));
-            ProgressBarIsVisible = false;
+            await Task.WhenAll(images.Select(x => CreateCategoryItem(x)));           
         }
 
         private async Task CreateCategoryItem(ImageMetaData imageMetaData)
@@ -71,20 +75,6 @@ namespace ThePaperWall.WinRT.ViewModels
             await category.LoadImage();
         }
 
-        public ReactiveCommand CategoryItemCommand { get; private set; }
-        private bool _progressBarIsVisible = true;
-        public bool ProgressBarIsVisible
-        {
-            get
-            {
-                return _progressBarIsVisible;
-            }
-            set
-            {
-                this.RaiseAndSetIfChanged(ref _progressBarIsVisible, value);
-            }
-        }
-        
-        
+        public ReactiveCommand CategoryItemCommand { get; private set; }   
     }
 }
