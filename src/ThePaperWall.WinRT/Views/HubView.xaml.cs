@@ -10,10 +10,6 @@ using ThePaperWall.Helpers;
 
 namespace ThePaperWall.WinRT.Views
 {
-
-    public class foo : Page{
-
-    }
     /// <summary>
     /// A page that displays a grouped collection of items.
     /// </summary>
