@@ -49,8 +49,8 @@
             TODO: Content should be placed within the following grid 
                   to show details for the current item
         -->
-        <Grid Grid.Row="1" x:Name="contentRegion">
-            <Image Source="{Binding ImageSource}"></Image>
+        <Grid Grid.RowSpan="3" x:Name="contentRegion">
+            <Image Stretch="Fill" Source="{Binding ImageSource}"></Image>
         </Grid>
         <controls:AppBarHint HorizontalAlignment="Stretch" Grid.Row="2" VerticalAlignment="Bottom" />
 
