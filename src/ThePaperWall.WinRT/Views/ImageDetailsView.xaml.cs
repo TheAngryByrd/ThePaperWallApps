@@ -14,7 +14,7 @@ namespace ThePaperWall.WinRT.Views
     /// A page that displays details for a single item within a group while allowing gestures to
     /// flip through other items belonging to the same group.
     /// </summary>
-    public sealed partial class ImageDetailsView : Page
+    public sealed partial class ImageDetailsView : MyToolkit.Paging.Page
     {
         public ImageDetailsView()
         {       

@@ -1,4 +1,5 @@
-﻿<Page
+﻿<mt:Page
+    xmlns:mt="using:MyToolkit.Paging"
     x:Name="pageRoot"
     x:Class="ThePaperWall.WinRT.Views.CategoryListView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -10,13 +11,10 @@
     xmlns:fixin="using:ThePaperWall.WinRT.Fixins"
     mc:Ignorable="d">
 
-    <Page.Resources>
-        <common:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-     
+    <mt:Page.Resources>
+        <common:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>    
 
-        <!-- TODO: Delete this line if the key AppName is declared in App.xaml -->
-        <x:String x:Key="AppName">My Application</x:String>
-    </Page.Resources>
+    </mt:Page.Resources>
 
     <!--
         This grid acts as a root panel for the page that defines two rows:
@@ -49,7 +47,7 @@
                 <DataTemplate>
                     <Grid HorizontalAlignment="Left" Width="250" Height="250">
                         <Border Background="{StaticResource ListViewItemPlaceholderBackgroundThemeBrush}">
-                            <Image Source="{Binding ImagePath}" Stretch="UniformToFill" AutomationProperties.Name="{Binding Title}"/>
+                            <Image Source="{Binding ImagePath}" Stretch="UniformToFill"/>
                         </Border>
                         <StackPanel VerticalAlignment="Bottom" Background="{StaticResource ListViewItemOverlayBackgroundThemeBrush}">
                             <TextBlock Text="{Binding Name}" Foreground="{StaticResource ListViewItemOverlayForegroundThemeBrush}" Style="{StaticResource BaseTextBlockStyle}" Height="60" Margin="15,0,15,0" FontWeight="SemiBold"/>
@@ -66,7 +64,8 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <AppBarButton x:Name="GoBack" Icon="Back" Height="95" Margin="10,46,10,0"
-                          Visibility="{Binding CanGoBack, Converter={StaticResource BooleanToVisibilityConverter}, RelativeSource={RelativeSource Mode=Self}}"
+                          
+                          Visibility="{Binding CanGoBack, Converter={StaticResource BooleanToVisibilityConverter}}"
                           AutomationProperties.Name="Back"
                           AutomationProperties.AutomationId="BackButton"
                           AutomationProperties.ItemType="Navigation Button"/>
@@ -75,4 +74,4 @@
         </Grid>
         <ProgressBar VerticalAlignment="Top" x:Name="ProgressBar" IsIndeterminate="True" Height="10"></ProgressBar>
     </Grid>
-</Page>
+</mt:Page>

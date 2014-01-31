@@ -15,17 +15,14 @@ namespace ThePaperWall.WinRT.Controls
         {
             base.OnTapped(e);
 
-            if (Window.Current.Content is Frame)
+            if (Window.Current.Content is MyToolkit.Paging.Frame)
             {
-                var frame = (Frame)Window.Current.Content;
-                if (frame.Content is Page)
+                var frame = (MyToolkit.Paging.Frame)Window.Current.Content;               
+                var page = frame.CurrentPage.Page.InternalPage;
+                if (page.BottomAppBar != null)
                 {
-                    var page = (Page)frame.Content;
-                    if (page.BottomAppBar != null)
-                    {
-                        page.BottomAppBar.IsOpen = true;
-                    }
-                }
+                    page.BottomAppBar.IsOpen = true;
+                }                
             }
         }
     }

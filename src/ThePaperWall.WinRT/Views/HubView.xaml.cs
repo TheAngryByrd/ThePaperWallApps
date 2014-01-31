@@ -10,10 +10,14 @@ using ThePaperWall.Helpers;
 
 namespace ThePaperWall.WinRT.Views
 {
+
+    public class foo : Page{
+
+    }
     /// <summary>
     /// A page that displays a grouped collection of items.
     /// </summary>
-    public sealed partial class HubView : Page
+    public sealed partial class HubView : MyToolkit.Paging.Page
     {
         public HubView()
         {
@@ -30,16 +34,9 @@ namespace ThePaperWall.WinRT.Views
         }
 
         void HubView_Loaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
-        {
-           this.ProgressBar.Visibility = Windows.UI.Xaml.Visibility.Visible;
+        {           
            ViewModel.OnActivateCommand.IsExecuting.ToVisibility().Subscribe(isExecuting => ProgressBar.Visibility = isExecuting);
         }
-
-        private void loadingThis(object sender, Windows.UI.Xaml.RoutedEventArgs e)
-        {
-           
-        }
-        
 
     }
 }

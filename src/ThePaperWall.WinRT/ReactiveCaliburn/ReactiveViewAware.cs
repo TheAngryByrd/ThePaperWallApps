@@ -73,11 +73,12 @@ namespace ReactiveCaliburn
         }
 
 
+        public static readonly object DefaultContext = new object();
         async void IViewAware.AttachView(object view, object context)
         {
             if (CacheViews)
             {
-                Views[context ?? View.DefaultContext] = view;
+                Views[context ?? DefaultContext] = view;
             }
 
 
@@ -112,7 +113,7 @@ namespace ReactiveCaliburn
         protected internal virtual async Task OnViewLoaded(object view) { }
 
 
-#if WINDOWS_PHONE || NETFX_CORE
+#if WINDOWS_PHONE 
         async void IViewAware.OnViewReady(object view)
         {
             await OnViewReady(view);
@@ -135,7 +136,7 @@ namespace ReactiveCaliburn
         public virtual object GetView(object context = null)
         {
             object view;
-            Views.TryGetValue(context ?? View.DefaultContext, out view);
+            Views.TryGetValue(context ?? DefaultContext, out view);
             return view;
         }
     }

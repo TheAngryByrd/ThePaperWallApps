@@ -1,4 +1,6 @@
-﻿<Page
+﻿<mt:Page
+    xmlns:mt="using:MyToolkit.Paging"
+    xmlns:local1="using:ThePaperWall.WinRT.Views"
     x:Name="pageRoot"
     x:Class="ThePaperWall.WinRT.Views.HubView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -11,17 +13,13 @@
     xmlns:fixin="using:ThePaperWall.WinRT.Fixins"
     mc:Ignorable="d">
 
-    <Page.Resources>
+    <mt:Page.Resources>
         <common:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <!--
         Collection of grouped items displayed by this page, bound to a subset
         of the complete item list because items in groups cannot be virtualized
     -->
-        <CollectionViewSource
-        x:Name="groupedItemsViewSource"
-        Source="{Binding DefaultViewModel.Groups}"
-        ItemsPath="TopItems"
-        d:Source="{Binding Groups, Source={d:DesignData Source=/DataModel/SampleData.json, Type=data:SampleDataSource}}"/>
+
 
         <!-- Grid-appropriate 310 by 260 pixel item template as seen in section 4 -->
         <DataTemplate x:Key="Standard310x260ItemTemplate">
@@ -46,14 +44,14 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Border Background="{StaticResource ListViewItemPlaceholderBackgroundThemeBrush}" Width="110" Height="110">
-                    <Image Source="{Binding ImagePath}" Stretch="UniformToFill" AutomationProperties.Name="{Binding Title}"/>
+                    <Image Source="{Binding ImagePath}" Stretch="UniformToFill" />
                 </Border>
                 <StackPanel Grid.Column="1" VerticalAlignment="Top" Margin="10,0,0,0">
                     <TextBlock Text="{Binding Name}" Style="{StaticResource TitleTextBlockStyle}" TextWrapping="NoWrap"/>
                 </StackPanel>
             </Grid>
         </DataTemplate>
-    </Page.Resources>
+    </mt:Page.Resources>
 
 
     <!--
@@ -158,4 +156,4 @@
         </Hub>
         <ProgressBar VerticalAlignment="Top" x:Name="ProgressBar" IsIndeterminate="True" Height="10"></ProgressBar>
     </Grid>
-</Page>
+</mt:Page>
