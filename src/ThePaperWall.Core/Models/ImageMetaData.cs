@@ -23,6 +23,14 @@ namespace ThePaperWall.Core.Models
             }
         }
 
+        private string WithoutDomain
+        {
+            get
+            {
+                return imageUrl.Replace("http://thepaperwall.com",string.Empty);
+            }
+        }
+
         public string imageName { get { return GetImageFileName(imageThumbnail); } }
         public Theme Theme { get; set; }
         public Progress<double> progress { get; set; }
@@ -35,5 +43,12 @@ namespace ThePaperWall.Core.Models
         }
 
         public string Category { get; set; }
+
+        private const string imageResizeLink = "http://www.thepaperwall.com/image.php?width={0}&height={1}&image={2}";
+
+        public string GetResizedImageUrl(int width =310, int height = 310)
+        {
+            return string.Format(imageResizeLink, width,height,WithoutDomain);
+        }
     }
 }

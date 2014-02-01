@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Caliburn.Micro;
+using NotificationsExtensions.TileContent;
 using ReactiveUI;
 using Splat;
 using ThePaperWall.Core.Downloads;
@@ -9,10 +10,12 @@ using ThePaperWall.Core.Feeds;
 using ThePaperWall.Core.Models;
 using ThePaperWall.Core.Rss;
 using Windows.UI.Core;
+using Windows.UI.Notifications;
 using Windows.UI.Xaml.Media;
 using ThePaperWall.Core.Framework;
 using System.Collections.Generic;
 using ThePaperWall.ViewModels;
+using Windows.Data.Xml.Dom;
 
 namespace ThePaperWall.WinRT.ViewModels
 {
@@ -49,6 +52,29 @@ namespace ThePaperWall.WinRT.ViewModels
             CategoryCommand = new ReactiveCommand();
             CategoryCommand.Subscribe(NavigateToCategoryList);
             //BlobCache.LocalMachine.Dispose();
+            this.updater = TileUpdateManager.CreateTileUpdaterForApplication();
+            updater.EnableNotificationQueue(true);
+        }
+
+
+
+        private TileUpdater updater;
+
+
+     
+        private void SetupLiveTile(string imgSrc)
+        {
+            var square310 = TileContentFactory.CreateTileSquare310x310Image();
+            square310.Image.Src = imgSrc;
+            var wide = TileContentFactory.CreateTileWide310x150Image();
+            wide.Image.Src = imgSrc;
+            square310.Wide310x150Content = wide;
+            var square150 = TileContentFactory.CreateTileSquare150x150Image();
+            square150.Image.Src = imgSrc;
+            wide.Square150x150Content = square150;
+            var notification = square310.CreateNotification();         
+
+            updater.Update(notification);
         }
 
         private void NavigateToDetailsForTop4Item(object item)
@@ -115,7 +141,7 @@ namespace ThePaperWall.WinRT.ViewModels
         {
             var rssForFeed = await _rssReader.GetFeed(_themes.WallPaperOfTheDay.FeedUrl);
             var imageMetaData = _rssReader.GetImageMetaData(rssForFeed).First();
-
+            SetupLiveTile(imageMetaData.GetResizedImageUrl());
             Task<IBitmap> lowResImageTask = _downloadManager.DownloadImage(imageMetaData.imageThumbnail, priority: 10);
             Task<IBitmap> imageTask = _downloadManager.DownloadImage(imageMetaData.imageUrl, priority: 10);
 
@@ -131,6 +157,7 @@ namespace ThePaperWall.WinRT.ViewModels
             var taskList = new List<Task>();
             foreach (var imd in imageMetaData)
             {
+                SetupLiveTile(imd.GetResizedImageUrl());
                 Func<Task<IBitmap>> lazyImageFactory = () => _downloadManager.DownloadImage(imd.imageThumbnail);
                 var categoryItem = new CategoryItem(imd.imageUrl ,imd.Category, lazyImageFactory);
                 Top4Items.Add(categoryItem);
