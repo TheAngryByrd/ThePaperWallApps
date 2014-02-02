@@ -119,6 +119,8 @@
     <Compile Include="Helpers\ILockscreenHelper.cs" />
     <Compile Include="Helpers\LockscreenHelper.cs" />
     <Compile Include="LocalizedStrings.cs" />
+    <Compile Include="Services\INotificationService.cs" />
+    <Compile Include="Services\NotificationService.cs" />
     <Compile Include="ViewModels\CategoryItem.cs" />
     <Compile Include="ViewModels\CategoryListViewModel.cs" />
     <Compile Include="Views\CategoryListView.xaml.cs">

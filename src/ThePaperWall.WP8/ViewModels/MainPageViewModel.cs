@@ -11,6 +11,7 @@ using ThePaperWall.Core.Rss;
 using Splat;
 using System.Windows.Media;
 using ThePaperWall.WP8.Helpers;
+using ThePaperWall.WP8.Services;
 using ThePaperWall.WP8.Views;
 using Akavache;
 using System.Reactive.Linq;
@@ -20,6 +21,8 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using Microsoft.Phone.Net.NetworkInformation;
 using ThePaperWall.ViewModels;
+using Microsoft.Phone.Shell;
+using System.Diagnostics;
 
 namespace ThePaperWall.WP8.ViewModels
 {
@@ -31,11 +34,14 @@ namespace ThePaperWall.WP8.ViewModels
         private readonly INavigationService _navigationService;
         private readonly ILockscreenHelper _lockscreenHelper;
 
+        private readonly INotificationService _notificationService;
+
         public MainPageViewModel(IThemeService themeService,
             IRssReader rssReader,
             IAsyncDownloadManager downloadManager,
             INavigationService navigationService,
-            ILockscreenHelper lockscreenHelper)
+            ILockscreenHelper lockscreenHelper,
+            INotificationService notificationService)
         {
             _themeService = themeService;
             _rssReader = rssReader;
@@ -44,6 +50,7 @@ namespace ThePaperWall.WP8.ViewModels
             _lockscreenHelper = lockscreenHelper;
 
 
+            this._notificationService = notificationService;
             this.ObservableForProperty(vm => vm.SelectedCategory).Select(_ => _.GetValue()).Subscribe(NavigateToCategoryList);
             this.ObservableForProperty(vm => vm.SelectedTop4).Select(_ => _.GetValue()).Where(v => v != null).Subscribe(Top4Selected);
         }
@@ -51,7 +58,7 @@ namespace ThePaperWall.WP8.ViewModels
         private Themes _themes;
         protected override async Task OnActivate()
         {
-            
+            ;
             var isNetworkAvailable = NetworkInterface.GetIsNetworkAvailable();
             if (!isNetworkAvailable)
             {
@@ -67,7 +74,7 @@ namespace ThePaperWall.WP8.ViewModels
 
             try
             {
-                await Task.WhenAll(t1, t2, t3);
+                await Task.WhenAll(t1, t2, t3, LiveTile());
             }
             catch (Exception e)
             {
@@ -232,6 +239,28 @@ namespace ThePaperWall.WP8.ViewModels
             _view2 = view as MainPageView;
         }
 
+
+        private async Task LiveTile()
+        {      
+            try
+            {                
+                var rssForFeed = await _rssReader.GetFeed(_themes.WallPaperOfTheDay.FeedUrl);
+                var wallpaper = _rssReader.GetImageMetaData(rssForFeed).First();
+
+                rssForFeed = await _rssReader.GetFeed(_themes.Top4.FeedUrl);
+                var top4 = _rssReader.GetImageMetaData(rssForFeed);
+
+                var list = new List<ImageMetaData>(top4);
+                list.Add(wallpaper);
+
+                await _notificationService.CreateLiveTileFromImageMetadata(list);
+
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);   
+            }
+        }
 
         private async Task GetWallpaperOfTheDay()
         {

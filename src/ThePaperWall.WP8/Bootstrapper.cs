@@ -10,6 +10,7 @@ using ThePaperWall.Core.Downloads;
 using ThePaperWall.Core.Feeds;
 using ThePaperWall.Core.Rss;
 using ThePaperWall.WP8.Helpers;
+using ThePaperWall.WP8.Services;
 
 namespace ThePaperWall.WP8
 {
@@ -92,6 +93,7 @@ namespace ThePaperWall.WP8
             _container.PerRequest<ILockscreenHelper, LockscreenHelper>();
             _container.PerRequest<IDownloadHelper, DownloadHelper>();
             _container.PerRequest<IDialogService, DialogService>();
+            _container.PerRequest<INotificationService, NotificationService>();
 
         }
 

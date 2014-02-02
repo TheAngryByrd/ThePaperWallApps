@@ -36,6 +36,22 @@ namespace ThePaperWall.Core.Downloads
             }
             return Splat.BitmapLoader.Current.Create(1,1);
         }
+
+        public async Task<byte[]> Download(string url,
+            int priority = 1)
+        {
+             return await _opQueue.EnqueueObservableOperation(priority, () =>
+                {
+                    try
+                    {
+                        return BlobCache.LocalMachine.DownloadUrl(url,absoluteExpiration: DateTimeOffset.Now.AddDays(1));
+                    }
+                    catch (Exception e)
+                    {
+                        throw;
+                    }
+                });
+        }
     }
 }
 
