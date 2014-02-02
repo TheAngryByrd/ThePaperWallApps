@@ -14,8 +14,7 @@
       <PrimaryToken TokenID="ThePaperWall.WP8Token" TaskName="_default">
         <TemplateCycle>
           <SmallImageURI IsRelative="true" IsResource="false">Assets\Tiles\FlipCycleTileSmall.png</SmallImageURI>
-          <Title>
-          </Title>
+          <Title>Paper Wall Locker</Title>
           <Photo01ImageURI IsRelative="true" IsResource="false">Assets\Tiles\FlipCycleTileMedium.png</Photo01ImageURI>
           <Photo02ImageURI IsRelative="true" IsResource="false">
           </Photo02ImageURI>
