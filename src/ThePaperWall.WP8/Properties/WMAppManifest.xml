@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Deployment xmlns="http://schemas.microsoft.com/windowsphone/2012/deployment" AppPlatformVersion="8.0">
   <DefaultLanguage xmlns="" code="en-US" />
-  <App xmlns="" ProductID="{09d6c248-d027-45dd-9889-07a29541dad8}" Title="Paper Wall Locker" RuntimeType="Silverlight" Version="1.0.1.0" Genre="apps.normal" Author="ThePaperWall.WP8 author" Description="Sample description" Publisher="ThePaperWall.WP8" PublisherID="{ba4390db-e8dc-4dbe-847a-f80bb142142f}">
+  <App xmlns="" ProductID="{09d6c248-d027-45dd-9889-07a29541dad8}" Title="Paper Wall Locker" RuntimeType="Silverlight" Version="1.3.0.0" Genre="apps.normal" Author="Jimmy Byrd" Description="" Publisher="Jimmy Byrd" PublisherID="{ba4390db-e8dc-4dbe-847a-f80bb142142f}">
     <IconPath IsRelative="true" IsResource="false">Assets\ApplicationIcon.png</IconPath>
     <Capabilities>
       <Capability Name="ID_CAP_NETWORKING" />
